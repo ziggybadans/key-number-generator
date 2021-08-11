@@ -6,6 +6,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class KeyNumberGenerator {
@@ -26,6 +27,7 @@ public class KeyNumberGenerator {
 
     String pathname = System.getenv("APPDATA") + "/number.properties";
 
+    // Add dedicated method for this later.
     KeyNumberGenerator(int year) {
         this.year = year;
     }
@@ -68,7 +70,6 @@ public class KeyNumberGenerator {
         }
     }
 
-    // Have this get the char after space later
     public void getcI(String input) {
         CharConcatentation charConcat = new CharConcatentation();
         if (input.length() == 2) {
@@ -132,20 +133,74 @@ public class KeyNumberGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        KeyNumberGenerator keyNumberGenerator = new KeyNumberGenerator(Integer.parseInt(args[1]));
+        Scanner input = new Scanner(System.in);
 
+        // Rearrange this later (year after market).
+        System.out.println("What year?:");
+        Integer yearInput = null;
+        while (yearInput == null) {
+            try {
+                yearInput = Integer.parseInt(input.nextLine());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.out.println("That is not a valid number! Please enter again:");
+            }
+        }
+        KeyNumberGenerator keyNumberGenerator = new KeyNumberGenerator(yearInput);
         keyNumberGenerator.properties();
 
-        System.out.println("What market?");
-        keyNumberGenerator.setMarket(args[0]);
-        System.out.println("Type writer initials or name.");
-        keyNumberGenerator.getwI(args[2]);
-        System.out.println("Type client initials or name.");
-        keyNumberGenerator.getcI(args[5]);
-        System.out.println("What duration?");
-        keyNumberGenerator.setDuration(Integer.parseInt(args[3]));
-        System.out.println("What type?");
-        keyNumberGenerator.setType(args[4]);
+        System.out.println("What market?" + Arrays.toString(keyNumberGenerator.markets) + ':');
+        String marketInput = null;
+        while (marketInput == null) {
+            String tempMarketInput = input.nextLine();
+            try {
+                java.util.Arrays.asList(keyNumberGenerator.markets).indexOf(tempMarketInput);
+            } catch (Exception e) {
+                System.out.println("That is not a valid market! Please enter again:");
+            }
+            marketInput = tempMarketInput;
+            keyNumberGenerator.setMarket(marketInput);
+        }
+
+
+        // Add cI functionality to wI
+        System.out.println("Type writer initials or name:");
+        String writerInitialsInput = input.nextLine();
+        keyNumberGenerator.getwI(writerInitialsInput);
+
+        System.out.println("Type client initials or name:");
+        String clientInitialsInput = input.nextLine();
+        keyNumberGenerator.getcI(clientInitialsInput);
+
+        System.out.println("What duration?:" + Arrays.toString(keyNumberGenerator.durations) + ':');
+        int durationInput = -1;
+        while (durationInput == -1) {
+            try {
+                int tempDurationInput = Integer.parseInt(input.nextLine());
+                Arrays.asList(keyNumberGenerator.durations).indexOf(tempDurationInput);
+                //durationInput = tempDurationInput;
+                //keyNumberGenerator.setDuration(durationInput);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("That is not a valid duration! Please enter again:");
+            }
+        }
+
+
+
+        System.out.println("What type?" + Arrays.toString(keyNumberGenerator.types) + ':');
+        String typeInput = null;
+        while (typeInput == null) {
+            String tempTypeInput = input.nextLine();
+            try {
+                Arrays.asList(keyNumberGenerator.types).indexOf(tempTypeInput);
+            } catch (Exception e) {
+                System.out.println("That is not a valid type! Please enter again:");
+            }
+            typeInput = tempTypeInput;
+            keyNumberGenerator.setType(typeInput);
+        }
+
 
         System.out.println("Here is your key number! (Copied to clipboard)");
         keyNumberGenerator.print();
