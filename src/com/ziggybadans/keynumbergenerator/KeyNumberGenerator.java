@@ -1,14 +1,17 @@
 package com.ziggybadans.keynumbergenerator;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.*;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class KeyNumberGenerator {
 
-    public String[] markets = {"BAL", "AUG"};
+    public String[] markets = {"AUG", "BAL", "BEG", "BEN", "BER", "BOW", "BUN", "BUR", "CAI", "DAR", "DEV", "GEE", "GLA", "GOL", "HOB", "IPS", "LAU", "LIN", "MAC",
+            "MAR", "MIL", "MUR", "MUS", "NOW", "PIR", "QUE", "ROC", "TOW", "WOL", "TRSN", "AGEN"};
     public String market;
     public int year;
     public char writerInitial;
@@ -18,6 +21,8 @@ public class KeyNumberGenerator {
     public String type;
     public String clientInitial;
     public int number = 0;
+
+    public String keyNumber;
 
     String pathname = System.getenv("APPDATA") + "/number.properties";
 
@@ -118,7 +123,12 @@ public class KeyNumberGenerator {
 
         }
         System.out.println("Key Number:");
-        System.out.println(market + year + writerInitial + '-' + duration + type + '-' + clientInitial + '-' + tempNumber);
+        keyNumber = market + year + writerInitial + '-' + clientInitial + '-' + duration + type + '-' + tempNumber;
+        System.out.println(keyNumber);
+
+        StringSelection selection = new StringSelection(keyNumber);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
     }
 
     public static void main(String[] args) throws IOException {
@@ -126,12 +136,18 @@ public class KeyNumberGenerator {
 
         keyNumberGenerator.properties();
 
+        System.out.println("What market?");
         keyNumberGenerator.setMarket(args[0]);
+        System.out.println("Type writer initials or name.");
         keyNumberGenerator.getwI(args[2]);
-        keyNumberGenerator.setDuration(Integer.parseInt(args[3]));
-        keyNumberGenerator.setType(args[4]);
+        System.out.println("Type client initials or name.");
         keyNumberGenerator.getcI(args[5]);
+        System.out.println("What duration?");
+        keyNumberGenerator.setDuration(Integer.parseInt(args[3]));
+        System.out.println("What type?");
+        keyNumberGenerator.setType(args[4]);
 
+        System.out.println("Here is your key number! (Copied to clipboard)");
         keyNumberGenerator.print();
     }
 }
