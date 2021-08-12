@@ -11,21 +11,28 @@ import java.util.stream.Collectors;
 
 public class KeyNumberGenerator {
 
+    public int year;
+
     public String[] markets = {"AUG", "BAL", "BEG", "BEN", "BER", "BOW", "BUN", "BUR", "CAI", "DAR", "DEV", "GEE", "GLA", "GOL", "HOB", "IPS", "LAU", "LIN", "MAC",
             "MAR", "MIL", "MUR", "MUS", "NOW", "PIR", "QUE", "ROC", "TOW", "WOL", "TRSN", "AGEN"};
+    public boolean marketReady = false;
     public String market;
-    public int year;
+
     public char writerInitial;
+
     public int[] durations = {10, 15, 30, 45, 60, 90};
+    public boolean durationReady = false;
     public int duration;
+
     public String[] types = {"R", "L", "SL", "X", "SX"};
+    public boolean typeReady = false;
     public String type;
+
     public String clientInitial;
+
     public int number = 0;
-
+    public String pathname;
     public String keyNumber;
-
-    String pathname = System.getenv("APPDATA") + "/number.properties";
 
     // Add dedicated method for this later.
     KeyNumberGenerator(int year) {
@@ -53,6 +60,7 @@ public class KeyNumberGenerator {
             tempDuration = Arrays.stream(durations).boxed().collect(Collectors.toList()).indexOf(input);
             //System.out.println("Debug: " + tempDuration);
             duration = durations[tempDuration];
+            durationReady = true;
         }
         catch (Exception e) {
             System.out.println(input + " is not a valid duration! Please enter again.");
@@ -84,10 +92,16 @@ public class KeyNumberGenerator {
 
             clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
         }
-
     }
 
     public void properties() throws IOException {
+        if (getOS.isWindows()) {
+            pathname = System.getenv("APPDATA")  + "/number.properties";
+        }
+        if (getOS.isMac()) {
+            pathname = System.getProperty("user.home") + "/number.properties";
+        }
+
         File getFile = new File(pathname);
         boolean exists = getFile.exists();
 
@@ -112,6 +126,12 @@ public class KeyNumberGenerator {
     }
 
     public void print() {
+        if (getOS.isWindows()) {
+            pathname = System.getenv("APPDATA") + "/number.properties";
+        }
+        if (getOS.isMac()) {
+            pathname = System.getProperty("user.home" + "/number.properties");
+        }
         int tempNumber = number;
         try {
             number++;
@@ -173,20 +193,10 @@ public class KeyNumberGenerator {
         keyNumberGenerator.getcI(clientInitialsInput);
 
         System.out.println("What duration?:" + Arrays.toString(keyNumberGenerator.durations) + ':');
-        int durationInput = -1;
-        while (durationInput == -1) {
-            try {
-                int tempDurationInput = Integer.parseInt(input.nextLine());
-                Arrays.asList(keyNumberGenerator.durations).indexOf(tempDurationInput);
-                //durationInput = tempDurationInput;
-                //keyNumberGenerator.setDuration(durationInput);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("That is not a valid duration! Please enter again:");
-            }
+        while (!keyNumberGenerator.durationReady) {
+            int durationInput = Integer.parseInt(input.nextLine());
+            keyNumberGenerator.setDuration(durationInput);
         }
-
-
 
         System.out.println("What type?" + Arrays.toString(keyNumberGenerator.types) + ':');
         String typeInput = null;
