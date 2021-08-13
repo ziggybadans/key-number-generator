@@ -5,6 +5,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -38,6 +39,19 @@ public class KeyNumberGenerator {
     KeyNumberGenerator() {
     }
 
+    public void setMarket(String input) {
+        int tempMarket;
+        try {
+            tempMarket = java.util.Arrays.asList(markets).indexOf(input);
+            market = markets[tempMarket];
+            marketReady = true;
+            System.out.println("Debug: " + market + " - Successful!");
+        }
+        catch (Exception e) {
+            System.out.println("Debug: " + input + " - Invalid.");
+        }
+    }
+
     // Get current year for this later.
     public void setYear(String input) {
         CharConcatentation charConcat = new CharConcatentation();
@@ -58,20 +72,9 @@ public class KeyNumberGenerator {
         }
     }
 
-    public void setMarket(String input) {
-        int tempMarket;
-        try {
-            tempMarket = java.util.Arrays.asList(markets).indexOf(input);
-            market = markets[tempMarket];
-            marketReady = true;
-        }
-        catch (Exception e) {
-            System.out.println(input + " is not a valid market! Please enter again.");
-        }
-    }
-
-    public void getwI(String input) {
-        writerInitial = input.charAt(0);
+    public void setwI(String input) {
+        writerInitial = input.toUpperCase(Locale.ROOT).charAt(0);
+        System.out.println("Debug: " + writerInitial + " - Successful!");
     }
 
     public void setDuration(int input) {
@@ -82,9 +85,10 @@ public class KeyNumberGenerator {
             //System.out.println("Debug: " + tempDuration);
             duration = durations[tempDuration];
             durationReady = true;
+            System.out.println("Debug: " + duration + " - Successful!");
         }
         catch (Exception e) {
-            System.out.println(input + " is not a valid duration! Please enter again.");
+            System.out.println("Debug: " + input + " - Invalid.");
         }
     }
 
@@ -94,25 +98,28 @@ public class KeyNumberGenerator {
             tempType = java.util.Arrays.asList(types).indexOf(input);
             type = types[tempType];
             typeReady = true;
+            System.out.println("Debug " + type + " - Successful!");
         }
         catch (Exception e) {
-            System.out.println(input + " is not a valid type! Please enter again.");
+            System.out.println("Debug: " + input + " - Invalid.");
         }
     }
 
-    public void getcI(String input) {
+    public void setcI(String input) {
         CharConcatentation charConcat = new CharConcatentation();
         if (input.length() == 2) {
-            char firstClientInitial = input.charAt(0);
-            char secondClientInitial = input.charAt(1);
+            char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
+            char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(1);
 
             clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
+            System.out.println("Debug: " + clientInitial + " - Successful!");
         } else {
-            int secondInitialIndex = input.indexOf(" ") + 1;
-            char firstClientInitial = input.charAt(0);
-            char secondClientInitial = input.charAt(secondInitialIndex);
+            int secondInitialIndex = input.toUpperCase(Locale.ROOT).indexOf(" ") + 1;
+            char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
+            char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(secondInitialIndex);
 
             clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
+            System.out.println("Debug: " + clientInitial + " - Successful!");
         }
     }
 
@@ -167,14 +174,17 @@ public class KeyNumberGenerator {
                     FileReader reader = new FileReader(pathname);
                     p.load(reader);
                     number = Integer.parseInt(p.getProperty("number"));
+                    System.out.println("Debug: Read properties successfully!");
                 } catch (IOException e) {
                     System.out.println("Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.");
                     e.printStackTrace();
                 }
             } else {
                 try {
+                    System.out.println("Debug: Properties file doesn't exist. Creating new file.");
                     p.setProperty("number", "1");
                     p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+                    System.out.println("Debug: Created properties successfully!");
                 } catch (IOException e) {
                     System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
                     e.printStackTrace();
@@ -191,7 +201,7 @@ public class KeyNumberGenerator {
         return number;
     }
 
-    public void generate() {
+    public String generate() {
         if (getOS.isWindows()) {
             pathname = System.getenv("APPDATA") + "/number.properties";
         }
@@ -208,6 +218,7 @@ public class KeyNumberGenerator {
             Properties p = new Properties();
             p.setProperty("number", String.valueOf(number));
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+            System.out.println("Debug: Updated properties successfully!");
         } catch (IOException e) {
             System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
             e.printStackTrace();
@@ -217,6 +228,8 @@ public class KeyNumberGenerator {
         StringSelection selection = new StringSelection(keyNumber);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, selection);
+
+        return keyNumber;
     }
 
     public static void main(String[] args) throws IOException {

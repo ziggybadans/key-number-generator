@@ -1,10 +1,8 @@
 package com.ziggybadans.keynumbergenerator;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import javax.swing.text.*;
+import java.awt.event.*;
 
 public class GUI implements ActionListener {
 
@@ -17,6 +15,11 @@ public class GUI implements ActionListener {
     JComboBox typeMenu;
     JTextField cIInput;
     JTextField numberOutput;
+
+    JButton generateButton;
+    String generateOutput;
+    //PlainDocument document;
+    JTextField generateResult;
 
     KeyNumberGenerator main = new KeyNumberGenerator();
 
@@ -88,6 +91,7 @@ public class GUI implements ActionListener {
                 if (wIInput.getText().equals("Type name")) {
                 } else {
                     System.out.println("Writer Input: " + wIInput.getText());
+                    main.setwI(wIInput.getText());
                 }
             }
         });
@@ -127,6 +131,7 @@ public class GUI implements ActionListener {
                 if (cIInput.getText().equals("Type client name")) {
                 } else {
                     System.out.println("Client: " + cIInput.getText());
+                    main.setcI(cIInput.getText());
                 }
             }
         });
@@ -140,6 +145,23 @@ public class GUI implements ActionListener {
         numberOutput.setBounds(670, 50, 50, 20);
         numberOutput.setEditable(false);
         panel.add(numberOutput);
+
+        generateButton = new JButton("Generate");
+        generateButton.setBounds(450, 100, 100, 20);
+        generateButton.addActionListener(this);
+        panel.add(generateButton);
+        generateResult = new JTextField();
+        generateResult.setBounds(450, 150, 200, 20);
+        generateResult.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (generateResult.getText().length() > 30 || generateResult.getText().contains("")) {
+                    e.consume();
+                }
+            }
+        });
+        //document = (PlainDocument) generateResult.getDocument();
+        panel.add(generateResult);
     }
 
     @Override
@@ -158,6 +180,22 @@ public class GUI implements ActionListener {
         } else if (event.getSource() == typeMenu) {
             System.out.println("Type: " + typeMenu.getSelectedItem());
             main.setType((String) typeMenu.getSelectedItem());
+        } else if (event.getSource() == generateButton) {
+            System.out.println("Debug: Attempting to generate...");
+            generateOutput = main.generate();
+            generateResult.setText(generateOutput);
+            numberOutput.setText(String.valueOf(main.getProperties()));
         }
     }
 }
+
+/*
+class CharacterFilter extends DocumentFilter {
+    @Override
+    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        Document doc = fb.getDocument();
+        StringBuilder sb = new StringBuilder();
+        sb.append(doc.getText(0, doc.getLength()));
+    }
+}
+ */
