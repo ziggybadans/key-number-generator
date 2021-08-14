@@ -55,26 +55,38 @@ public class KeyNumberGenerator {
     // Get current year for this later.
     public void setYear(String input) {
         CharConcatentation charConcat = new CharConcatentation();
-        if (input.length() == 2 && Integer.parseInt(input) >= 21) {
-            this.year = Integer.parseInt(input);
-            this.yearReady = true;
-            System.out.println("Debug: " + this.year + " - Successful!");
-        } else if (input.length() == 4 && Integer.parseInt(input) >= 2021) {
-            char firstYearChar = input.charAt(2);
-            char secondYearChar = input.charAt(3);
+        try {
+            if (input.length() == 2 && Integer.parseInt(input) >= 21) {
+                this.year = Integer.parseInt(input);
+                this.yearReady = true;
+                System.out.println("Debug: " + this.year + " - Successful!");
+            } else if (input.length() == 4 && Integer.parseInt(input) >= 2021) {
+                char firstYearChar = input.charAt(2);
+                char secondYearChar = input.charAt(3);
 
-            this.year = Integer.parseInt(charConcat.concat(firstYearChar, secondYearChar));
-            this.yearReady = true;
-            System.out.println("Debug: " + this.year + " - Successful!");
-        } else {
-            this.yearReady = false;
-            System.out.println("Debug: " + input + " - Invalid.");
+                this.year = Integer.parseInt(charConcat.concat(firstYearChar, secondYearChar));
+                this.yearReady = true;
+                System.out.println("Debug: " + this.year + " - Successful!");
+            } else {
+                this.yearReady = false;
+                System.out.println("Debug: " + input + " - Invalid.");
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Input is null! Resetting...");
+            year = Integer.parseInt(null);
         }
+
     }
 
     public void setwI(String input) {
-        writerInitial = input.toUpperCase(Locale.ROOT).charAt(0);
-        System.out.println("Debug: " + writerInitial + " - Successful!");
+        try {
+            writerInitial = input.toUpperCase(Locale.ROOT).charAt(0);
+            System.out.println("Debug: " + writerInitial + " - Successful!");
+        } catch (NullPointerException e) {
+            System.out.println("Input is null! Resetting...");
+            writerInitial = (char) '\0';
+        }
+
     }
 
     public void setDuration(int input) {
@@ -106,21 +118,27 @@ public class KeyNumberGenerator {
     }
 
     public void setcI(String input) {
-        CharConcatentation charConcat = new CharConcatentation();
-        if (input.length() == 2) {
-            char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
-            char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(1);
+        try {
+            CharConcatentation charConcat = new CharConcatentation();
+            if (input.length() == 2) {
+                char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
+                char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(1);
 
-            clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
-            System.out.println("Debug: " + clientInitial + " - Successful!");
-        } else {
-            int secondInitialIndex = input.toUpperCase(Locale.ROOT).indexOf(" ") + 1;
-            char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
-            char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(secondInitialIndex);
+                clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
+                System.out.println("Debug: " + clientInitial + " - Successful!");
+            } else {
+                int secondInitialIndex = input.toUpperCase(Locale.ROOT).indexOf(" ") + 1;
+                char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
+                char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(secondInitialIndex);
 
-            clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
-            System.out.println("Debug: " + clientInitial + " - Successful!");
+                clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
+                System.out.println("Debug: " + clientInitial + " - Successful!");
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Input is null! Resetting...");
+            clientInitial = null;
         }
+
     }
 
     /*

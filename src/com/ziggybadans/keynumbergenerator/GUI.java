@@ -1,5 +1,9 @@
 package com.ziggybadans.keynumbergenerator;
 
+import net.java.balloontip.BalloonTip;
+import net.java.balloontip.utils.FadingUtils;
+import net.java.balloontip.utils.TimingUtils;
+
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -9,6 +13,7 @@ import java.util.Locale;
 public class GUI implements ActionListener {
 
     JFrame frame;
+    JButton backgroundButton;
 
     JComboBox marketMenu;
     JTextField yearInput;
@@ -21,7 +26,7 @@ public class GUI implements ActionListener {
     JButton generateButton;
     String generateOutput;
     PlainDocument document;
-    JTextField generateResult;
+    static JTextField generateResult;
 
     KeyNumberGenerator main = new KeyNumberGenerator();
 
@@ -31,7 +36,7 @@ public class GUI implements ActionListener {
         frame.setSize(1200,600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
+        JLayeredPane panel = new JLayeredPane();
         frame.add(panel);
 
         placeComponents(panel);
@@ -39,20 +44,31 @@ public class GUI implements ActionListener {
         frame.setVisible(true);
     }
 
-    private void placeComponents(JPanel panel) {
+    private void placeComponents(JLayeredPane panel) {
         panel.setLayout(null);
+
+        JButton backgroundButton = new JButton();
+        backgroundButton.setBounds(0,0,1200,600);
+        backgroundButton.setOpaque(false);
+        backgroundButton.setContentAreaFilled(false);
+        backgroundButton.setBorderPainted(false);
+        panel.add(backgroundButton);
+        panel.setLayer(backgroundButton, 0, 0);
 
         JLabel marketLabel = new JLabel("Market");
         marketLabel.setBounds(50, 25, 80, 12);
         panel.add(marketLabel);
+        panel.setLayer(marketLabel, 1, 0);
         marketMenu = new JComboBox(KeyNumberGenerator.markets);
         marketMenu.setBounds(50,50,90,20);
         marketMenu.addActionListener(this);
         panel.add(marketMenu);
+        panel.setLayer(marketMenu, 1, 0);
 
         JLabel yearLabel = new JLabel("Year");
         yearLabel.setBounds(150, 25, 80, 12);
         panel.add(yearLabel);
+        panel.setLayer(yearLabel, 1, 0);
         yearInput = new JTextField("Type year");
         yearInput.setBounds(150, 50, 90, 20);
         yearInput.addFocusListener(new FocusListener() {
@@ -66,6 +82,12 @@ public class GUI implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (yearInput.getText().equals("Type year")) {
+                    System.out.println("Year: " + null);
+                    main.setYear(null);
+                } else if(yearInput.getText().equals("")) {
+                    yearInput.setText("Type year");
+                    System.out.println("Year: " + null);
+                    main.setYear(null);
                 } else {
                     System.out.println("Year: " + yearInput.getText());
                     main.setYear(yearInput.getText());
@@ -74,10 +96,12 @@ public class GUI implements ActionListener {
             }
         });
         panel.add(yearInput);
+        panel.setLayer(yearInput, 1, 0);
 
         JLabel wILabel = new JLabel("Writer");
         wILabel.setBounds(250, 25, 80, 12);
         panel.add(wILabel);
+        panel.setLayer(wILabel, 1, 0);
         wIInput = new JTextField("Type name");
         wIInput.setBounds(250, 50, 90, 20);
         wIInput.addFocusListener(new FocusListener() {
@@ -91,33 +115,46 @@ public class GUI implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (wIInput.getText().equals("Type name")) {
-                } else {
+                    System.out.println("Writer input: " + null);
+                    main.setwI(null);
+                } else if (wIInput.getText().equals("")) {
+                    wIInput.setText("Type year");
+                    System.out.println("Writer input: " + null);
+                    main.setwI(null);
+                }
+                else {
                     System.out.println("Writer Input: " + wIInput.getText());
                     main.setwI(wIInput.getText());
                 }
             }
         });
         panel.add(wIInput);
+        panel.setLayer(wIInput, 1, 0);
 
         JLabel durationLabel = new JLabel("Duration");
         durationLabel.setBounds(350, 25, 80, 12);
         panel.add(durationLabel);
+        panel.setLayer(durationLabel, 1, 0);
         durationMenu = new JComboBox(KeyNumberGenerator.durations);
         durationMenu.setBounds(350, 50, 90, 20);
         durationMenu.addActionListener(this);
         panel.add(durationMenu);
+        panel.setLayer(durationMenu, 1, 0);
 
         JLabel typeLabel = new JLabel("Type");
         typeLabel.setBounds(450, 25, 80, 12);
         panel.add(typeLabel);
+        panel.setLayer(typeLabel, 1, 0);
         typeMenu = new JComboBox(KeyNumberGenerator.types);
         typeMenu.setBounds(450, 50, 90, 20);
         typeMenu.addActionListener(this);
         panel.add(typeMenu);
+        panel.setLayer(typeMenu, 1, 0);
 
         JLabel cILabel = new JLabel("Client");
         cILabel.setBounds(550, 25, 80, 12);
         panel.add(cILabel);
+        panel.setLayer(cILabel, 1, 0);
         cIInput = new JTextField("Type client name");
         cIInput.setBounds(550, 50, 110, 20);
         cIInput.addFocusListener(new FocusListener() {
@@ -131,30 +168,41 @@ public class GUI implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (cIInput.getText().equals("Type client name")) {
-                } else {
+                    System.out.println("Client: " + null);
+                    main.setcI(null);
+                } else if (cIInput.getText().equals("")) {
+                    cIInput.setText("");
+                    System.out.println("Client: " + null);
+                    main.setcI(null);
+                }
+                else {
                     System.out.println("Client: " + cIInput.getText());
                     main.setcI(cIInput.getText());
                 }
             }
         });
         panel.add(cIInput);
+        panel.setLayer(cIInput, 1, 0);
 
         JLabel numberLabel = new JLabel("Sequential Number");
         numberLabel.setBounds(670, 25, 110, 12);
         panel.add(numberLabel);
+        panel.setLayer(numberLabel, 1, 0);
         numberOutput = new JTextField(String.valueOf(main.getProperties()));
         numberOutput.setBounds(670, 50, 50, 20);
         numberOutput.setEditable(false);
         panel.add(numberOutput);
+        panel.setLayer(numberOutput, 1, 0);
 
         generateButton = new JButton("Generate");
         generateButton.setBounds(450, 100, 100, 20);
         generateButton.addActionListener(this);
         panel.add(generateButton);
+        panel.setLayer(generateButton, 1, 0);
         generateResult = new JTextField();
         generateResult.setBounds(450, 150, 200, 20);
         document = (PlainDocument) generateResult.getDocument();
-        document.setDocumentFilter(new CharacterFilter(5, true));
+        document.setDocumentFilter(new CharacterFilter(30, true));
         generateResult.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -162,6 +210,7 @@ public class GUI implements ActionListener {
             }
         });
         panel.add(generateResult);
+        panel.setLayer(generateResult, 1, 0);
     }
 
     @Override
@@ -183,8 +232,70 @@ public class GUI implements ActionListener {
         } else if (event.getSource() == generateButton) {
             System.out.println("Debug: Attempting to generate...");
             generateOutput = main.generate();
+            generateResult.setText("");
             generateResult.setText(generateOutput);
             numberOutput.setText(String.valueOf(main.getProperties()));
+        }
+    }
+
+    static class CharacterFilter extends DocumentFilter {
+        boolean upper = false;
+        int limit = 0;
+
+        public CharacterFilter(int limit) {
+            this.limit = limit;
+        }
+        public CharacterFilter(int limit, boolean upper) {
+            System.out.println("Limit: " + limit + "(Upper: " + upper + ')');
+            this.limit = limit;
+            this.upper = upper;
+        }
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+            super.insertString(fb, offset, text, attr);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
+            super.replace(fb, offset, length, revise(fb, text), attr);
+            System.out.println("Replace called!");
+        }
+
+        private String revise(FilterBypass fb, String text) {
+            System.out.println("Revise called!");
+            if (upper) {
+                text = text.toUpperCase();
+            }
+
+            StringBuilder builder = new StringBuilder(text);
+            int index = 0;
+            while (index < builder.length()) {
+                if (accept(builder.charAt(index)) && fb.getDocument().getLength() + text.length() <= limit) {
+                    index++;
+                } else {
+                    builder.deleteCharAt(index);
+                    BalloonTip acceptError = new BalloonTip(GUI.generateResult,
+                            "Maximum length is 30 characters. Only numbers, letters, and dashes allowed.");
+                    TimingUtils.showTimedBalloon(acceptError, 2000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            FadingUtils.fadeOutBalloon(acceptError, new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    acceptError.closeBalloon();
+                                }
+                            }, 500, 15);
+                        }
+                    });
+
+                }
+            }
+            return builder.toString();
+        }
+
+        public boolean accept(final char c) {
+            return Character.isAlphabetic(c) || Character.isDigit(c) || c == '-' || c == '\0';
         }
     }
 }
@@ -298,50 +409,3 @@ class CustomLengthTextField extends JTextField {
 }
  */
 
-
-
-class CharacterFilter extends DocumentFilter {
-    boolean upper = false;
-    int limit = 0;
-    public CharacterFilter(int limit) {
-        this.limit = limit;
-    }
-    public CharacterFilter(int limit, boolean upper) {
-        System.out.println("Limit: " + limit + "(Upper: " + upper + ')');
-        this.limit = limit;
-        this.upper = upper;
-    }
-
-    @Override
-    public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
-        super.insertString(fb, offset, text, attr);
-    }
-
-    @Override
-    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
-        super.replace(fb, offset, length, revise(fb, text), attr);
-        System.out.println("Replace called!");
-    }
-
-    private String revise(FilterBypass fb, String text) {
-        System.out.println("Revise called!");
-        if (upper) {
-            text = text.toUpperCase();
-        }
-
-        StringBuilder builder = new StringBuilder(text);
-        int index = 0;
-        while (index < builder.length()) {
-            if (accept(builder.charAt(index)) && fb.getDocument().getLength() + text.length() <= limit) {
-                index++;
-            } else {
-                builder.deleteCharAt(index);
-            }
-        }
-        return builder.toString();
-    }
-
-    public boolean accept(final char c) {
-        return Character.isAlphabetic(c) || Character.isDigit(c) || c == '-';
-    }
-   }
