@@ -2,7 +2,9 @@ package com.ziggybadans.keynumbergenerator;
 
 import javax.swing.*;
 import javax.swing.text.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.util.Locale;
 
 public class GUI implements ActionListener {
 
@@ -18,7 +20,7 @@ public class GUI implements ActionListener {
 
     JButton generateButton;
     String generateOutput;
-    //PlainDocument document;
+    PlainDocument document;
     JTextField generateResult;
 
     KeyNumberGenerator main = new KeyNumberGenerator();
@@ -137,7 +139,6 @@ public class GUI implements ActionListener {
         });
         panel.add(cIInput);
 
-        // Make getProperties functionality
         JLabel numberLabel = new JLabel("Sequential Number");
         numberLabel.setBounds(670, 25, 110, 12);
         panel.add(numberLabel);
@@ -152,15 +153,14 @@ public class GUI implements ActionListener {
         panel.add(generateButton);
         generateResult = new JTextField();
         generateResult.setBounds(450, 150, 200, 20);
+        document = (PlainDocument) generateResult.getDocument();
+        document.setDocumentFilter(new CharacterFilter(5, true));
         generateResult.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (generateResult.getText().length() > 30 || generateResult.getText().contains("")) {
-                    e.consume();
-                }
+                System.out.println("Key pressed!");
             }
         });
-        //document = (PlainDocument) generateResult.getDocument();
         panel.add(generateResult);
     }
 
@@ -190,12 +190,158 @@ public class GUI implements ActionListener {
 }
 
 /*
-class CharacterFilter extends DocumentFilter {
-    @Override
-    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-        Document doc = fb.getDocument();
-        StringBuilder sb = new StringBuilder();
-        sb.append(doc.getText(0, doc.getLength()));
+class JTextFieldLimit extends PlainDocument {
+    private int limit;
+
+    public JTextFieldLimit(int limit) {
+        super();
+        this.limit = limit;
+    }
+
+    public JTextFieldLimit(int limit, boolean upper) {
+        super();
+        this.limit = limit;
+    }
+
+    private class LimitDocument extends PlainDocument {
+        @Override
+        public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+            if (str == null) return;
+
+            if ((getLength() + str.length()) <= limit) {
+                super.insertString(offset, str, attr);
+            }
+        }
     }
 }
  */
+
+/*
+class CustomLengthTextField extends JTextField {
+    protected boolean upper = false;
+    protected int maxLength = 0;
+
+    public CustomLengthTextField() {
+        this(-1);
+        System.out.println("Basic constructor.");
+    }
+
+    public CustomLengthTextField(int length, boolean upper) {
+        this(length, upper, null);
+        System.out.println("length, upper constructor.");
+    }
+
+    public CustomLengthTextField(int length, InputVerifier inputVerifier) {
+        this(length, false, inputVerifier);
+        System.out.println("length, inpv constructor.");
+    }
+
+    public CustomLengthTextField(int length, boolean upper, InputVerifier inputVerifier) {
+        super();
+        this.maxLength = length;
+        this.upper = upper;
+        if (length > 0) {
+            AbstractDocument doc = (AbstractDocument) getDocument();
+            doc.setDocumentFilter(new SizeFilter());
+            System.out.println("New SizeFilter created.");
+        }
+        setInputVerifier(inputVerifier);
+        System.out.println("Created text field.");
+    }
+
+    public CustomLengthTextField(int length) {
+        this(length, false);
+        System.out.println("length constructor.");
+    }
+
+    public void setMaxLength(int length) {
+        this.maxLength = length;
+        System.out.println("setMaxLength called.");
+    }
+
+    class SizeFilter extends DocumentFilter {
+        public void insertString(FilterBypass fb, int offs, String str, AttributeSet a) throws BadLocationException {
+            System.out.println("insertString called.");
+            if ((fb.getDocument().getLength() + str.length()) <= maxLength) {
+                System.out.println("insertString succeeded.");
+                super.insertString(fb, offs, str, a);
+            }
+        }
+
+        public void replace(FilterBypass fb, int offs, int length, String str, AttributeSet a) throws BadLocationException {
+            if (upper) {
+                System.out.println("replace called.");
+                str = str.toUpperCase();
+            }
+
+            int charLength = fb.getDocument().getLength() + str.length() - length;
+            if (charLength <= maxLength) {
+                super.replace(fb, offs, length, str, a);
+                System.out.println("Replace succeeded.");
+                if (charLength == maxLength) {
+                    focusNextComponent();
+                    System.out.println("Replace cancelled.");
+                }
+            } else {
+                focusNextComponent();
+                System.out.println("Replace cancelled.");
+            }
+        }
+
+        private void focusNextComponent() {
+            System.out.println("focusNextComponent called.");
+            if (CustomLengthTextField.this == KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner()) {
+                KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent();
+            }
+        }
+    }
+}
+ */
+
+
+
+class CharacterFilter extends DocumentFilter {
+    boolean upper = false;
+    int limit = 0;
+    public CharacterFilter(int limit) {
+        this.limit = limit;
+    }
+    public CharacterFilter(int limit, boolean upper) {
+        System.out.println("Limit: " + limit + "(Upper: " + upper + ')');
+        this.limit = limit;
+        this.upper = upper;
+    }
+
+    @Override
+    public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+        super.insertString(fb, offset, text, attr);
+    }
+
+    @Override
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
+        super.replace(fb, offset, length, revise(fb, text), attr);
+        System.out.println("Replace called!");
+    }
+
+    private String revise(FilterBypass fb, String text) {
+        System.out.println("Revise called!");
+        if (upper) {
+            text = text.toUpperCase();
+        }
+
+        StringBuilder builder = new StringBuilder(text);
+        int index = 0;
+        while (index < builder.length()) {
+            if (accept(builder.charAt(index)) && fb.getDocument().getLength() + text.length() <= limit) {
+                index++;
+            } else {
+                builder.deleteCharAt(index);
+            }
+        }
+        return builder.toString();
+    }
+
+    public boolean accept(final char c) {
+        return Character.isAlphabetic(c) || Character.isDigit(c) || c == '-';
+    }
+   }
