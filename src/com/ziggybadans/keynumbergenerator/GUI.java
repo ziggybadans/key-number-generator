@@ -25,13 +25,13 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 
-public class GUI implements ActionListener {
+public class GUI<KeyNumberGenerator> implements ActionListener {
 
     JFrame frame;
     JButton backgroundButton;
 
-    JComboBox<String> marketMenu;
-    static JTextField yearInput;
+    JComboBox<String> marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
+    public static JTextField yearInput;
     JTextField writerIInput;
     JComboBox<Integer> durationMenu;
     JComboBox<String> typeMenu;
@@ -40,9 +40,9 @@ public class GUI implements ActionListener {
 
     JButton generateButton;
     String generateOutput;
-    static JTextField generateResult;
+    public static JTextField generateResult;
 
-    static boolean yearFieldActive;
+    public static boolean yearFieldActive;
 
     PlainDocument generateDocument;
     PlainDocument yearDocument;
@@ -84,7 +84,6 @@ public class GUI implements ActionListener {
         marketLabel.setBounds(50, 25, 80, 12);
         panel.add(marketLabel);
         panel.setLayer(marketLabel, 1, 0);
-        marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
         marketMenu.setSelectedIndex(0);
         marketMenu.setBounds(50, 50, 90, 20);
         marketMenu.addActionListener(this);
@@ -310,7 +309,7 @@ public class GUI implements ActionListener {
         }
     }
 
-    static class CharacterFilter extends DocumentFilter {
+    public static class CharacterFilter extends DocumentFilter {
         boolean upper = false;
         // Removing this limit initializer, if there's a bug change it back
         int limit;
@@ -364,7 +363,7 @@ public class GUI implements ActionListener {
         }
     }
 
-    static class NumberFilter extends DocumentFilter {
+    public static class NumberFilter extends DocumentFilter {
         // Removing this limit initializer, if there's a bug change it back
         int limit;
         boolean number;
