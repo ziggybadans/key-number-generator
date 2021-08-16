@@ -1,18 +1,20 @@
 package com.ziggybadans.keynumbergenerator;
 
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Properties;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class KeyNumberGenerator {
 
-    public int year;
+    public int year = -1;
     public boolean yearReady;
 
     public static String[] markets = {"AUG", "BAL", "BEG", "BEN", "BER", "BOW", "BUN", "BUR", "CAI", "DAR", "DEV", "GEE", "GLA", "GOL", "HOB", "IPS", "LAU", "LIN", "MAC",
@@ -24,7 +26,7 @@ public class KeyNumberGenerator {
 
     public static Integer[] durations = {10, 15, 30, 45, 60, 90};
     public boolean durationReady = false;
-    public int duration;
+    public int duration = -1;
 
     public static String[] types = {"R", "L", "SL", "X", "SX"};
     public boolean typeReady = false;
@@ -33,7 +35,7 @@ public class KeyNumberGenerator {
     public String clientInitial;
 
     public static int number = 0;
-    public String pathname;
+    public static String pathname;
     public String keyNumber;
 
     KeyNumberGenerator() {
@@ -73,18 +75,18 @@ public class KeyNumberGenerator {
             }
         } catch (NullPointerException e) {
             System.out.println("Input is null! Resetting...");
-            year = Integer.parseInt(null);
+            year = -1;
         }
 
     }
 
-    public void setwI(String input) {
+    public void setWriterI(String input) {
         try {
             writerInitial = input.toUpperCase(Locale.ROOT).charAt(0);
             System.out.println("Debug: " + writerInitial + " - Successful!");
         } catch (NullPointerException e) {
             System.out.println("Input is null! Resetting...");
-            writerInitial = (char) '\0';
+            writerInitial = '\0';
         }
 
     }
@@ -117,7 +119,7 @@ public class KeyNumberGenerator {
         }
     }
 
-    public void setcI(String input) {
+    public void setClientI(String input) {
         try {
             CharConcatentation charConcat = new CharConcatentation();
             if (input.length() == 2) {
@@ -125,15 +127,14 @@ public class KeyNumberGenerator {
                 char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(1);
 
                 clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
-                System.out.println("Debug: " + clientInitial + " - Successful!");
             } else {
                 int secondInitialIndex = input.toUpperCase(Locale.ROOT).indexOf(" ") + 1;
                 char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
                 char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(secondInitialIndex);
 
                 clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
-                System.out.println("Debug: " + clientInitial + " - Successful!");
             }
+            System.out.println("Debug: " + clientInitial + " - Successful!");
         } catch (NullPointerException e) {
             System.out.println("Input is null! Resetting...");
             clientInitial = null;
@@ -141,40 +142,7 @@ public class KeyNumberGenerator {
 
     }
 
-    /*
-    public void properties() throws IOException {
-        if (getOS.isWindows()) {
-            pathname = System.getenv("APPDATA")  + "/number.properties";
-        }
-        if (getOS.isMac()) {
-            pathname = System.getProperty("user.home") + "/number.properties";
-        }
-
-        File getFile = new File(pathname);
-        boolean exists = getFile.exists();
-
-        Properties p = new Properties();
-
-        if (exists) {
-            FileReader reader = new FileReader(pathname);
-            p.load(reader);
-            number = Integer.parseInt(p.getProperty("number"));
-        } else {
-            try {
-                p.setProperty("number", "1");
-                p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
-
-                FileReader reader = new FileReader(pathname);
-                p.load(reader);
-                number = Integer.parseInt(p.getProperty("number"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-     */
-
-    public int getProperties() {
+    public static int getProperties() {
         if (getOS.isWindows()) {
             pathname = System.getenv("APPDATA")  + "/number.properties";
         }
@@ -219,6 +187,26 @@ public class KeyNumberGenerator {
         return number;
     }
 
+    public String get(String input) {
+        return Objects.requireNonNullElse(input, "NULL");
+    }
+
+    public String get(int input) {
+        if (input != -1) {
+            return String.valueOf(input);
+        } else {
+            return "NULL";
+        }
+    }
+
+    public String get(char input) {
+        if (input != '\0') {
+            return String.valueOf(input);
+        } else {
+            return "NULL";
+        }
+    }
+
     public String generate() {
         if (getOS.isWindows()) {
             pathname = System.getenv("APPDATA") + "/number.properties";
@@ -228,7 +216,8 @@ public class KeyNumberGenerator {
         }
 
         System.out.println("Key Number:");
-        keyNumber = market + year + writerInitial + '-' + clientInitial + '-' + duration + type + '-' + number;
+        //keyNumber = market + year + writerInitial + '-' + clientInitial + '-' + duration + type + '-' + number;
+        keyNumber = get(market) + get(year) + get(writerInitial) + '-' + get(clientInitial) + '-' + get(duration) + get(type) + '-' + number;
         System.out.println(keyNumber);
 
         try {
@@ -250,56 +239,7 @@ public class KeyNumberGenerator {
         return keyNumber;
     }
 
-    public static void main(String[] args) throws IOException {
-        KeyNumberGenerator keyNumberGenerator = new KeyNumberGenerator();
-
+    public static void main(String[] args) {
         GUI gui = new GUI();
-        /*
-        Scanner input = new Scanner(System.in);
-
-        // Rearrange this later (year after market).
-        System.out.println("What year?:");
-        while (!keyNumberGenerator.yearReady) {
-            try {
-                keyNumberGenerator.year = Integer.parseInt(input.nextLine());
-                keyNumberGenerator.yearReady = true;
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                System.out.println("That is not a valid number! Please enter again:");
-            }
-        }
-
-        keyNumberGenerator.properties();
-
-        System.out.println("What market?" + Arrays.toString(keyNumberGenerator.markets) + ':');
-        while (!keyNumberGenerator.marketReady) {
-            String marketInput = input.nextLine();
-            keyNumberGenerator.setMarket(marketInput);
-        }
-
-        // Add cI functionality to wI
-        System.out.println("Type writer initials or name:");
-        String writerInitialsInput = input.nextLine();
-        keyNumberGenerator.getwI(writerInitialsInput);
-
-        System.out.println("Type client initials or name:");
-        String clientInitialsInput = input.nextLine();
-        keyNumberGenerator.getcI(clientInitialsInput);
-
-        System.out.println("What duration?:" + Arrays.toString(keyNumberGenerator.durations) + ':');
-        while (!keyNumberGenerator.durationReady) {
-            int durationInput = Integer.parseInt(input.nextLine());
-            keyNumberGenerator.setDuration(durationInput);
-        }
-
-        System.out.println("What type?" + Arrays.toString(keyNumberGenerator.types) + ':');
-        while (!keyNumberGenerator.typeReady) {
-            String typeInput = input.nextLine();
-            keyNumberGenerator.setType(typeInput);
-        }
-
-        System.out.println("Here is your key number! (Copied to clipboard)");
-        keyNumberGenerator.print();
-         */
     }
 }
