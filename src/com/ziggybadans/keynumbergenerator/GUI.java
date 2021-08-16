@@ -23,8 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class GUI implements ActionListener {
@@ -33,17 +31,23 @@ public class GUI implements ActionListener {
     JButton backgroundButton;
 
     JComboBox<String> marketMenu;
-    JTextField yearInput;
-    JTextField wIInput;
-     JComboBox<Integer> durationMenu;
+    static JTextField yearInput;
+    JTextField writerIInput;
+    JComboBox<Integer> durationMenu;
     JComboBox<String> typeMenu;
-    JTextField cIInput;
+    JTextField clientIInput;
     JTextField numberOutput;
 
     JButton generateButton;
     String generateOutput;
-    PlainDocument document;
     static JTextField generateResult;
+
+    static boolean yearFieldActive;
+
+    PlainDocument generateDocument;
+    PlainDocument yearDocument;
+    PlainDocument writerIDocument;
+    PlainDocument clientIDocument;
 
     JMenuBar menuBar;
     JMenu preferences;
@@ -54,7 +58,7 @@ public class GUI implements ActionListener {
     public GUI() {
         frame = new JFrame("Key Number Generator");
 
-        frame.setSize(850,300);
+        frame.setSize(850, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JLayeredPane panel = new JLayeredPane();
@@ -69,7 +73,7 @@ public class GUI implements ActionListener {
         panel.setLayout(null);
 
         backgroundButton = new JButton();
-        backgroundButton.setBounds(0,0,1200,600);
+        backgroundButton.setBounds(0, 0, 1200, 600);
         backgroundButton.setOpaque(false);
         backgroundButton.setContentAreaFilled(false);
         backgroundButton.setBorderPainted(false);
@@ -82,7 +86,7 @@ public class GUI implements ActionListener {
         panel.setLayer(marketLabel, 1, 0);
         marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
         marketMenu.setSelectedIndex(0);
-        marketMenu.setBounds(50,50,90,20);
+        marketMenu.setBounds(50, 50, 90, 20);
         marketMenu.addActionListener(this);
         panel.add(marketMenu);
         panel.setLayer(marketMenu, 1, 0);
@@ -98,6 +102,7 @@ public class GUI implements ActionListener {
             public void focusGained(FocusEvent e) {
                 if (yearInput.getText().equals("Type year")) {
                     yearInput.setText("");
+                    yearFieldActive = true;
                 }
             }
 
@@ -106,7 +111,7 @@ public class GUI implements ActionListener {
                 if (yearInput.getText().equals("Type year")) {
                     System.out.println("Year: " + null);
                     main.setYear(null);
-                } else if(yearInput.getText().equals("")) {
+                } else if (yearInput.getText().equals("")) {
                     yearInput.setText("Type year");
                     System.out.println("Year: " + null);
                     main.setYear(null);
@@ -117,6 +122,8 @@ public class GUI implements ActionListener {
                 }
             }
         });
+        yearDocument = (PlainDocument) yearInput.getDocument();
+        yearDocument.setDocumentFilter(new NumberFilter(4, false));
         panel.add(yearInput);
         panel.setLayer(yearInput, 1, 0);
 
@@ -124,34 +131,33 @@ public class GUI implements ActionListener {
         wILabel.setBounds(250, 25, 80, 12);
         panel.add(wILabel);
         panel.setLayer(wILabel, 1, 0);
-        wIInput = new JTextField("Type name");
-        wIInput.setBounds(250, 50, 90, 20);
-        wIInput.addFocusListener(new FocusListener() {
+        writerIInput = new JTextField("Type name");
+        writerIInput.setBounds(250, 50, 90, 20);
+        writerIInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (wIInput.getText().equals("Type name")) {
-                    wIInput.setText("");
+                if (writerIInput.getText().equals("Type name")) {
+                    writerIInput.setText("");
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (wIInput.getText().equals("Type name")) {
+                if (writerIInput.getText().equals("Type name")) {
                     System.out.println("Writer input: " + null);
                     main.setWriterI(null);
-                } else if (wIInput.getText().equals("")) {
-                    wIInput.setText("Type name");
+                } else if (writerIInput.getText().equals("")) {
+                    writerIInput.setText("Type name");
                     System.out.println("Writer input: " + null);
                     main.setWriterI(null);
-                }
-                else {
-                    System.out.println("Writer Input: " + wIInput.getText());
-                    main.setWriterI(wIInput.getText());
+                } else {
+                    System.out.println("Writer Input: " + writerIInput.getText());
+                    main.setWriterI(writerIInput.getText());
                 }
             }
         });
-        panel.add(wIInput);
-        panel.setLayer(wIInput, 1, 0);
+        panel.add(writerIInput);
+        panel.setLayer(writerIInput, 1, 0);
 
         JLabel durationLabel = new JLabel("Duration");
         durationLabel.setBounds(350, 25, 80, 12);
@@ -179,34 +185,33 @@ public class GUI implements ActionListener {
         cILabel.setBounds(550, 25, 80, 12);
         panel.add(cILabel);
         panel.setLayer(cILabel, 1, 0);
-        cIInput = new JTextField("Type client name");
-        cIInput.setBounds(550, 50, 110, 20);
-        cIInput.addFocusListener(new FocusListener() {
+        clientIInput = new JTextField("Type client name");
+        clientIInput.setBounds(550, 50, 110, 20);
+        clientIInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (cIInput.getText().equals("Type client name")) {
-                    cIInput.setText("");
+                if (clientIInput.getText().equals("Type client name")) {
+                    clientIInput.setText("");
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (cIInput.getText().equals("Type client name")) {
+                if (clientIInput.getText().equals("Type client name")) {
                     System.out.println("Client: " + null);
                     main.setClientI(null);
-                } else if (cIInput.getText().equals("")) {
-                    cIInput.setText("Type client name");
+                } else if (clientIInput.getText().equals("")) {
+                    clientIInput.setText("Type client name");
                     System.out.println("Client: " + null);
                     main.setClientI(null);
-                }
-                else {
-                    System.out.println("Client: " + cIInput.getText());
-                    main.setClientI(cIInput.getText());
+                } else {
+                    System.out.println("Client: " + clientIInput.getText());
+                    main.setClientI(clientIInput.getText());
                 }
             }
         });
-        panel.add(cIInput);
-        panel.setLayer(cIInput, 1, 0);
+        panel.add(clientIInput);
+        panel.setLayer(clientIInput, 1, 0);
 
         JLabel numberLabel = new JLabel("Sequential Number");
         numberLabel.setBounds(670, 25, 110, 12);
@@ -225,14 +230,8 @@ public class GUI implements ActionListener {
         panel.setLayer(generateButton, 1, 0);
         generateResult = new JTextField();
         generateResult.setBounds(302, 150, 250, 20);
-        document = (PlainDocument) generateResult.getDocument();
-        document.setDocumentFilter(new CharacterFilter(30, true));
-        generateResult.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                System.out.println("Key pressed!");
-            }
-        });
+        generateDocument = (PlainDocument) generateResult.getDocument();
+        generateDocument.setDocumentFilter(new CharacterFilter(30, true));
         panel.add(generateResult);
         panel.setLayer(generateResult, 1, 0);
 
@@ -264,15 +263,33 @@ public class GUI implements ActionListener {
             System.out.println("Type: " + typeMenu.getSelectedItem());
             main.setType((String) typeMenu.getSelectedItem());
         } else if (event.getSource() == generateButton) {
+            main.setMarket((String) marketMenu.getSelectedItem());
+            main.setDuration((int) durationMenu.getSelectedItem());
+            main.setType((String) typeMenu.getSelectedItem());
             System.out.println("Debug: Attempting to generate...");
             generateOutput = main.generate();
             generateResult.setText("");
             generateResult.setText(generateOutput);
             numberOutput.setText(String.valueOf(KeyNumberGenerator.getProperties()));
+            if (!main.yearReady) {
+                BalloonTip nullError = new BalloonTip(GUI.yearInput, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (main.writerInitial == '\0') {
+                BalloonTip nullError = new BalloonTip(writerIInput, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (main.clientInitial == null) {
+                BalloonTip nullError = new BalloonTip(clientIInput, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
         } else if (event.getSource() == editProperties) {
             System.out.println("test");
             File properties = new File(KeyNumberGenerator.pathname);
-            try{
+            try {
                 if (!Desktop.isDesktopSupported()) {
                     System.out.println("Desktop not supported.");
                     JOptionPane.showMessageDialog(new JFrame(), "Desktop not supported.",
@@ -290,7 +307,6 @@ public class GUI implements ActionListener {
                 JOptionPane.showMessageDialog(new JFrame(), "An error occurred while trying to access the properties file.",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
-
         }
     }
 
@@ -300,8 +316,10 @@ public class GUI implements ActionListener {
         int limit;
 
         public CharacterFilter(int limit) {
+            System.out.println("Limit: " + limit);
             this.limit = limit;
         }
+
         public CharacterFilter(int limit, boolean upper) {
             System.out.println("Limit: " + limit + "(Upper: " + upper + ')');
             this.limit = limit;
@@ -345,4 +363,56 @@ public class GUI implements ActionListener {
             return Character.isAlphabetic(c) || Character.isDigit(c) || c == '-' || c == '\0';
         }
     }
+
+    static class NumberFilter extends DocumentFilter {
+        // Removing this limit initializer, if there's a bug change it back
+        int limit;
+        boolean number;
+
+        public NumberFilter(int limit, boolean number) {
+            System.out.println("Limit: " + limit + "(Number: " + number + ')');
+            this.limit = limit;
+            this.number = number;
+        }
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+            super.insertString(fb, offset, text, attr);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
+            if (!text.equals("Type year")) {
+                super.replace(fb, offset, length, revise(fb, text), attr);
+                System.out.println("Replace called!");
+            } else {
+                super.replace(fb, offset, length, text, attr);
+            }
+        }
+
+        private String revise(FilterBypass fb, String text) {
+
+            System.out.println("Revise called!");
+
+            StringBuilder builder = new StringBuilder(text);
+            int index = 0;
+            while (index < builder.length()) {
+                if (accept(builder.charAt(index)) && fb.getDocument().getLength() + text.length() <= limit) {
+                    index++;
+                } else {
+                        builder.deleteCharAt(index);
+                        BalloonTip acceptError = new BalloonTip(GUI.yearInput,
+                                "Maximum length is 4 characters. Only numbers allowed.");
+                        TimingUtils.showTimedBalloon(acceptError, 2000, e -> FadingUtils.fadeOutBalloon(acceptError,
+                                e1 -> acceptError.closeBalloon(), 500, 15));
+                }
+            }
+            return builder.toString();
+        }
+
+        public boolean accept(final char c) {
+            return Character.isDigit(c);
+        }
+    }
 }
+
