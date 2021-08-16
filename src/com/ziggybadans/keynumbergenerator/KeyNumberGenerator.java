@@ -7,10 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
 
 public class KeyNumberGenerator {
 
@@ -57,12 +54,13 @@ public class KeyNumberGenerator {
     // Get current year for this later.
     public void setYear(String input) {
         CharConcatentation charConcat = new CharConcatentation();
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         try {
-            if (input.length() == 2 && Integer.parseInt(input) >= 21) {
+            if (input.length() == 2 && Integer.parseInt(input) >= currentYear) {
                 this.year = Integer.parseInt(input);
                 this.yearReady = true;
                 System.out.println("Debug: " + this.year + " - Successful!");
-            } else if (input.length() == 4 && Integer.parseInt(input) >= 2021) {
+            } else if (input.length() == 4 && Integer.parseInt(input) >= Integer.parseInt(Integer.toString(currentYear).substring(2,4))) {
                 char firstYearChar = input.charAt(2);
                 char secondYearChar = input.charAt(3);
 
