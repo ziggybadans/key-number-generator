@@ -56,11 +56,11 @@ public class KeyNumberGenerator {
         CharConcatentation charConcat = new CharConcatentation();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         try {
-            if (input.length() == 2 && Integer.parseInt(input) >= currentYear) {
+            if (input.length() == 2 && Integer.parseInt(input) >= Integer.parseInt(Integer.toString(currentYear).substring(2,4))) {
                 this.year = Integer.parseInt(input);
                 this.yearReady = true;
                 System.out.println("Debug: " + this.year + " - Successful!");
-            } else if (input.length() == 4 && Integer.parseInt(input) >= Integer.parseInt(Integer.toString(currentYear).substring(2,4))) {
+            } else if (input.length() == 4 && Integer.parseInt(input) >= currentYear) {
                 char firstYearChar = input.charAt(2);
                 char secondYearChar = input.charAt(3);
 

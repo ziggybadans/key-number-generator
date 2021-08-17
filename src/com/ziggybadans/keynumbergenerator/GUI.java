@@ -77,6 +77,7 @@ public class GUI implements ActionListener {
         backgroundButton.setOpaque(false);
         backgroundButton.setContentAreaFilled(false);
         backgroundButton.setBorderPainted(false);
+        backgroundButton.addActionListener(this);
         panel.add(backgroundButton);
         panel.setLayer(backgroundButton, 0, 0);
 
@@ -126,6 +127,8 @@ public class GUI implements ActionListener {
         yearDocument.setDocumentFilter(new NumberFilter(4, false));
         panel.add(yearInput);
         panel.setLayer(yearInput, 1, 0);
+
+        System.out.println(yearInput.getBounds());
 
         JLabel wILabel = new JLabel("Writer");
         wILabel.setBounds(250, 25, 80, 12);
@@ -242,11 +245,14 @@ public class GUI implements ActionListener {
         menuBar.add(preferences);
         preferences.add(editProperties);
         frame.setJMenuBar(menuBar);
+
+
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
         // All of this probably won't run when the program first launches, making defaults broken
+        numberOutput.setText(String.valueOf(KeyNumberGenerator.getProperties()));
         if (event.getSource() == marketMenu) {
             System.out.println("Market: " + marketMenu.getSelectedItem());
             main.setMarket((String) marketMenu.getSelectedItem());
@@ -287,7 +293,6 @@ public class GUI implements ActionListener {
                         e1 -> nullError.closeBalloon(), 500, 15));
             }
         } else if (event.getSource() == editProperties) {
-            System.out.println("test");
             File properties = new File(KeyNumberGenerator.pathname);
             try {
                 if (!Desktop.isDesktopSupported()) {
