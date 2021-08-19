@@ -16,10 +16,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class GUI implements ActionListener {
 
     KeyNumberGenerator main = new KeyNumberGenerator();
+    ProgramProperties properties = new ProgramProperties();
 
     JFrame frame;
     JButton backgroundButton;
@@ -44,8 +46,6 @@ public class GUI implements ActionListener {
 
     JTextField numberOutput;
 
-
-
     JButton generateButton;
     String generateOutput;
     static JTextField generateResult;
@@ -61,7 +61,11 @@ public class GUI implements ActionListener {
     JMenu preferences;
     JMenuItem editProperties;
 
-    public GUI() {
+    boolean debug = false;
+    boolean debugProperties = false;
+    boolean debugFields = false;
+
+    public GUI() throws InterruptedException {
         frame = new JFrame("Key Number Generator");
 
         frame.setSize(850, 300);
@@ -70,9 +74,12 @@ public class GUI implements ActionListener {
         JLayeredPane panel = new JLayeredPane();
         frame.add(panel);
 
+        properties.loadProperties();
+        TimeUnit.SECONDS.sleep(1);
+
         placeComponents(panel);
 
-        updateFields();
+        //updateFields();
 
         frame.setVisible(true);
     }
@@ -83,7 +90,8 @@ public class GUI implements ActionListener {
             this.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    main.setProperties(key, input.getText());
+                    if (debugProperties) { System.out.println("Input: " + input.getText()); }
+                    properties.setProperties(key, input.getText());
                 }
             });
         }
@@ -93,12 +101,19 @@ public class GUI implements ActionListener {
             this.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    main.setProperties(key, Objects.requireNonNull(input.getSelectedItem()).toString());
+                    if (debugProperties) { System.out.println("Input: " + input.getSelectedItem()); }
+                    try {
+                        properties.setProperties(key, Objects.requireNonNull(input.getSelectedItem()).toString());
+                    } catch (NullPointerException error) {
+                        System.out.println("Failed!");
+                    }
+
                 }
             });
         }
     }
 
+    /*
     private void updateFields() {
         JComboBox<?>[] comboFields = {marketMenu, durationMenu, typeMenu};
         String[] comboFieldNames = {"marketMenu", "durationMenu", "typeMenu"};
@@ -106,9 +121,11 @@ public class GUI implements ActionListener {
         String[] textFieldNames = {"yearInput", "writerIInput", "clientIInput"};
 
         for (int i = 0; i < comboFields.length; i++) {
-            System.out.println(comboFields[i]);
-            System.out.println(comboFieldNames[i]);
-            String fetch = main.getProperty(comboFieldNames[i].replace("Menu", ""), String.class);
+            if (debugFields) {
+                System.out.println(comboFields[i]);
+                System.out.println(comboFieldNames[i]);
+            }
+            String fetch = properties.getProperty(comboFieldNames[i].replace("Menu", ""));
             JComboBox<?> field = comboFields[i];
             if (!fetch.equals("null")) {
                 field.setSelectedItem(fetch);
@@ -117,8 +134,8 @@ public class GUI implements ActionListener {
             }
         }
         for (int i = 0; i < textFields.length; i++) {
-            System.out.println(textFieldNames[i]);
-            String fetch = main.getProperty(textFieldNames[i].replace("Input", ""), String.class);
+            if (debugFields) { System.out.println(textFieldNames[i]); }
+            String fetch = properties.getProperty(textFieldNames[i].replace("Input", ""));
             JTextField field = textFields[i];
             if (!fetch.equals("null")) {
                 field.setText(fetch);
@@ -126,9 +143,10 @@ public class GUI implements ActionListener {
                 field.setText("Type " + textFieldNames[i].replace("Input", ""));
             }
         }
-        System.out.println("Number: " + main.getProperty("number", Integer.class));
-        numberOutput.setText(String.valueOf(main.getProperty("number", Integer.class)));
+        if (debugFields) { System.out.println("Number: " + properties.getProperty("number")); }
+        numberOutput.setText(String.valueOf(properties.getProperty("number")));
     }
+     */
 
     public static void throwPropertiesError(String type) {
         switch (type) {
@@ -183,13 +201,13 @@ public class GUI implements ActionListener {
 
         JLabel marketLabel = new JLabel("Market");
         marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
-        marketMenu.setSelectedIndex(0);
+        marketMenu.setSelectedItem(properties.getProperty("market"));
         marketMenu.addActionListener(this);
         marketSP = new SetPropertiesButton("market", marketMenu);
         place(marketLabel, marketMenu, marketSP, panel, 50, 25, 80, 12);
 
         JLabel yearLabel = new JLabel("Year");
-        yearInput = new JTextField("Type year");
+        yearInput = new JTextField(properties.getProperty("year"));
         yearInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -202,14 +220,14 @@ public class GUI implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (yearInput.getText().equals("Type year")) {
-                    System.out.println("Year: " + null);
+                    if (debug) { System.out.println("Year: " + null); }
                     main.setYear(null);
                 } else if (yearInput.getText().equals("")) {
                     yearInput.setText("Type year");
-                    System.out.println("Year: " + null);
+                    if (debug) { System.out.println("Year: " + null); }
                     main.setYear(null);
                 } else {
-                    System.out.println("Year: " + yearInput.getText());
+                    if (debug) { System.out.println("Year: " + yearInput.getText()); }
                     main.setYear(yearInput.getText());
                     // Add balloon tooltip for invalid input
                 }
@@ -221,7 +239,7 @@ public class GUI implements ActionListener {
         place(yearLabel, yearInput, yearSP, panel, 150, 25, 80, 12);
 
         JLabel wILabel = new JLabel("Writer");
-        writerIInput = new JTextField("Type name");
+        writerIInput = new JTextField(properties.getProperty("writer_initial"));
         writerIInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -233,14 +251,14 @@ public class GUI implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (writerIInput.getText().equals("Type name")) {
-                    System.out.println("Writer input: " + null);
+                    if (debug) { System.out.println("Writer input: " + null); }
                     main.setWriterI(null);
                 } else if (writerIInput.getText().equals("")) {
                     writerIInput.setText("Type name");
-                    System.out.println("Writer input: " + null);
+                    if (debug) { System.out.println("Writer input: " + null); }
                     main.setWriterI(null);
                 } else {
-                    System.out.println("Writer Input: " + writerIInput.getText());
+                    if (debug) { System.out.println("Writer Input: " + writerIInput.getText()); }
                     main.setWriterI(writerIInput.getText());
                 }
             }
@@ -250,20 +268,20 @@ public class GUI implements ActionListener {
 
         JLabel durationLabel = new JLabel("Duration");
         durationMenu = new JComboBox<>(KeyNumberGenerator.durations);
-        durationMenu.setSelectedIndex(0);
+        durationMenu.setSelectedItem(properties.getProperty("duration"));
         durationMenu.addActionListener(this);
         durationSP = new SetPropertiesButton("duration", durationMenu);
         place(durationLabel, durationMenu, durationSP, panel, 350, 25, 80, 12);
 
         JLabel typeLabel = new JLabel("Type");
         typeMenu = new JComboBox<>(KeyNumberGenerator.types);
-        typeMenu.setSelectedIndex(0);
+        typeMenu.setSelectedItem(properties.getProperty("type"));
         typeMenu.addActionListener(this);
         typeSP = new SetPropertiesButton("type", typeMenu);
         place(typeLabel, typeMenu, typeSP, panel, 450, 25, 80, 12);
 
         JLabel cILabel = new JLabel("Client");
-        clientIInput = new JTextField("Type client name");
+        clientIInput = new JTextField(properties.getProperty("client_initial"));
         clientIInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -275,14 +293,14 @@ public class GUI implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (clientIInput.getText().equals("Type client name")) {
-                    System.out.println("Client: " + null);
+                    if (debug) { System.out.println("Client: " + null); }
                     main.setClientI(null);
                 } else if (clientIInput.getText().equals("")) {
                     clientIInput.setText("Type client name");
-                    System.out.println("Client: " + null);
+                    if (debug) { System.out.println("Client: " + null); }
                     main.setClientI(null);
                 } else {
-                    System.out.println("Client: " + clientIInput.getText());
+                    if (debug) { System.out.println("Client: " + clientIInput.getText()); }
                     main.setClientI(clientIInput.getText());
                 }
             }
@@ -291,7 +309,7 @@ public class GUI implements ActionListener {
         place(cILabel, clientIInput, clientISP, panel, 550, 25, 110, 12);
 
         JLabel numberLabel = new JLabel("Sequential Number");
-        numberOutput = new JTextField();
+        numberOutput = new JTextField(properties.getProperty("number"));
         numberOutput.setEditable(false);
         place(numberLabel, panel, 1, 670, 25, 110, 12);
         place(numberOutput, panel, 1, numberLabel.getX(), numberLabel.getY() + 25, 50, numberLabel.getHeight() + 8);
@@ -317,29 +335,32 @@ public class GUI implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         // All of this probably won't run when the program first launches, making defaults broken
         if (event.getSource() == marketMenu) {
-            System.out.println("Market: " + marketMenu.getSelectedItem());
+            if (debug) { System.out.println("Market: " + marketMenu.getSelectedItem()); }
             main.setMarket((String) marketMenu.getSelectedItem());
-        } else if (event.getSource() == durationMenu) {
+        }
+        else if (event.getSource() == durationMenu) {
             try {
-                System.out.println("Duration: " + durationMenu.getSelectedItem());
+                if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
                 main.setDuration((int) durationMenu.getSelectedItem());
             } catch (NullPointerException e) {
                 durationMenu.setSelectedItem(KeyNumberGenerator.durations[0]);
-                System.out.println("Duration: " + durationMenu.getSelectedItem());
+                if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
                 main.setDuration((int) durationMenu.getSelectedItem());
             }
-        } else if (event.getSource() == typeMenu) {
-            System.out.println("Type: " + typeMenu.getSelectedItem());
+        }
+        else if (event.getSource() == typeMenu) {
+            if (debug) { System.out.println("Type: " + typeMenu.getSelectedItem()); }
             main.setType((String) typeMenu.getSelectedItem());
-        } else if (event.getSource() == generateButton) {
+        }
+        else if (event.getSource() == generateButton) {
             main.setMarket((String) marketMenu.getSelectedItem());
             main.setDuration((int) durationMenu.getSelectedItem());
             main.setType((String) typeMenu.getSelectedItem());
-            System.out.println("Debug: Attempting to generate...");
+            if (debug) { System.out.println("Debug: Attempting to generate..."); }
             generateOutput = main.generate();
             generateResult.setText("");
             generateResult.setText(generateOutput);
-            numberOutput.setText(String.valueOf(main.getProperty("number", Integer.class)));
+            numberOutput.setText(String.valueOf(properties.getProperty("number")));
             if (!main.yearReady) {
                 BalloonTip nullError = new BalloonTip(GUI.yearInput, "This input was left blank.");
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
@@ -355,7 +376,8 @@ public class GUI implements ActionListener {
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
                         e1 -> nullError.closeBalloon(), 500, 15));
             }
-        } else if (event.getSource() == editProperties) {
+        }
+        else if (event.getSource() == editProperties) {
             System.out.println("test");
             File properties = new File(KeyNumberGenerator.pathname);
             try {
@@ -378,17 +400,19 @@ public class GUI implements ActionListener {
     }
 
     static class CharacterFilter extends DocumentFilter {
+        boolean debugFilter = false;
+
         boolean upper = false;
         // Removing this limit initializer, if there's a bug change it back
         int limit;
 
         public CharacterFilter(int limit) {
-            System.out.println("Limit: " + limit);
+            if (debugFilter) { System.out.println("Limit: " + limit); }
             this.limit = limit;
         }
 
         public CharacterFilter(int limit, boolean upper) {
-            System.out.println("Limit: " + limit + "(Upper: " + upper + ')');
+            if (debugFilter) { System.out.println("Limit: " + limit + "(Upper: " + upper + ')'); }
             this.limit = limit;
             this.upper = upper;
         }
@@ -401,11 +425,11 @@ public class GUI implements ActionListener {
         @Override
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
             super.replace(fb, offset, length, revise(fb, text), attr);
-            System.out.println("Replace called!");
+            if (debugFilter) { System.out.println("Replace called!"); }
         }
 
         private String revise(FilterBypass fb, String text) {
-            System.out.println("Revise called!");
+            if (debugFilter) { System.out.println("Revise called!"); }
             if (upper) {
                 text = text.toUpperCase();
             }
@@ -432,12 +456,15 @@ public class GUI implements ActionListener {
     }
 
     static class NumberFilter extends DocumentFilter {
+        boolean debugFilter = false;
+
         // Removing this limit initializer, if there's a bug change it back
         int limit;
         boolean number;
 
+
         public NumberFilter(int limit, boolean number) {
-            System.out.println("Limit: " + limit + "(Number: " + number + ')');
+            if (debugFilter) { System.out.println("Limit: " + limit + "(Number: " + number + ')'); }
             this.limit = limit;
             this.number = number;
         }
@@ -451,15 +478,14 @@ public class GUI implements ActionListener {
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
             if (!text.equals("Type year")) {
                 super.replace(fb, offset, length, revise(fb, text), attr);
-                System.out.println("Replace called!");
+                if (debugFilter) { System.out.println("Replace called!"); }
             } else {
                 super.replace(fb, offset, length, text, attr);
             }
         }
 
         private String revise(FilterBypass fb, String text) {
-
-            System.out.println("Revise called!");
+            if (debugFilter) { System.out.println("Revise called!"); }
 
             StringBuilder builder = new StringBuilder(text);
             int index = 0;

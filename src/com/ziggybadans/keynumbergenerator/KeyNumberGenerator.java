@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class KeyNumberGenerator {
 
@@ -39,8 +40,9 @@ public class KeyNumberGenerator {
     public static String[] errors = {"access", "save", "read", "type..."};
 
     private Properties p;
-    private final String[] props = {"market", "year", "writer_initial", "duration", "type", "client_initial", "number"};
-    //private Map<String, String> defaultProps = Map.ofEntries(Map.entry("market", "AUG"), Map.entry("year", ""), Map.entry("writer_initial", ""), Map.entry("duration", "10"), Map.entry())
+    //private final String[] props = {"market", "year", "writer_initial", "duration", "type", "client_initial", "number"};
+
+    boolean debug;
 
     KeyNumberGenerator() {
     }
@@ -51,10 +53,10 @@ public class KeyNumberGenerator {
             tempMarket = java.util.Arrays.asList(markets).indexOf(input);
             market = markets[tempMarket];
             marketReady = true;
-            System.out.println("Debug: " + market + " - Successful!");
+            if (debug) { System.out.println("Debug: " + market + " - Successful!"); }
         }
         catch (Exception e) {
-            System.out.println("Debug: " + input + " - Invalid.");
+            if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
         }
     }
 
@@ -66,20 +68,20 @@ public class KeyNumberGenerator {
             if (input.length() == 2 && Integer.parseInt(input) >= currentYear) {
                 this.year = Integer.parseInt(input);
                 this.yearReady = true;
-                System.out.println("Debug: " + this.year + " - Successful!");
+                if (debug) { System.out.println("Debug: " + this.year + " - Successful!"); }
             } else if (input.length() == 4 && Integer.parseInt(input) >= Integer.parseInt(Integer.toString(currentYear).substring(2,4))) {
                 char firstYearChar = input.charAt(2);
                 char secondYearChar = input.charAt(3);
 
                 this.year = Integer.parseInt(charConcat.concat(firstYearChar, secondYearChar));
                 this.yearReady = true;
-                System.out.println("Debug: " + this.year + " - Successful!");
+                if (debug) { System.out.println("Debug: " + this.year + " - Successful!"); }
             } else {
                 this.yearReady = false;
-                System.out.println("Debug: " + input + " - Invalid.");
+                if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
             }
         } catch (NullPointerException e) {
-            System.out.println("Input is null! Resetting...");
+            if (debug) { System.out.println("Input is null! Resetting..."); }
             year = -1;
         }
     }
@@ -87,9 +89,9 @@ public class KeyNumberGenerator {
     public void setWriterI(String input) {
         try {
             writerInitial = input.toUpperCase(Locale.ROOT).charAt(0);
-            System.out.println("Debug: " + writerInitial + " - Successful!");
+            if (debug) { System.out.println("Debug: " + writerInitial + " - Successful!"); }
         } catch (NullPointerException e) {
-            System.out.println("Input is null! Resetting...");
+            if (debug) { System.out.println("Input is null! Resetting..."); }
             writerInitial = '\0';
         }
 
@@ -103,10 +105,10 @@ public class KeyNumberGenerator {
             //System.out.println("Debug: " + tempDuration);
             duration = durations[tempDuration];
             durationReady = true;
-            System.out.println("Debug: " + duration + " - Successful!");
+            if (debug) { System.out.println("Debug: " + duration + " - Successful!"); }
         }
         catch (Exception e) {
-            System.out.println("Debug: " + input + " - Invalid.");
+            if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
         }
     }
 
@@ -116,10 +118,10 @@ public class KeyNumberGenerator {
             tempType = java.util.Arrays.asList(types).indexOf(input);
             type = types[tempType];
             typeReady = true;
-            System.out.println("Debug " + type + " - Successful!");
+            if (debug) { System.out.println("Debug " + type + " - Successful!"); }
         }
         catch (Exception e) {
-            System.out.println("Debug: " + input + " - Invalid.");
+            if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
         }
     }
 
@@ -138,13 +140,14 @@ public class KeyNumberGenerator {
 
                 clientInitial = charConcat.concat(firstClientInitial, secondClientInitial);
             }
-            System.out.println("Debug: " + clientInitial + " - Successful!");
+            if (debug) { System.out.println("Debug: " + clientInitial + " - Successful!"); }
         } catch (NullPointerException e) {
-            System.out.println("Input is null! Resetting...");
+            if (debug) { System.out.println("Input is null! Resetting..."); }
             clientInitial = null;
         }
     }
 
+    /*
     private void loadProperties() {
         if (getOS.isWindows()) {
             pathname = System.getenv("APPDATA")  + "/number.properties";
@@ -216,7 +219,9 @@ public class KeyNumberGenerator {
             }
         }
     }
+     */
 
+    /*
     public <T> T getProperty(String key, Class<T> type) {
         try {
             if (key.equals("number")) {
@@ -230,6 +235,7 @@ public class KeyNumberGenerator {
 
         //return props.getOrDefault(key, "");
     }
+     */
 
     /*
     public static int getProperties() {
@@ -294,15 +300,16 @@ public class KeyNumberGenerator {
     }
      */
 
+    /*
     public void setProperties(String key, String input) {
-        /*
         if (props.containsKey(key)) {
             props.replace(key, input);
         } else {
             props.put(key, input);
         }
         System.out.println(props);
-         */
+
+        System.out.println("Debug2: " + input);
 
         if (input.contains("Type ")) {
             System.out.println(input);
@@ -338,6 +345,7 @@ public class KeyNumberGenerator {
             }
         }
     }
+*/
 
     public String get(String input) {
         return Objects.requireNonNullElse(input, "NULL");
@@ -384,6 +392,7 @@ public class KeyNumberGenerator {
         return keyNumber;
     }
 
+    /*
     void test() throws IOException {
         if (getOS.isWindows()) {
             pathname = System.getenv("APPDATA") + "/number.properties";
@@ -403,12 +412,22 @@ public class KeyNumberGenerator {
         System.out.println(p.getProperty("test", "failed"));
         System.out.println(p.getProperty("test2", "failed"));
     }
+     */
 
-    public static void main(String[] args) throws IOException {
-        KeyNumberGenerator logic = new KeyNumberGenerator();
-        logic.loadProperties();
-        System.out.println("Test: " + logic.getProperty("number", Integer.class));
+    public static void main(String[] args) throws IOException, InterruptedException {
+        /*
+        ProgramProperties properties = new ProgramProperties();
+        properties.loadProperties();
+        System.out.println("Result: " + properties.getProperty("number"));
+        TimeUnit.SECONDS.sleep(1);
+        properties.setProperties("year", "21");
+        System.out.println("Result: " + properties.getProperty("year"));
+        //System.out.println("Test: " + logic.getProperty("number", Integer.class));
         //System.out.println(logic.props);
+        //GUI gui = new GUI();
+         */
+
+
         GUI gui = new GUI();
     }
 }
