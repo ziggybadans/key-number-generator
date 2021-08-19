@@ -60,6 +60,9 @@ public class GUI implements ActionListener {
     JMenuBar menuBar;
     JMenu preferences;
     JMenuItem editProperties;
+    JMenuItem locationProperties;
+    final JFileChooser fileChooser = new JFileChooser();
+    JMenuItem reload;
 
     boolean debug = false;
     boolean debugProperties = false;
@@ -78,8 +81,6 @@ public class GUI implements ActionListener {
         TimeUnit.SECONDS.sleep(1);
 
         placeComponents(panel);
-
-        //updateFields();
 
         frame.setVisible(true);
     }
@@ -112,41 +113,6 @@ public class GUI implements ActionListener {
             });
         }
     }
-
-    /*
-    private void updateFields() {
-        JComboBox<?>[] comboFields = {marketMenu, durationMenu, typeMenu};
-        String[] comboFieldNames = {"marketMenu", "durationMenu", "typeMenu"};
-        JTextField[] textFields = {yearInput, writerIInput, clientIInput};
-        String[] textFieldNames = {"yearInput", "writerIInput", "clientIInput"};
-
-        for (int i = 0; i < comboFields.length; i++) {
-            if (debugFields) {
-                System.out.println(comboFields[i]);
-                System.out.println(comboFieldNames[i]);
-            }
-            String fetch = properties.getProperty(comboFieldNames[i].replace("Menu", ""));
-            JComboBox<?> field = comboFields[i];
-            if (!fetch.equals("null")) {
-                field.setSelectedItem(fetch);
-            } else {
-                field.setSelectedIndex(0);
-            }
-        }
-        for (int i = 0; i < textFields.length; i++) {
-            if (debugFields) { System.out.println(textFieldNames[i]); }
-            String fetch = properties.getProperty(textFieldNames[i].replace("Input", ""));
-            JTextField field = textFields[i];
-            if (!fetch.equals("null")) {
-                field.setText(fetch);
-            } else {
-                field.setText("Type " + textFieldNames[i].replace("Input", ""));
-            }
-        }
-        if (debugFields) { System.out.println("Number: " + properties.getProperty("number")); }
-        numberOutput.setText(String.valueOf(properties.getProperty("number")));
-    }
-     */
 
     public static void throwPropertiesError(String type) {
         switch (type) {
@@ -197,6 +163,7 @@ public class GUI implements ActionListener {
         backgroundButton.setOpaque(false);
         backgroundButton.setContentAreaFilled(false);
         backgroundButton.setBorderPainted(false);
+        backgroundButton.addActionListener(this);
         place(backgroundButton, panel, 0, 0, 0, 1200, 600);
 
         JLabel marketLabel = new JLabel("Market");
@@ -309,7 +276,7 @@ public class GUI implements ActionListener {
         place(cILabel, clientIInput, clientISP, panel, 550, 25, 110, 12);
 
         JLabel numberLabel = new JLabel("Sequential Number");
-        numberOutput = new JTextField(properties.getProperty("number"));
+        numberOutput = new JTextField(String.valueOf(KeyNumberGenerator.number));
         numberOutput.setEditable(false);
         place(numberLabel, panel, 1, 670, 25, 110, 12);
         place(numberOutput, panel, 1, numberLabel.getX(), numberLabel.getY() + 25, 50, numberLabel.getHeight() + 8);
@@ -324,16 +291,21 @@ public class GUI implements ActionListener {
 
         menuBar = new JMenuBar();
         preferences = new JMenu("Preferences");
+        reload = new JMenuItem("Reload");
+        reload.addActionListener(this);
         editProperties = new JMenuItem("Edit Properties...");
         editProperties.addActionListener(this);
+        locationProperties = new JMenuItem("Change properties location...");
+        locationProperties.addActionListener(this);
         menuBar.add(preferences);
+        menuBar.add(reload);
         preferences.add(editProperties);
+        preferences.add(locationProperties);
         frame.setJMenuBar(menuBar);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        // All of this probably won't run when the program first launches, making defaults broken
         if (event.getSource() == marketMenu) {
             if (debug) { System.out.println("Market: " + marketMenu.getSelectedItem()); }
             main.setMarket((String) marketMenu.getSelectedItem());
@@ -356,11 +328,17 @@ public class GUI implements ActionListener {
             main.setMarket((String) marketMenu.getSelectedItem());
             main.setDuration((int) durationMenu.getSelectedItem());
             main.setType((String) typeMenu.getSelectedItem());
+            main.setYear(yearInput.getText());
+            main.setWriterI(writerIInput.getText());
+            main.setClientI(clientIInput.getText());
+
             if (debug) { System.out.println("Debug: Attempting to generate..."); }
             generateOutput = main.generate();
+            properties.setProperties("number", String.valueOf(KeyNumberGenerator.number));
             generateResult.setText("");
             generateResult.setText(generateOutput);
-            numberOutput.setText(String.valueOf(properties.getProperty("number")));
+            numberOutput.setText(properties.getProperty("number"));
+
             if (!main.yearReady) {
                 BalloonTip nullError = new BalloonTip(GUI.yearInput, "This input was left blank.");
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
@@ -379,7 +357,7 @@ public class GUI implements ActionListener {
         }
         else if (event.getSource() == editProperties) {
             System.out.println("test");
-            File properties = new File(KeyNumberGenerator.pathname);
+            File properties = new File(ProgramProperties.pathname);
             try {
                 if (!Desktop.isDesktopSupported()) {
                     System.out.println("Desktop not supported.");
@@ -396,6 +374,37 @@ public class GUI implements ActionListener {
                 JOptionPane.showMessageDialog(new JFrame(), "An error occurred while trying to access the properties file.",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+        else if (event.getSource() == locationProperties) {
+            // Make this a proper file selector later
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = fileChooser.showOpenDialog(frame);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                String result = fileChooser.getSelectedFile().toString();
+                properties.setPathname(result);
+            }
+        }
+        else if (event.getSource() == reload) {
+            JComboBox<?>[] comboBoxes = {marketMenu, durationMenu, typeMenu};
+            String[] comboNames = {"market", "duration", "type"};
+            JTextField[] textFields = {yearInput, writerIInput, clientIInput};
+            String[] textFieldNames = {"year", "writer_initial", "client_initial"};
+
+            properties.loadProperties();
+            for (int i = 0; i < comboNames.length; i++) {
+                String fetch = properties.getProperty(comboNames[i]);
+                if (!fetch.equals(comboBoxes[i].getSelectedItem())) {
+                    comboBoxes[i].setSelectedItem(fetch);
+                }
+            }
+            for (int i = 0; i < textFieldNames.length; i++) {
+                String fetch = properties.getProperty(textFieldNames[i]);
+                if (!fetch.equals(textFields[i].getText())) {
+                    textFields[i].setText(fetch);
+                }
+            }
+            numberOutput.setText(properties.getProperty("number"));
         }
     }
 
