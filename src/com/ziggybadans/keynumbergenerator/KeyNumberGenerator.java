@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,6 +35,11 @@ public class KeyNumberGenerator {
     public static int number = 0;
     public static String pathname;
     public String keyNumber;
+
+    public static String[] errors = {"access", "save", "read", "type..."};
+
+    private Properties p = new Properties();
+    private HashMap<String, String> props = new HashMap<>();
 
     KeyNumberGenerator() {
     }
@@ -75,7 +81,6 @@ public class KeyNumberGenerator {
             System.out.println("Input is null! Resetting...");
             year = -1;
         }
-
     }
 
     public void setWriterI(String input) {
@@ -137,9 +142,68 @@ public class KeyNumberGenerator {
             System.out.println("Input is null! Resetting...");
             clientInitial = null;
         }
-
     }
 
+    private void loadProperties() {
+        if (getOS.isWindows()) {
+            pathname = System.getenv("APPDATA")  + "/number.properties";
+        }
+        if (getOS.isMac()) {
+            pathname = System.getProperty("user.home") + "/number.properties";
+        }
+
+        File getFile = new File(pathname);
+        boolean exists = getFile.exists();
+
+        if (exists) {
+            try {
+                p.load(new FileInputStream(pathname));
+                p.forEach((key, value) -> props.put(key.toString(), value.toString()));
+                System.out.println(props);
+            } catch (IOException e) {
+                System.out.println("Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.");
+                e.printStackTrace();
+                GUI.throwPropertiesError(errors[0]);
+            } catch (NumberFormatException e) {
+                System.out.println("The properties file is broken! Resetting; some properties may be lost.");
+                e.printStackTrace();
+                if (getFile.delete()) {
+                    try {
+                        p.setProperty("number", "1");
+                        p.forEach((key, value) -> props.put(key.toString(), value.toString()));
+                        p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+                        System.out.println(props);
+                    } catch (IOException e2) {
+                        System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+                        e2.printStackTrace();
+                        GUI.throwPropertiesError(errors[1]);
+                    }
+                } else {
+                    System.out.println("Failed to delete the broken file. Delete manually: " + pathname);
+                    // Add error dialog for this later
+                }
+            }
+        } else {
+            System.out.println("The properties file is missing! Creating new properties file...");
+            try {
+                p.setProperty("number", "1");
+                p.forEach((key, value) -> props.put(key.toString(), value.toString()));
+                p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+                System.out.println(props);
+            } catch (IOException e) {
+                System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+                e.printStackTrace();
+                GUI.throwPropertiesError(errors[1]);
+            }
+        }
+    }
+
+    public String getProperty(String key) {
+        //String result = p.getProperty(key);
+        return props.getOrDefault(key, "");
+    }
+
+    /*
     public static int getProperties() {
         if (getOS.isWindows()) {
             pathname = System.getenv("APPDATA")  + "/number.properties";
@@ -162,6 +226,20 @@ public class KeyNumberGenerator {
                 } catch (IOException e) {
                     System.out.println("Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.");
                     e.printStackTrace();
+                    GUI.throwPropertiesError(errors[0]);
+                } catch (NumberFormatException e) {
+                    System.out.println("The properties file is broken! Resetting; some properties may be lost.");
+                    e.printStackTrace();
+                    try {
+                        System.out.println("Debug: Properties file doesn't exist. Creating new file.");
+                        p.setProperty("number", "1");
+                        p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+                        System.out.println("Debug: Created properties successfully!");
+                    } catch (IOException e2) {
+                        System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+                        e2.printStackTrace();
+                        GUI.throwPropertiesError(errors[1]);
+                    }
                 }
             } else {
                 try {
@@ -172,6 +250,7 @@ public class KeyNumberGenerator {
                 } catch (IOException e) {
                     System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
                     e.printStackTrace();
+                    GUI.throwPropertiesError(errors[1]);
                 }
                 try {
                     FileReader reader = new FileReader(pathname);
@@ -180,9 +259,59 @@ public class KeyNumberGenerator {
                 } catch (IOException e) {
                     System.out.println("Could not read important properties! Please try again, or change location of properties file to somewhere with access.");
                     e.printStackTrace();
+                    GUI.throwPropertiesError(errors[2]);
                 }
             }
         return number;
+    }
+     */
+
+    public void setProperties(String key, String input) {
+        if (props.containsKey(key)) {
+            props.replace(key, input);
+        } else {
+            props.put(key, input);
+        }
+        System.out.println(props);
+
+        if (input.contains("Type")) {
+            System.out.println(input);
+            GUI.throwPropertiesError(errors[3]);
+        } else {
+            if (getOS.isWindows()) {
+                pathname = System.getenv("APPDATA") + "/number.properties";
+            }
+            if (getOS.isMac()) {
+                pathname = System.getProperty("user.home") + "/number.properties";
+            }
+
+            File getFile = new File(pathname);
+            boolean exists = getFile.exists();
+
+            if (exists) {
+                try {
+                    props.forEach((k, v) -> p.setProperty(k, v));
+                    p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+                    System.out.println("Debug: Read properties successfully!");
+                } catch (IOException e) {
+                    System.out.println("Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.");
+                    e.printStackTrace();
+                    GUI.throwPropertiesError(errors[0]);
+                }
+            } else {
+                try {
+                    System.out.println("Debug: Properties file doesn't exist. Creating new file.");
+                    p.setProperty("number", "1");
+                    props.forEach((k, v) -> p.setProperty(k, v));
+                    p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+                    System.out.println("Debug: Created properties successfully!");
+                } catch (IOException e) {
+                    System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+                    e.printStackTrace();
+                    GUI.throwPropertiesError(errors[1]);
+                }
+            }
+        }
     }
 
     public String get(String input) {
@@ -214,13 +343,12 @@ public class KeyNumberGenerator {
         }
 
         System.out.println("Key Number:");
-        //keyNumber = market + year + writerInitial + '-' + clientInitial + '-' + duration + type + '-' + number;
         keyNumber = get(market) + get(year) + get(writerInitial) + '-' + get(clientInitial) + '-' + get(duration) + get(type) + '-' + number;
         System.out.println(keyNumber);
 
         try {
             number++;
-            Properties p = new Properties();
+            props.replace("number", String.valueOf(number));
             p.setProperty("number", String.valueOf(number));
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
             System.out.println("Debug: Updated properties successfully!");
@@ -238,6 +366,9 @@ public class KeyNumberGenerator {
     }
 
     public static void main(String[] args) {
+        KeyNumberGenerator logic = new KeyNumberGenerator();
+        logic.loadProperties();
+        System.out.println(logic.props);
         GUI gui = new GUI();
     }
 }
