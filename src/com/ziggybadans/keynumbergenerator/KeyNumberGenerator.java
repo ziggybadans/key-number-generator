@@ -3,9 +3,9 @@ package com.ziggybadans.keynumbergenerator;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.beans.IntrospectionException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -38,8 +38,9 @@ public class KeyNumberGenerator {
 
     public static String[] errors = {"access", "save", "read", "type..."};
 
-    private Properties p = new Properties();
-    private HashMap<String, String> props = new HashMap<>();
+    private Properties p;
+    private final String[] props = {"market", "year", "writer_initial", "duration", "type", "client_initial", "number"};
+    //private Map<String, String> defaultProps = Map.ofEntries(Map.entry("market", "AUG"), Map.entry("year", ""), Map.entry("writer_initial", ""), Map.entry("duration", "10"), Map.entry())
 
     KeyNumberGenerator() {
     }
@@ -155,11 +156,15 @@ public class KeyNumberGenerator {
         File getFile = new File(pathname);
         boolean exists = getFile.exists();
 
+        p = new Properties();
+
         if (exists) {
             try {
                 p.load(new FileInputStream(pathname));
-                p.forEach((key, value) -> props.put(key.toString(), value.toString()));
-                System.out.println(props);
+                System.out.println(p);
+                number = Integer.parseInt(p.getProperty("number"));
+                //p.forEach((key, value) -> props.put(key.toString(), value.toString()));
+                //System.out.println(props);
             } catch (IOException e) {
                 System.out.println("Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.");
                 e.printStackTrace();
@@ -169,10 +174,17 @@ public class KeyNumberGenerator {
                 e.printStackTrace();
                 if (getFile.delete()) {
                     try {
-                        p.setProperty("number", "1");
-                        p.forEach((key, value) -> props.put(key.toString(), value.toString()));
+                        for (String prop : props) {
+                            if (prop.equals("number")) {
+                                p.setProperty(prop, "1");
+                            } else {
+                                p.setProperty(prop, "");
+                            }
+                        }
+                        System.out.println(p);
+                        //p.forEach((key, value) -> props.put(key.toString(), value.toString()));
                         p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
-                        System.out.println(props);
+                        //System.out.println(props);
                     } catch (IOException e2) {
                         System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
                         e2.printStackTrace();
@@ -186,10 +198,17 @@ public class KeyNumberGenerator {
         } else {
             System.out.println("The properties file is missing! Creating new properties file...");
             try {
-                p.setProperty("number", "1");
-                p.forEach((key, value) -> props.put(key.toString(), value.toString()));
+                for (String prop : props) {
+                    if (prop.equals("number")) {
+                        p.setProperty(prop, "test");
+                    } else {
+                        p.setProperty(prop, "");
+                    }
+                }
+                System.out.println(p);
+                //p.forEach((key, value) -> props.put(key.toString(), value.toString()));
                 p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
-                System.out.println(props);
+                //System.out.println(props);
             } catch (IOException e) {
                 System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
                 e.printStackTrace();
@@ -198,9 +217,18 @@ public class KeyNumberGenerator {
         }
     }
 
-    public String getProperty(String key) {
-        //String result = p.getProperty(key);
-        return props.getOrDefault(key, "");
+    public <T> T getProperty(String key, Class<T> type) {
+        try {
+            if (key.equals("number")) {
+                return type.cast(number);
+            } else {
+                return type.cast(p.getProperty(key));
+            }
+        } catch (NullPointerException e) {
+            return type.cast("null");
+        }
+
+        //return props.getOrDefault(key, "");
     }
 
     /*
@@ -267,30 +295,27 @@ public class KeyNumberGenerator {
      */
 
     public void setProperties(String key, String input) {
+        /*
         if (props.containsKey(key)) {
             props.replace(key, input);
         } else {
             props.put(key, input);
         }
         System.out.println(props);
+         */
 
-        if (input.contains("Type")) {
+        if (input.contains("Type ")) {
             System.out.println(input);
             GUI.throwPropertiesError(errors[3]);
         } else {
-            if (getOS.isWindows()) {
-                pathname = System.getenv("APPDATA") + "/number.properties";
-            }
-            if (getOS.isMac()) {
-                pathname = System.getProperty("user.home") + "/number.properties";
-            }
-
             File getFile = new File(pathname);
             boolean exists = getFile.exists();
 
             if (exists) {
                 try {
-                    props.forEach((k, v) -> p.setProperty(k, v));
+                    p.setProperty(key, input);
+                    System.out.println(p);
+                    //props.forEach((k, v) -> p.setProperty(k, v));
                     p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
                     System.out.println("Debug: Read properties successfully!");
                 } catch (IOException e) {
@@ -302,7 +327,7 @@ public class KeyNumberGenerator {
                 try {
                     System.out.println("Debug: Properties file doesn't exist. Creating new file.");
                     p.setProperty("number", "1");
-                    props.forEach((k, v) -> p.setProperty(k, v));
+                    //props.forEach((k, v) -> p.setProperty(k, v));
                     p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
                     System.out.println("Debug: Created properties successfully!");
                 } catch (IOException e) {
@@ -335,21 +360,15 @@ public class KeyNumberGenerator {
     }
 
     public String generate() {
-        if (getOS.isWindows()) {
-            pathname = System.getenv("APPDATA") + "/number.properties";
-        }
-        if (getOS.isMac()) {
-            pathname = System.getProperty("user.home") + "/number.properties";
-        }
-
         System.out.println("Key Number:");
         keyNumber = get(market) + get(year) + get(writerInitial) + '-' + get(clientInitial) + '-' + get(duration) + get(type) + '-' + number;
         System.out.println(keyNumber);
 
         try {
             number++;
-            props.replace("number", String.valueOf(number));
+            //props.replace("number", String.valueOf(number));
             p.setProperty("number", String.valueOf(number));
+            System.out.println(p);
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
             System.out.println("Debug: Updated properties successfully!");
         } catch (IOException e) {
@@ -365,10 +384,31 @@ public class KeyNumberGenerator {
         return keyNumber;
     }
 
-    public static void main(String[] args) {
+    void test() throws IOException {
+        if (getOS.isWindows()) {
+            pathname = System.getenv("APPDATA") + "/number.properties";
+        }
+        if (getOS.isMac()) {
+            pathname = System.getProperty("user.home") + "/number.properties";
+        }
+
+        p.setProperty("test", "1");
+        p.setProperty("test2", "2");
+        System.out.println(p.getProperty("test"));
+        System.out.println(p.getProperty("test2"));
+        p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
+        p.remove("test");
+        p.remove("test2");
+        p.load(new FileInputStream(pathname));
+        System.out.println(p.getProperty("test", "failed"));
+        System.out.println(p.getProperty("test2", "failed"));
+    }
+
+    public static void main(String[] args) throws IOException {
         KeyNumberGenerator logic = new KeyNumberGenerator();
         logic.loadProperties();
-        System.out.println(logic.props);
+        System.out.println("Test: " + logic.getProperty("number", Integer.class));
+        //System.out.println(logic.props);
         GUI gui = new GUI();
     }
 }

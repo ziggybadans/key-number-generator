@@ -44,6 +44,8 @@ public class GUI implements ActionListener {
 
     JTextField numberOutput;
 
+
+
     JButton generateButton;
     String generateOutput;
     static JTextField generateResult;
@@ -98,26 +100,34 @@ public class GUI implements ActionListener {
     }
 
     private void updateFields() {
-        marketMenu.setSelectedItem(main.getProperty("market"));
-        yearInput.setText(main.getProperty("year"));
-        if (yearInput.getText().equals("")) {
-            yearInput.setText("Type year");
+        JComboBox<?>[] comboFields = {marketMenu, durationMenu, typeMenu};
+        String[] comboFieldNames = {"marketMenu", "durationMenu", "typeMenu"};
+        JTextField[] textFields = {yearInput, writerIInput, clientIInput};
+        String[] textFieldNames = {"yearInput", "writerIInput", "clientIInput"};
+
+        for (int i = 0; i < comboFields.length; i++) {
+            System.out.println(comboFields[i]);
+            System.out.println(comboFieldNames[i]);
+            String fetch = main.getProperty(comboFieldNames[i].replace("Menu", ""), String.class);
+            JComboBox<?> field = comboFields[i];
+            if (!fetch.equals("null")) {
+                field.setSelectedItem(fetch);
+            } else {
+                field.setSelectedIndex(0);
+            }
         }
-        writerIInput.setText(main.getProperty("writer_initial"));
-        if (writerIInput.getText().equals("")) {
-            writerIInput.setText("Type name");
+        for (int i = 0; i < textFields.length; i++) {
+            System.out.println(textFieldNames[i]);
+            String fetch = main.getProperty(textFieldNames[i].replace("Input", ""), String.class);
+            JTextField field = textFields[i];
+            if (!fetch.equals("null")) {
+                field.setText(fetch);
+            } else {
+                field.setText("Type " + textFieldNames[i].replace("Input", ""));
+            }
         }
-        try {
-            durationMenu.setSelectedItem(Integer.parseInt(main.getProperty("duration")));
-        } catch (NumberFormatException e) {
-            durationMenu.setSelectedIndex(0);
-        }
-        typeMenu.setSelectedItem(main.getProperty("type"));
-        clientIInput.setText(main.getProperty("client_initial"));
-        if (clientIInput.getText().equals("")) {
-            clientIInput.setText("Type name");
-        }
-        numberOutput.setText(main.getProperty("number"));
+        System.out.println("Number: " + main.getProperty("number", Integer.class));
+        numberOutput.setText(String.valueOf(main.getProperty("number", Integer.class)));
     }
 
     public static void throwPropertiesError(String type) {
@@ -329,7 +339,7 @@ public class GUI implements ActionListener {
             generateOutput = main.generate();
             generateResult.setText("");
             generateResult.setText(generateOutput);
-            numberOutput.setText(main.getProperty("number"));
+            numberOutput.setText(String.valueOf(main.getProperty("number", Integer.class)));
             if (!main.yearReady) {
                 BalloonTip nullError = new BalloonTip(GUI.yearInput, "This input was left blank.");
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
@@ -357,8 +367,6 @@ public class GUI implements ActionListener {
                     Desktop desktop = Desktop.getDesktop();
                     if (properties.exists()) {
                         desktop.open(properties);
-                    } else {
-                        main.getProperty("number");
                     }
                 }
             } catch (Exception e) {
