@@ -3,13 +3,10 @@ package com.ziggybadans.keynumbergenerator;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.beans.IntrospectionException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
 
 public class KeyNumberGenerator {
 
@@ -37,8 +34,6 @@ public class KeyNumberGenerator {
     public String keyNumber;
 
     public static String[] errors = {"access", "save", "read", "type..."};
-
-    private Properties p;
 
     boolean debug = true;
 
@@ -194,7 +189,7 @@ public class KeyNumberGenerator {
         return keyNumber;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        GUI gui = new GUI();
+    public static void main(String[] args) throws InterruptedException {
+        new GUI();
     }
 }

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class ProgramProperties {
     Properties p;
     final String[] props = {"market", "year", "writer_initial", "duration", "type", "client_initial", "number"};
-    private Map<String, String> defaultProps = Map.ofEntries(Map.entry("market", "AUG"), Map.entry("year", "Type year"),
+    private final Map<String, String> defaultProps = Map.ofEntries(Map.entry("market", "AUG"), Map.entry("year", "Type year"),
             Map.entry("writer_initial", "Type name"), Map.entry("duration", "10"), Map.entry("type", "R"),
             Map.entry("client_initial", "Type client name"), Map.entry("number", "1"));
 
@@ -36,7 +36,6 @@ public class ProgramProperties {
             if (exists) {
                 try {
                     File file = new File(default_pathname + "/path.properties");
-                    FileReader fileReader = new FileReader(default_pathname + "/path.properties");
                     Scanner scanner = new Scanner(file);
                     int i = 0;
                     while (i <= 1) {
@@ -128,7 +127,7 @@ public class ProgramProperties {
             FileWriter pathWriter = new FileWriter(default_pathname + "/path.properties");
             pathWriter.write("BEGIN");
             pathWriter.write(System.lineSeparator());
-            pathWriter.write(path.toString() + "/keynumbergenerator.properties");
+            pathWriter.write(path + "/keynumbergenerator.properties");
             pathWriter.write(System.lineSeparator());
             pathWriter.write("END");
             pathWriter.close();

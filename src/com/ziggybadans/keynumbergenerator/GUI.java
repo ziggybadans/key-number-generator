@@ -116,7 +116,7 @@ public class GUI implements ActionListener {
         }
     }
 
-    class NullButton extends JButton {
+    static class NullButton extends JButton {
         public NullButton(JComboBox<String> linked) {
             super("Make null");
             this.addActionListener(new ActionListener() {
@@ -162,17 +162,15 @@ public class GUI implements ActionListener {
         component.setBounds(label.getX(), label.getY() + 25, label.getWidth(), label.getHeight() + 8);
         linked.setBounds(component.getX(), component.getY() + 135, component.getWidth(), component.getHeight() + 8);
         if (nullButtonBoolean) {
+            NullButton nullButton;
             if (integer) {
-                NullButton nullButton = new NullButton(component, true);
-                nullButton.setBounds(linked.getX(), linked.getY() + 100, linked.getWidth(), linked.getHeight());
-                panel.add(nullButton);
-                panel.setLayer(nullButton, 1, 0);
+                nullButton = new NullButton(component, true);
             } else {
-                NullButton nullButton = new NullButton(component);
-                nullButton.setBounds(linked.getX(), linked.getY() + 100, linked.getWidth(), linked.getHeight());
-                panel.add(nullButton);
-                panel.setLayer(nullButton, 1, 0);
+                nullButton = new NullButton(component);
             }
+            nullButton.setBounds(linked.getX(), linked.getY() + 100, linked.getWidth(), linked.getHeight());
+            panel.add(nullButton);
+            panel.setLayer(nullButton, 1, 0);
         }
         panel.add(label);
         panel.add(component);
