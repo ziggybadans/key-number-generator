@@ -21,37 +21,38 @@ public class ProgramProperties {
     ProgramProperties() {
         try {
             if (getOS.isWindows()) {
-                default_pathname = System.getenv("APPDATA");
+                default_pathname = System.getenv("APPDATA" + "keynumbergenerator");
             } else if (getOS.isMac()) {
-                default_pathname = System.getProperty("user.home");
+                default_pathname = System.getProperty("user.home") + "/keynumbergenerator";
             }
         } catch (Exception e) {
             System.out.println("Something went wrong!");
             //System.out.println("The directory for properties has restricted access or is missing. " + "Please try again, or change location of properties file to somewhere with access.");
         }
 
+        new File(default_pathname).mkdir();
         boolean exists = new File(default_pathname + "/path.properties").exists();
-        try {
             if (exists) {
-                FileReader fileReader = new FileReader(default_pathname + "/path.properties");
-                int i;
-                while ((i = fileReader.read()) != -1) {
-                    pathname += (char) i;
-                    fileReader.close();
-                    pathname = pathname + "/keynumbergenerator.properties";
+                try {
+                    FileReader fileReader = new FileReader(default_pathname + "/path.properties");
+                    int i;
+                    while ((i = fileReader.read()) != -1) {
+                        pathname += (char) i;
+                        fileReader.close();
+                        pathname = pathname + "/keynumbergenerator.properties";
+                    }
+                } catch (IOException e) {
+                    System.out.println("Something went wrong reading the file at " + default_pathname + "/path.properties");
+                    pathname = default_pathname + "/keynumbergenerator.properties";
                 }
-
             } else {
                 pathname = default_pathname + "/keynumbergenerator.properties";
+                System.out.println("No custom directory selected! Using default directory.");
             }
-        } catch (IOException e) {
-            System.out.println("Something went wrong reading the file at " + default_pathname + "/path.properties");
-            pathname = default_pathname + "/keynumbergenerator.properties";
-        }
+
 
         System.out.println("Pathname: " + pathname);
 
-        getProperties = new File(pathname);
         p = new Properties();
     }
 
@@ -60,6 +61,8 @@ public class ProgramProperties {
             System.out.println("");
             System.out.println("This is the loadProperties function!");
         }
+
+        getProperties = new File(pathname);
         boolean exists = getProperties.exists();
 
         if (exists) {
@@ -107,6 +110,7 @@ public class ProgramProperties {
             if (debug) { System.out.println("After update: " + p); }
         }
         try {
+            System.out.println(pathname);
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
         } catch (IOException e) {
             System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
@@ -114,7 +118,11 @@ public class ProgramProperties {
     }
 
     void setPathname(String path) {
+        System.out.println("");
+        System.out.println("This is the setPathname function!");
         try {
+            System.out.println("Old path: " + pathname);
+            System.out.println("Selected path: " + path);
             FileWriter pathWriter = new FileWriter(default_pathname + "/path.properties");
             pathWriter.write(path.toString());
             pathWriter.close();
@@ -128,8 +136,8 @@ public class ProgramProperties {
         } catch (IOException e) {
             System.out.println("Could not set path! Access may be denied. Please try again with a different location.");
         }
-
         try {
+            System.out.println("New path: " + pathname);
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
         } catch (IOException e) {
             System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
