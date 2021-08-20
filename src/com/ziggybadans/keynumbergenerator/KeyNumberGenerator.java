@@ -40,13 +40,17 @@ public class KeyNumberGenerator {
 
     private Properties p;
 
-    boolean debug = false;
+    boolean debug = true;
 
     KeyNumberGenerator() {
     }
 
     public void setMarket(String input) {
         int tempMarket;
+        if (input.equals("NULL")) {
+            market = null;
+            marketReady = false;
+        }
         try {
             tempMarket = java.util.Arrays.asList(markets).indexOf(input);
             market = markets[tempMarket];
@@ -62,18 +66,19 @@ public class KeyNumberGenerator {
     public void setYear(String input) {
         CharConcatentation charConcat = new CharConcatentation();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        System.out.println("Current year: " + currentYear);
         try {
-            if (input.length() == 2 && Integer.parseInt(input) >= currentYear) {
+            if (input.length() == 2 && Integer.parseInt(input) >= Integer.parseInt(Integer.toString(currentYear).substring(2,4))) {
                 this.year = Integer.parseInt(input);
                 this.yearReady = true;
-                if (debug) { System.out.println("Debug: " + this.year + " - Successful!"); }
-            } else if (input.length() == 4 && Integer.parseInt(input) >= Integer.parseInt(Integer.toString(currentYear).substring(2,4))) {
+                if (debug) { System.out.println("Debug1: " + this.year + " - Successful!"); }
+            } else if (input.length() == 4 && Integer.parseInt(input) >= currentYear) {
                 char firstYearChar = input.charAt(2);
                 char secondYearChar = input.charAt(3);
 
                 this.year = Integer.parseInt(charConcat.concat(firstYearChar, secondYearChar));
                 this.yearReady = true;
-                if (debug) { System.out.println("Debug: " + this.year + " - Successful!"); }
+                if (debug) { System.out.println("Debug2: " + this.year + " - Successful!"); }
             } else {
                 this.yearReady = false;
                 if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
@@ -81,6 +86,7 @@ public class KeyNumberGenerator {
         } catch (NullPointerException e) {
             if (debug) { System.out.println("Input is null! Resetting..."); }
             year = -1;
+            this.yearReady = false;
         }
     }
 
@@ -97,20 +103,31 @@ public class KeyNumberGenerator {
 
     public void setDuration(int input) {
         int tempDuration;
-        try {
-            // Check this
-            tempDuration = Arrays.asList(durations).indexOf(input);
-            duration = durations[tempDuration];
-            durationReady = true;
-            if (debug) { System.out.println("Debug: " + duration + " - Successful!"); }
+        if (input == 0) {
+            duration = 0;
+            durationReady = false;
+        } else {
+            try {
+                // Check this
+                tempDuration = Arrays.asList(durations).indexOf(input);
+                duration = durations[tempDuration];
+                durationReady = true;
+                if (debug) { System.out.println("Debug: " + duration + " - Successful!"); }
+            }
+            catch (Exception e) {
+                if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
+                durationReady = false;
+            }
         }
-        catch (Exception e) {
-            if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
-        }
+
     }
 
     public void setType(String input) {
         int tempType;
+        if (input.equals("NULL")) {
+            type = null;
+            typeReady = false;
+        }
         try {
             tempType = java.util.Arrays.asList(types).indexOf(input);
             type = types[tempType];

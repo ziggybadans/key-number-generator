@@ -3,6 +3,7 @@ package com.ziggybadans.keynumbergenerator;
 import java.io.*;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class ProgramProperties {
     Properties p;
@@ -16,7 +17,7 @@ public class ProgramProperties {
 
     File getProperties;
 
-    boolean debug = true;
+    boolean debug = false;
 
     ProgramProperties() {
         try {
@@ -34,12 +35,13 @@ public class ProgramProperties {
         boolean exists = new File(default_pathname + "/path.properties").exists();
             if (exists) {
                 try {
+                    File file = new File(default_pathname + "/path.properties");
                     FileReader fileReader = new FileReader(default_pathname + "/path.properties");
-                    int i;
-                    while ((i = fileReader.read()) != -1) {
-                        pathname += (char) i;
-                        fileReader.close();
-                        pathname = pathname + "/keynumbergenerator.properties";
+                    Scanner scanner = new Scanner(file);
+                    int i = 0;
+                    while (i <= 1) {
+                        pathname = scanner.nextLine();
+                        i++;
                     }
                 } catch (IOException e) {
                     System.out.println("Something went wrong reading the file at " + default_pathname + "/path.properties");
@@ -124,7 +126,11 @@ public class ProgramProperties {
             System.out.println("Old path: " + pathname);
             System.out.println("Selected path: " + path);
             FileWriter pathWriter = new FileWriter(default_pathname + "/path.properties");
-            pathWriter.write(path.toString());
+            pathWriter.write("BEGIN");
+            pathWriter.write(System.lineSeparator());
+            pathWriter.write(path.toString() + "/keynumbergenerator.properties");
+            pathWriter.write(System.lineSeparator());
+            pathWriter.write("END");
             pathWriter.close();
             File file = new File(pathname);
             if (file.delete()) {

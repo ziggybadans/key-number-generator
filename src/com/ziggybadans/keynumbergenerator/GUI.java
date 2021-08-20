@@ -71,7 +71,7 @@ public class GUI implements ActionListener {
     public GUI() throws InterruptedException {
         frame = new JFrame("Key Number Generator");
 
-        frame.setSize(850, 300);
+        frame.setSize(850, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JLayeredPane panel = new JLayeredPane();
@@ -95,6 +95,7 @@ public class GUI implements ActionListener {
                     properties.setProperties(key, input.getText());
                 }
             });
+            this.setToolTipText("Sets the current value as the default");
         }
 
         public SetPropertiesButton(String key, JComboBox<?> input) {
@@ -111,6 +112,33 @@ public class GUI implements ActionListener {
 
                 }
             });
+            this.setToolTipText("Sets the current value as the default");
+        }
+    }
+
+    class NullButton extends JButton {
+        public NullButton(JComboBox<String> linked) {
+            super("Make null");
+            this.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    linked.addItem("NULL");
+                    linked.setSelectedItem("NULL");
+                }
+            });
+            this.setToolTipText("Sets the text field to null");
+        }
+
+        public NullButton(JComboBox<Integer> linked, boolean integer) {
+            super("Make null");
+            this.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    linked.addItem(0);
+                    linked.setSelectedItem(0);
+                }
+            });
+            this.setToolTipText("Sets the text field to null");
         }
     }
 
@@ -127,6 +155,31 @@ public class GUI implements ActionListener {
             // Change this to a balloon dialog eventually
             case "type..." -> JOptionPane.showMessageDialog(new JFrame(), "This is already the default value!");
         }
+    }
+
+    private void place(JLabel label, JComboBox component, SetPropertiesButton linked, boolean nullButtonBoolean, boolean integer, JLayeredPane panel, int... bounds) {
+        label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+        component.setBounds(label.getX(), label.getY() + 25, label.getWidth(), label.getHeight() + 8);
+        linked.setBounds(component.getX(), component.getY() + 135, component.getWidth(), component.getHeight() + 8);
+        if (nullButtonBoolean) {
+            if (integer) {
+                NullButton nullButton = new NullButton(component, true);
+                nullButton.setBounds(linked.getX(), linked.getY() + 100, linked.getWidth(), linked.getHeight());
+                panel.add(nullButton);
+                panel.setLayer(nullButton, 1, 0);
+            } else {
+                NullButton nullButton = new NullButton(component);
+                nullButton.setBounds(linked.getX(), linked.getY() + 100, linked.getWidth(), linked.getHeight());
+                panel.add(nullButton);
+                panel.setLayer(nullButton, 1, 0);
+            }
+        }
+        panel.add(label);
+        panel.add(component);
+        panel.add(linked);
+        panel.setLayer(label, 1, 0);
+        panel.setLayer(component, 1, 0);
+        panel.setLayer(linked, 1, 0);
     }
 
     private void place(JLabel label, JComponent component, SetPropertiesButton linked, JLayeredPane panel, int... bounds) {
@@ -170,8 +223,20 @@ public class GUI implements ActionListener {
         marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
         marketMenu.setSelectedItem(properties.getProperty("market"));
         marketMenu.addActionListener(this);
+        marketMenu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (Objects.equals(marketMenu.getSelectedItem(), "NULL")) {
+                    marketMenu.setSelectedIndex(0);
+                    marketMenu.removeItem("NULL");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
         marketSP = new SetPropertiesButton("market", marketMenu);
-        place(marketLabel, marketMenu, marketSP, panel, 50, 25, 80, 12);
+        place(marketLabel, marketMenu, marketSP, true, false, panel, 50, 25, 80, 12);
 
         JLabel yearLabel = new JLabel("Year");
         yearInput = new JTextField(properties.getProperty("year"));
@@ -188,15 +253,9 @@ public class GUI implements ActionListener {
             public void focusLost(FocusEvent e) {
                 if (yearInput.getText().equals("Type year")) {
                     if (debug) { System.out.println("Year: " + null); }
-                    main.setYear(null);
                 } else if (yearInput.getText().equals("")) {
                     yearInput.setText("Type year");
                     if (debug) { System.out.println("Year: " + null); }
-                    main.setYear(null);
-                } else {
-                    if (debug) { System.out.println("Year: " + yearInput.getText()); }
-                    main.setYear(yearInput.getText());
-                    // Add balloon tooltip for invalid input
                 }
             }
         });
@@ -219,14 +278,9 @@ public class GUI implements ActionListener {
             public void focusLost(FocusEvent e) {
                 if (writerIInput.getText().equals("Type name")) {
                     if (debug) { System.out.println("Writer input: " + null); }
-                    main.setWriterI(null);
                 } else if (writerIInput.getText().equals("")) {
                     writerIInput.setText("Type name");
                     if (debug) { System.out.println("Writer input: " + null); }
-                    main.setWriterI(null);
-                } else {
-                    if (debug) { System.out.println("Writer Input: " + writerIInput.getText()); }
-                    main.setWriterI(writerIInput.getText());
                 }
             }
         });
@@ -237,15 +291,39 @@ public class GUI implements ActionListener {
         durationMenu = new JComboBox<>(KeyNumberGenerator.durations);
         durationMenu.setSelectedItem(properties.getProperty("duration"));
         durationMenu.addActionListener(this);
+        durationMenu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (Objects.equals(durationMenu.getSelectedItem(), 0)) {
+                    durationMenu.setSelectedIndex(0);
+                    durationMenu.removeItem(0);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
         durationSP = new SetPropertiesButton("duration", durationMenu);
-        place(durationLabel, durationMenu, durationSP, panel, 350, 25, 80, 12);
+        place(durationLabel, durationMenu, durationSP, true, true, panel, 350, 25, 80, 12);
 
         JLabel typeLabel = new JLabel("Type");
         typeMenu = new JComboBox<>(KeyNumberGenerator.types);
         typeMenu.setSelectedItem(properties.getProperty("type"));
         typeMenu.addActionListener(this);
+        typeMenu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (Objects.equals(typeMenu.getSelectedItem(), "NULL")) {
+                    typeMenu.setSelectedIndex(0);
+                    typeMenu.removeItem("NULL");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
         typeSP = new SetPropertiesButton("type", typeMenu);
-        place(typeLabel, typeMenu, typeSP, panel, 450, 25, 80, 12);
+        place(typeLabel, typeMenu, typeSP, true, false, panel, 450, 25, 80, 12);
 
         JLabel cILabel = new JLabel("Client");
         clientIInput = new JTextField(properties.getProperty("client_initial"));
@@ -261,14 +339,9 @@ public class GUI implements ActionListener {
             public void focusLost(FocusEvent e) {
                 if (clientIInput.getText().equals("Type client name")) {
                     if (debug) { System.out.println("Client: " + null); }
-                    main.setClientI(null);
                 } else if (clientIInput.getText().equals("")) {
                     clientIInput.setText("Type client name");
                     if (debug) { System.out.println("Client: " + null); }
-                    main.setClientI(null);
-                } else {
-                    if (debug) { System.out.println("Client: " + clientIInput.getText()); }
-                    main.setClientI(clientIInput.getText());
                 }
             }
         });
@@ -278,6 +351,7 @@ public class GUI implements ActionListener {
         JLabel numberLabel = new JLabel("Sequential Number");
         numberOutput = new JTextField(String.valueOf(KeyNumberGenerator.number));
         numberOutput.setEditable(false);
+        numberOutput.setToolTipText("This value increases by 1 every time a key is generated");
         place(numberLabel, panel, 1, 670, 25, 110, 12);
         place(numberOutput, panel, 1, numberLabel.getX(), numberLabel.getY() + 25, 50, numberLabel.getHeight() + 8);
 
@@ -293,9 +367,12 @@ public class GUI implements ActionListener {
         preferences = new JMenu("Preferences");
         reload = new JMenuItem("Reload");
         reload.addActionListener(this);
+        reload.setToolTipText("Replaces all text fields currently edited with default values");
         editProperties = new JMenuItem("Edit Properties...");
         editProperties.addActionListener(this);
+        editProperties.setToolTipText("Opens the default properties file in the default text editor");
         locationProperties = new JMenuItem("Change properties location...");
+        locationProperties.setToolTipText("Sets a custom directory for the properties file");
         locationProperties.addActionListener(this);
         menuBar.add(preferences);
         menuBar.add(reload);
@@ -325,17 +402,40 @@ public class GUI implements ActionListener {
             main.setType((String) typeMenu.getSelectedItem());
         }
         else if (event.getSource() == generateButton) {
+            if (clientIInput.getText().equals("Type client name")) {
+                main.setClientI(null);
+            } else if (clientIInput.getText().equals("")) {
+                main.setClientI(null);
+                clientIInput.setText("Type client name");
+            } else {
+                main.setClientI(clientIInput.getText());
+            }
+            if (writerIInput.getText().equals("Type name")) {
+                main.setWriterI(null);
+            } else if (writerIInput.getText().equals("")) {
+                main.setWriterI(null);
+                writerIInput.setText("Type name");
+            } else {
+                main.setWriterI(writerIInput.getText());
+            }
+            if (yearInput.getText().equals("Type year")) {
+                main.setYear(null);
+            } else if (yearInput.getText().equals("")) {
+                main.setYear(null);
+                yearInput.setText("Type year");
+            } else {
+                main.setYear(yearInput.getText());
+            }
+
             main.setMarket((String) marketMenu.getSelectedItem());
             main.setDuration((int) durationMenu.getSelectedItem());
             main.setType((String) typeMenu.getSelectedItem());
-            main.setYear(yearInput.getText());
-            main.setWriterI(writerIInput.getText());
-            main.setClientI(clientIInput.getText());
 
             if (debug) { System.out.println("Debug: Attempting to generate..."); }
             generateOutput = main.generate();
             properties.setProperties("number", String.valueOf(KeyNumberGenerator.number));
             generateResult.setText("");
+
             generateResult.setText(generateOutput);
             numberOutput.setText(properties.getProperty("number"));
 
@@ -351,6 +451,21 @@ public class GUI implements ActionListener {
             }
             if (main.clientInitial == null) {
                 BalloonTip nullError = new BalloonTip(clientIInput, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (!main.durationReady) {
+                BalloonTip nullError = new BalloonTip(durationMenu, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (!main.marketReady) {
+                BalloonTip nullError = new BalloonTip(marketMenu, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (!main.typeReady) {
+                BalloonTip nullError = new BalloonTip(typeMenu, "This input was left blank.");
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
                         e1 -> nullError.closeBalloon(), 500, 15));
             }
@@ -399,6 +514,7 @@ public class GUI implements ActionListener {
                 }
             }
             for (int i = 0; i < textFieldNames.length; i++) {
+                textFields[i].setText("");
                 String fetch = properties.getProperty(textFieldNames[i]);
                 if (!fetch.equals(textFields[i].getText())) {
                     textFields[i].setText(fetch);
