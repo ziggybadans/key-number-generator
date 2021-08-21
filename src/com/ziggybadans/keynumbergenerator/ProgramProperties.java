@@ -1,6 +1,9 @@
 package com.ziggybadans.keynumbergenerator;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
