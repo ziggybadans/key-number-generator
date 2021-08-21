@@ -154,6 +154,7 @@ public class GUI implements ActionListener {
                     "Error reading path file", JOptionPane.ERROR_MESSAGE);
             case "oldProperties" -> JOptionPane.showMessageDialog(new JFrame(),
                     "Old properties file failed to be deleted; please delete manually.");
+            default -> JOptionPane.showMessageDialog(new JFrame(), "Something went wrong!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
