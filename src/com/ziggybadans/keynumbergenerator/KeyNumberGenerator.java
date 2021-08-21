@@ -57,7 +57,7 @@ public class KeyNumberGenerator {
 
     // Get current year for this later.
     public void setYear(String input) {
-        CharConcatentation charConcat = new CharConcatentation();
+        CharConcatenation charConcat = new CharConcatenation();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         System.out.println("Current year: " + currentYear);
         try {
@@ -134,7 +134,7 @@ public class KeyNumberGenerator {
 
     public void setClientI(String input) {
         try {
-            CharConcatentation charConcat = new CharConcatentation();
+            CharConcatenation charConcat = new CharConcatenation();
             if (input.length() == 2) {
                 char firstClientInitial = input.toUpperCase(Locale.ROOT).charAt(0);
                 char secondClientInitial = input.toUpperCase(Locale.ROOT).charAt(1);

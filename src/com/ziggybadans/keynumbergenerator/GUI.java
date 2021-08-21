@@ -88,29 +88,23 @@ public class GUI implements ActionListener {
     class SetPropertiesButton extends JButton {
         public SetPropertiesButton(String key, JTextField input) {
             super("Set prop.");
-            this.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (debugProperties) { System.out.println("Input: " + input.getText()); }
-                    properties.setProperties(key, input.getText());
-                }
+            this.addActionListener(e -> {
+                if (debugProperties) { System.out.println("Input: " + input.getText()); }
+                properties.setProperties(key, input.getText());
             });
             this.setToolTipText("Sets the current value as the default");
         }
 
         public SetPropertiesButton(String key, JComboBox<?> input) {
             super("Set prop.");
-            this.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (debugProperties) { System.out.println("Input: " + input.getSelectedItem()); }
-                    try {
-                        properties.setProperties(key, Objects.requireNonNull(input.getSelectedItem()).toString());
-                    } catch (NullPointerException error) {
-                        System.out.println("Failed!");
-                    }
-
+            this.addActionListener(e -> {
+                if (debugProperties) { System.out.println("Input: " + input.getSelectedItem()); }
+                try {
+                    properties.setProperties(key, Objects.requireNonNull(input.getSelectedItem()).toString());
+                } catch (NullPointerException error) {
+                    System.out.println("Failed!");
                 }
+
             });
             this.setToolTipText("Sets the current value as the default");
         }
@@ -119,24 +113,18 @@ public class GUI implements ActionListener {
     static class NullButton extends JButton {
         public NullButton(JComboBox<String> linked) {
             super("Make null");
-            this.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    linked.addItem("NULL");
-                    linked.setSelectedItem("NULL");
-                }
+            this.addActionListener(e -> {
+                linked.addItem("NULL");
+                linked.setSelectedItem("NULL");
             });
             this.setToolTipText("Sets the text field to null");
         }
 
         public NullButton(JComboBox<Integer> linked, boolean integer) {
             super("Make null");
-            this.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    linked.addItem(0);
-                    linked.setSelectedItem(0);
-                }
+            this.addActionListener(e -> {
+                linked.addItem(0);
+                linked.setSelectedItem(0);
             });
             this.setToolTipText("Sets the text field to null");
         }
