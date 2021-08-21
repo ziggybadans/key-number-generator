@@ -146,14 +146,26 @@ public class GUI implements ActionListener {
         switch (type) {
             case "access" ->
                     // Add path placement option here
-                    JOptionPane.showMessageDialog(new JFrame(), "Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.",
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.",
                             "Error", JOptionPane.ERROR_MESSAGE);
-            case "save" -> JOptionPane.showMessageDialog(new JFrame(), "Could not save important properties! Please try again, or change location of properties file to somewhere with access.",
+            case "save" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not save important properties! Please try again, or change location of properties file to somewhere with access.",
                     "Error", JOptionPane.ERROR_MESSAGE);
-            case "read" -> JOptionPane.showMessageDialog(new JFrame(), "Could not read important properties! Please try again, or change location of properties file to somewhere with access.",
+            case "read" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not read important properties! Please try again, or change location of properties file to somewhere with access.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             // Change this to a balloon dialog eventually
-            case "type..." -> JOptionPane.showMessageDialog(new JFrame(), "This is already the default value!");
+            //case "type..." -> JOptionPane.showMessageDialog(new JFrame(), "This is already the default value!");
+            case "setPath" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not set path! Access may be denied. Please try again with a different location.",
+                    "Error setting path", JOptionPane.ERROR_MESSAGE);
+            case "readPath" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not read the path file! Please try again, or delete the path file at '" +
+                            ProgramProperties.default_pathname + "/path.properties" + "' and set the directory for properties again.",
+                    "Error reading path file", JOptionPane.ERROR_MESSAGE);
+            case "oldProperties" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Old properties file failed to be deleted; please delete manually.");
         }
     }
 
@@ -362,7 +374,7 @@ public class GUI implements ActionListener {
         place(generateResult, panel, 1, 302, 150, 250, 20);
 
         menuBar = new JMenuBar();
-        preferences = new JMenu("Preferences");
+        preferences = new JMenu("Advanced");
         reload = new JMenuItem("Reload");
         reload.addActionListener(this);
         reload.setToolTipText("Replaces all text fields currently edited with default values");

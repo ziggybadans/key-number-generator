@@ -33,8 +33,6 @@ public class KeyNumberGenerator {
     public static int number = 0;
     public String keyNumber;
 
-    public static String[] errors = {"access", "save", "read", "type..."};
-
     boolean debug = true;
 
     KeyNumberGenerator() {

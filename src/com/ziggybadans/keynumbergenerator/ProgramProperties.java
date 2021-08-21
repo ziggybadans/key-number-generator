@@ -15,6 +15,8 @@ public class ProgramProperties {
     public static String pathname;
     public static String default_pathname;
 
+    public static String[] errors = {"access", "save", "read", "setPath", "readPath", "oldProperties"};
+
     File getProperties;
 
     boolean debug = false;
@@ -22,7 +24,7 @@ public class ProgramProperties {
     ProgramProperties() {
         try {
             if (getOS.isWindows()) {
-                default_pathname = System.getenv("APPDATA" + "keynumbergenerator");
+                default_pathname = System.getenv("APPDATA" + "/keynumbergenerator");
             } else if (getOS.isMac()) {
                 default_pathname = System.getProperty("user.home") + "/keynumbergenerator";
             }
@@ -45,6 +47,7 @@ public class ProgramProperties {
                 } catch (IOException e) {
                     System.out.println("Something went wrong reading the file at " + default_pathname + "/path.properties");
                     pathname = default_pathname + "/keynumbergenerator.properties";
+                    GUI.throwPropertiesError(errors[4]);
                 }
             } else {
                 pathname = default_pathname + "/keynumbergenerator.properties";
@@ -72,6 +75,7 @@ public class ProgramProperties {
                 if (debug) { System.out.println("Properties: " + p); }
             } catch (IOException e) {
                 System.out.println("Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.");
+                GUI.throwPropertiesError(errors[0]);
             } // Maybe add NumberFormatException here later
         } else {
             System.out.println("Error: The properties file is missing! Creating new properties file...");
@@ -82,6 +86,7 @@ public class ProgramProperties {
                 p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
             } catch (IOException e) {
                 System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+                GUI.throwPropertiesError(errors[1]);
             }
         }
         KeyNumberGenerator.number = Integer.parseInt(p.getProperty("number"));
@@ -104,7 +109,7 @@ public class ProgramProperties {
         }
 
         if (input.contains("Type ")) {
-            System.out.println("Error: This value cannot be set as default!");
+            p.setProperty(key, defaultProps.get(key));
         } else {
             if (debug) { System.out.println("Before update: " + p); }
             p.setProperty(key, input);
@@ -115,6 +120,7 @@ public class ProgramProperties {
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
         } catch (IOException e) {
             System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+            GUI.throwPropertiesError(errors[1]);
         }
     }
 
@@ -136,16 +142,19 @@ public class ProgramProperties {
                 System.out.println("Old properties file has been deleted.");
             } else {
                 System.out.println("Old properties file failed to be deleted.");
+                GUI.throwPropertiesError(errors[5]);
             }
             pathname = path + "/keynumbergenerator.properties";
         } catch (IOException e) {
             System.out.println("Could not set path! Access may be denied. Please try again with a different location.");
+            GUI.throwPropertiesError(errors[3]);
         }
         try {
             System.out.println("New path: " + pathname);
             p.store(new FileWriter(pathname), "KeyNumberGenerator UNIQUE NUMBER // DO NOT DELETE");
         } catch (IOException e) {
             System.out.println("Could not save important properties! Please try again, or change location of properties file to somewhere with access.");
+            GUI.throwPropertiesError(errors[1]);
         }
     }
 }
