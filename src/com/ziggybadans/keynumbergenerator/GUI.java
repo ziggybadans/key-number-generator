@@ -6,6 +6,8 @@ import net.java.balloontip.utils.TimingUtils;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -24,25 +26,42 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
-public class GUI<KeyNumberGenerator> implements ActionListener {
+public class GUI implements ActionListener {
+
+    KeyNumberGenerator main = new KeyNumberGenerator();
+    ProgramProperties properties = new ProgramProperties();
 
     JFrame frame;
     JButton backgroundButton;
 
-    JComboBox<String> marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
-    public static JTextField yearInput;
+    JComboBox<String> marketMenu;
+    SetPropertiesButton marketSP;
+
+    static JTextField yearInput;
+    SetPropertiesButton yearSP;
+
     JTextField writerIInput;
+    SetPropertiesButton writerISP;
+
     JComboBox<Integer> durationMenu;
+    SetPropertiesButton durationSP;
+
     JComboBox<String> typeMenu;
+    SetPropertiesButton typeSP;
+
     JTextField clientIInput;
+    SetPropertiesButton clientISP;
+
     JTextField numberOutput;
 
     JButton generateButton;
     String generateOutput;
-    public static JTextField generateResult;
+    static JTextField generateResult;
 
-    public static boolean yearFieldActive;
+    static boolean yearFieldActive;
 
     PlainDocument generateDocument;
     PlainDocument yearDocument;
@@ -52,51 +71,185 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
     JMenuBar menuBar;
     JMenu preferences;
     JMenuItem editProperties;
+    JMenuItem locationProperties;
+    final JFileChooser fileChooser = new JFileChooser();
+    JMenuItem reload;
 
-    KeyNumberGenerator main = new KeyNumberGenerator();
+    boolean debug = false;
+    boolean debugProperties = false;
+    boolean debugFields = false;
 
-    public GUI() {
+    public GUI() throws InterruptedException {
         frame = new JFrame("Key Number Generator");
 
-        frame.setSize(850, 300);
+        frame.setSize(850, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JLayeredPane panel = new JLayeredPane();
         frame.add(panel);
+
+        properties.loadProperties();
+        TimeUnit.SECONDS.sleep(1);
 
         placeComponents(panel);
 
         frame.setVisible(true);
     }
 
+    class SetPropertiesButton extends JButton {
+        public SetPropertiesButton(String key, JTextField input) {
+            super("Set prop.");
+            this.addActionListener(e -> {
+                if (debugProperties) { System.out.println("Input: " + input.getText()); }
+                properties.setProperties(key, input.getText());
+            });
+            this.setToolTipText("Sets the current value as the default");
+        }
+
+        public SetPropertiesButton(String key, JComboBox<?> input) {
+            super("Set prop.");
+            this.addActionListener(e -> {
+                if (debugProperties) { System.out.println("Input: " + input.getSelectedItem()); }
+                try {
+                    properties.setProperties(key, Objects.requireNonNull(input.getSelectedItem()).toString());
+                } catch (NullPointerException error) {
+                    System.out.println("Failed!");
+                }
+
+            });
+            this.setToolTipText("Sets the current value as the default");
+        }
+    }
+
+    static class NullButton extends JButton {
+        public NullButton(JComboBox<String> linked) {
+            super("Make null");
+            this.addActionListener(e -> {
+                linked.addItem("NULL");
+                linked.setSelectedItem("NULL");
+            });
+            this.setToolTipText("Sets the text field to null");
+        }
+
+        public NullButton(JComboBox<Integer> linked, boolean integer) {
+            super("Make null");
+            this.addActionListener(e -> {
+                linked.addItem(0);
+                linked.setSelectedItem(0);
+            });
+            this.setToolTipText("Sets the text field to null");
+        }
+    }
+
+    public static void throwPropertiesError(String type) {
+        switch (type) {
+            case "access" ->
+                    // Add path placement option here
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Could not access default path, because it either doesn't exist or is protected. Please set path someplace else.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+            case "save" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not save important properties! Please try again, or change location of properties file to somewhere with access.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            case "read" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not read important properties! Please try again, or change location of properties file to somewhere with access.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            // Change this to a balloon dialog eventually
+            //case "type..." -> JOptionPane.showMessageDialog(new JFrame(), "This is already the default value!");
+            case "setPath" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not set path! Access may be denied. Please try again with a different location.",
+                    "Error setting path", JOptionPane.ERROR_MESSAGE);
+            case "readPath" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Could not read the path file! Please try again, or delete the path file at '" +
+                            ProgramProperties.default_pathname + "/path.properties" + "' and set the directory for properties again.",
+                    "Error reading path file", JOptionPane.ERROR_MESSAGE);
+            case "oldProperties" -> JOptionPane.showMessageDialog(new JFrame(),
+                    "Old properties file failed to be deleted; please delete manually.");
+            default -> JOptionPane.showMessageDialog(new JFrame(), "Something went wrong!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void place(JLabel label, JComboBox component, SetPropertiesButton linked, boolean nullButtonBoolean, boolean integer, JLayeredPane panel, int... bounds) {
+        label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+        component.setBounds(label.getX(), label.getY() + 25, label.getWidth(), label.getHeight() + 8);
+        linked.setBounds(component.getX(), component.getY() + 135, component.getWidth(), component.getHeight() + 8);
+        if (nullButtonBoolean) {
+            NullButton nullButton;
+            if (integer) {
+                nullButton = new NullButton(component, true);
+            } else {
+                nullButton = new NullButton(component);
+            }
+            nullButton.setBounds(linked.getX(), linked.getY() + 100, linked.getWidth(), linked.getHeight());
+            panel.add(nullButton);
+            panel.setLayer(nullButton, 1, 0);
+        }
+        panel.add(label);
+        panel.add(component);
+        panel.add(linked);
+        panel.setLayer(label, 1, 0);
+        panel.setLayer(component, 1, 0);
+        panel.setLayer(linked, 1, 0);
+    }
+
+    private void place(JLabel label, JComponent component, SetPropertiesButton linked, JLayeredPane panel, int... bounds) {
+        label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+        component.setBounds(label.getX(), label.getY() + 25, label.getWidth(), label.getHeight() + 8);
+        linked.setBounds(component.getX(), component.getY() + 135, component.getWidth(), component.getHeight() + 8);
+        panel.add(label);
+        panel.add(component);
+        panel.add(linked);
+        panel.setLayer(label, 1, 0);
+        panel.setLayer(component, 1, 0);
+        panel.setLayer(linked, 1, 0);
+    }
+
+    private void place(JLabel label, JComponent component, JLayeredPane panel, int... bounds) {
+        label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+        component.setBounds(label.getX(), label.getY() + 25, label.getWidth(), label.getHeight() + 8);
+        panel.add(label);
+        panel.add(component);
+        panel.setLayer(label, 1, 0);
+        panel.setLayer(component, 1, 0);
+    }
+
+    private void place(JComponent component, JLayeredPane panel, int layer, int... bounds) {
+        component.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
+        panel.add(component);
+        panel.setLayer(component, layer, 0);
+    }
+
     private void placeComponents(JLayeredPane panel) {
         panel.setLayout(null);
 
         backgroundButton = new JButton();
-        backgroundButton.setBounds(0, 0, 1200, 600);
         backgroundButton.setOpaque(false);
         backgroundButton.setContentAreaFilled(false);
         backgroundButton.setBorderPainted(false);
         backgroundButton.addActionListener(this);
-        panel.add(backgroundButton);
-        panel.setLayer(backgroundButton, 0, 0);
+        place(backgroundButton, panel, 0, 0, 0, 1200, 600);
 
         JLabel marketLabel = new JLabel("Market");
-        marketLabel.setBounds(50, 25, 80, 12);
-        panel.add(marketLabel);
-        panel.setLayer(marketLabel, 1, 0);
-        marketMenu.setSelectedIndex(0);
-        marketMenu.setBounds(50, 50, 90, 20);
+        marketMenu = new JComboBox<>(KeyNumberGenerator.markets);
+        marketMenu.setSelectedItem(properties.getProperty("market"));
         marketMenu.addActionListener(this);
-        panel.add(marketMenu);
-        panel.setLayer(marketMenu, 1, 0);
+        marketMenu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (Objects.equals(marketMenu.getSelectedItem(), "NULL")) {
+                    marketMenu.setSelectedIndex(0);
+                    marketMenu.removeItem("NULL");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
+        marketSP = new SetPropertiesButton("market", marketMenu);
+        place(marketLabel, marketMenu, marketSP, true, false, panel, 50, 25, 80, 12);
 
         JLabel yearLabel = new JLabel("Year");
-        yearLabel.setBounds(150, 25, 80, 12);
-        panel.add(yearLabel);
-        panel.setLayer(yearLabel, 1, 0);
-        yearInput = new JTextField("Type year");
-        yearInput.setBounds(150, 50, 90, 20);
+        yearInput = new JTextField(properties.getProperty("year"));
         yearInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -109,32 +262,20 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (yearInput.getText().equals("Type year")) {
-                    System.out.println("Year: " + null);
-                    main.setYear(null);
+                    if (debug) { System.out.println("Year: " + null); }
                 } else if (yearInput.getText().equals("")) {
                     yearInput.setText("Type year");
-                    System.out.println("Year: " + null);
-                    main.setYear(null);
-                } else {
-                    System.out.println("Year: " + yearInput.getText());
-                    main.setYear(yearInput.getText());
-                    // Add balloon tooltip for invalid input
+                    if (debug) { System.out.println("Year: " + null); }
                 }
             }
         });
         yearDocument = (PlainDocument) yearInput.getDocument();
         yearDocument.setDocumentFilter(new NumberFilter(4, false));
-        panel.add(yearInput);
-        panel.setLayer(yearInput, 1, 0);
-
-        System.out.println(yearInput.getBounds());
+        yearSP = new SetPropertiesButton("year", yearInput);
+        place(yearLabel, yearInput, yearSP, panel, 150, 25, 80, 12);
 
         JLabel wILabel = new JLabel("Writer");
-        wILabel.setBounds(250, 25, 80, 12);
-        panel.add(wILabel);
-        panel.setLayer(wILabel, 1, 0);
-        writerIInput = new JTextField("Type name");
-        writerIInput.setBounds(250, 50, 90, 20);
+        writerIInput = new JTextField(properties.getProperty("writer_initial"));
         writerIInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -146,49 +287,56 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (writerIInput.getText().equals("Type name")) {
-                    System.out.println("Writer input: " + null);
-                    main.setWriterI(null);
+                    if (debug) { System.out.println("Writer input: " + null); }
                 } else if (writerIInput.getText().equals("")) {
                     writerIInput.setText("Type name");
-                    System.out.println("Writer input: " + null);
-                    main.setWriterI(null);
-                } else {
-                    System.out.println("Writer Input: " + writerIInput.getText());
-                    main.setWriterI(writerIInput.getText());
+                    if (debug) { System.out.println("Writer input: " + null); }
                 }
             }
         });
-        panel.add(writerIInput);
-        panel.setLayer(writerIInput, 1, 0);
+        writerISP = new SetPropertiesButton("writer_initial", writerIInput);
+        place(wILabel, writerIInput, writerISP, panel, 250, 25, 80, 12);
 
         JLabel durationLabel = new JLabel("Duration");
-        durationLabel.setBounds(350, 25, 80, 12);
-        panel.add(durationLabel);
-        panel.setLayer(durationLabel, 1, 0);
         durationMenu = new JComboBox<>(KeyNumberGenerator.durations);
-        durationMenu.setSelectedIndex(0);
-        durationMenu.setBounds(350, 50, 90, 20);
+        durationMenu.setSelectedItem(properties.getProperty("duration"));
         durationMenu.addActionListener(this);
-        panel.add(durationMenu);
-        panel.setLayer(durationMenu, 1, 0);
+        durationMenu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (Objects.equals(durationMenu.getSelectedItem(), 0)) {
+                    durationMenu.setSelectedIndex(0);
+                    durationMenu.removeItem(0);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
+        durationSP = new SetPropertiesButton("duration", durationMenu);
+        place(durationLabel, durationMenu, durationSP, true, true, panel, 350, 25, 80, 12);
 
         JLabel typeLabel = new JLabel("Type");
-        typeLabel.setBounds(450, 25, 80, 12);
-        panel.add(typeLabel);
-        panel.setLayer(typeLabel, 1, 0);
         typeMenu = new JComboBox<>(KeyNumberGenerator.types);
-        typeMenu.setSelectedIndex(0);
-        typeMenu.setBounds(450, 50, 90, 20);
+        typeMenu.setSelectedItem(properties.getProperty("type"));
         typeMenu.addActionListener(this);
-        panel.add(typeMenu);
-        panel.setLayer(typeMenu, 1, 0);
+        typeMenu.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (Objects.equals(typeMenu.getSelectedItem(), "NULL")) {
+                    typeMenu.setSelectedIndex(0);
+                    typeMenu.removeItem("NULL");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {}
+        });
+        typeSP = new SetPropertiesButton("type", typeMenu);
+        place(typeLabel, typeMenu, typeSP, true, false, panel, 450, 25, 80, 12);
 
         JLabel cILabel = new JLabel("Client");
-        cILabel.setBounds(550, 25, 80, 12);
-        panel.add(cILabel);
-        panel.setLayer(cILabel, 1, 0);
-        clientIInput = new JTextField("Type client name");
-        clientIInput.setBounds(550, 50, 110, 20);
+        clientIInput = new JTextField(properties.getProperty("client_initial"));
         clientIInput.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -200,82 +348,107 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
             @Override
             public void focusLost(FocusEvent e) {
                 if (clientIInput.getText().equals("Type client name")) {
-                    System.out.println("Client: " + null);
-                    main.setClientI(null);
+                    if (debug) { System.out.println("Client: " + null); }
                 } else if (clientIInput.getText().equals("")) {
                     clientIInput.setText("Type client name");
-                    System.out.println("Client: " + null);
-                    main.setClientI(null);
-                } else {
-                    System.out.println("Client: " + clientIInput.getText());
-                    main.setClientI(clientIInput.getText());
+                    if (debug) { System.out.println("Client: " + null); }
                 }
             }
         });
-        panel.add(clientIInput);
-        panel.setLayer(clientIInput, 1, 0);
+        clientISP = new SetPropertiesButton("client_initial", clientIInput);
+        place(cILabel, clientIInput, clientISP, panel, 550, 25, 110, 12);
 
         JLabel numberLabel = new JLabel("Sequential Number");
-        numberLabel.setBounds(670, 25, 110, 12);
-        panel.add(numberLabel);
-        panel.setLayer(numberLabel, 1, 0);
-        numberOutput = new JTextField(String.valueOf(KeyNumberGenerator.getProperties()));
-        numberOutput.setBounds(670, 50, 50, 20);
+        numberOutput = new JTextField(String.valueOf(KeyNumberGenerator.number));
         numberOutput.setEditable(false);
-        panel.add(numberOutput);
-        panel.setLayer(numberOutput, 1, 0);
+        numberOutput.setToolTipText("This value increases by 1 every time a key is generated");
+        place(numberLabel, panel, 1, 670, 25, 110, 12);
+        place(numberOutput, panel, 1, numberLabel.getX(), numberLabel.getY() + 25, 50, numberLabel.getHeight() + 8);
 
         generateButton = new JButton("Generate");
-        generateButton.setBounds(375, 100, 100, 20);
         generateButton.addActionListener(this);
-        panel.add(generateButton);
-        panel.setLayer(generateButton, 1, 0);
+        place(generateButton, panel, 1, 375, 100, 100, 20);
         generateResult = new JTextField();
-        generateResult.setBounds(302, 150, 250, 20);
         generateDocument = (PlainDocument) generateResult.getDocument();
         generateDocument.setDocumentFilter(new CharacterFilter(30, true));
-        panel.add(generateResult);
-        panel.setLayer(generateResult, 1, 0);
+        place(generateResult, panel, 1, 302, 150, 250, 20);
 
         menuBar = new JMenuBar();
-        preferences = new JMenu("Preferences");
+        preferences = new JMenu("Advanced");
+        reload = new JMenuItem("Reload");
+        reload.addActionListener(this);
+        reload.setToolTipText("Replaces all text fields currently edited with default values");
         editProperties = new JMenuItem("Edit Properties...");
         editProperties.addActionListener(this);
+        editProperties.setToolTipText("Opens the default properties file in the default text editor");
+        locationProperties = new JMenuItem("Change properties location...");
+        locationProperties.setToolTipText("Sets a custom directory for the properties file");
+        locationProperties.addActionListener(this);
         menuBar.add(preferences);
+        menuBar.add(reload);
         preferences.add(editProperties);
+        preferences.add(locationProperties);
         frame.setJMenuBar(menuBar);
-
-
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        // All of this probably won't run when the program first launches, making defaults broken
-        numberOutput.setText(String.valueOf(KeyNumberGenerator.getProperties()));
         if (event.getSource() == marketMenu) {
-            System.out.println("Market: " + marketMenu.getSelectedItem());
+            if (debug) { System.out.println("Market: " + marketMenu.getSelectedItem()); }
             main.setMarket((String) marketMenu.getSelectedItem());
-        } else if (event.getSource() == durationMenu) {
+        }
+        else if (event.getSource() == durationMenu) {
             try {
-                System.out.println("Duration: " + durationMenu.getSelectedItem());
+                if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
                 main.setDuration((int) durationMenu.getSelectedItem());
             } catch (NullPointerException e) {
                 durationMenu.setSelectedItem(KeyNumberGenerator.durations[0]);
-                System.out.println("Duration: " + durationMenu.getSelectedItem());
+                if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
                 main.setDuration((int) durationMenu.getSelectedItem());
             }
-        } else if (event.getSource() == typeMenu) {
-            System.out.println("Type: " + typeMenu.getSelectedItem());
+        }
+        else if (event.getSource() == typeMenu) {
+            if (debug) { System.out.println("Type: " + typeMenu.getSelectedItem()); }
             main.setType((String) typeMenu.getSelectedItem());
-        } else if (event.getSource() == generateButton) {
+        }
+        else if (event.getSource() == generateButton) {
+            if (clientIInput.getText().equals("Type client name")) {
+                main.setClientI(null);
+            } else if (clientIInput.getText().equals("")) {
+                main.setClientI(null);
+                clientIInput.setText("Type client name");
+            } else {
+                main.setClientI(clientIInput.getText());
+            }
+            if (writerIInput.getText().equals("Type name")) {
+                main.setWriterI(null);
+            } else if (writerIInput.getText().equals("")) {
+                main.setWriterI(null);
+                writerIInput.setText("Type name");
+            } else {
+                main.setWriterI(writerIInput.getText());
+            }
+            if (yearInput.getText().equals("Type year")) {
+                main.setYear(null);
+            } else if (yearInput.getText().equals("")) {
+                main.setYear(null);
+                yearInput.setText("Type year");
+            } else {
+                main.setYear(yearInput.getText());
+            }
+
             main.setMarket((String) marketMenu.getSelectedItem());
             main.setDuration((int) durationMenu.getSelectedItem());
             main.setType((String) typeMenu.getSelectedItem());
-            System.out.println("Debug: Attempting to generate...");
+
+            if (debug) { System.out.println("Debug: Attempting to generate..."); }
             generateOutput = main.generate();
+            properties.setProperties("number", String.valueOf(KeyNumberGenerator.number));
             generateResult.setText("");
+
             generateResult.setText(generateOutput);
-            numberOutput.setText(String.valueOf(KeyNumberGenerator.getProperties()));
+            numberOutput.setText(properties.getProperty("number"));
+
             if (!main.yearReady) {
                 BalloonTip nullError = new BalloonTip(GUI.yearInput, "This input was left blank.");
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
@@ -291,8 +464,25 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
                         e1 -> nullError.closeBalloon(), 500, 15));
             }
-        } else if (event.getSource() == editProperties) {
-            File properties = new File(KeyNumberGenerator.pathname);
+            if (!main.durationReady) {
+                BalloonTip nullError = new BalloonTip(durationMenu, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (!main.marketReady) {
+                BalloonTip nullError = new BalloonTip(marketMenu, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+            if (!main.typeReady) {
+                BalloonTip nullError = new BalloonTip(typeMenu, "This input was left blank.");
+                TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
+                        e1 -> nullError.closeBalloon(), 500, 15));
+            }
+        }
+        else if (event.getSource() == editProperties) {
+            System.out.println("test");
+            File properties = new File(ProgramProperties.pathname);
             try {
                 if (!Desktop.isDesktopSupported()) {
                     System.out.println("Desktop not supported.");
@@ -302,8 +492,6 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
                     Desktop desktop = Desktop.getDesktop();
                     if (properties.exists()) {
                         desktop.open(properties);
-                    } else {
-                        KeyNumberGenerator.getProperties();
                     }
                 }
             } catch (Exception e) {
@@ -312,20 +500,54 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        else if (event.getSource() == locationProperties) {
+            // Make this a proper file selector later
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = fileChooser.showOpenDialog(frame);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                String result = fileChooser.getSelectedFile().toString();
+                properties.setPathname(result);
+            }
+        }
+        else if (event.getSource() == reload) {
+            JComboBox<?>[] comboBoxes = {marketMenu, durationMenu, typeMenu};
+            String[] comboNames = {"market", "duration", "type"};
+            JTextField[] textFields = {yearInput, writerIInput, clientIInput};
+            String[] textFieldNames = {"year", "writer_initial", "client_initial"};
+
+            properties.loadProperties();
+            for (int i = 0; i < comboNames.length; i++) {
+                String fetch = properties.getProperty(comboNames[i]);
+                if (!fetch.equals(comboBoxes[i].getSelectedItem())) {
+                    comboBoxes[i].setSelectedItem(fetch);
+                }
+            }
+            for (int i = 0; i < textFieldNames.length; i++) {
+                textFields[i].setText("");
+                String fetch = properties.getProperty(textFieldNames[i]);
+                if (!fetch.equals(textFields[i].getText())) {
+                    textFields[i].setText(fetch);
+                }
+            }
+            numberOutput.setText(properties.getProperty("number"));
+        }
     }
 
-    public static class CharacterFilter extends DocumentFilter {
+    static class CharacterFilter extends DocumentFilter {
+        boolean debugFilter = false;
+
         boolean upper = false;
         // Removing this limit initializer, if there's a bug change it back
         int limit;
 
         public CharacterFilter(int limit) {
-            System.out.println("Limit: " + limit);
+            if (debugFilter) { System.out.println("Limit: " + limit); }
             this.limit = limit;
         }
 
         public CharacterFilter(int limit, boolean upper) {
-            System.out.println("Limit: " + limit + "(Upper: " + upper + ')');
+            if (debugFilter) { System.out.println("Limit: " + limit + "(Upper: " + upper + ')'); }
             this.limit = limit;
             this.upper = upper;
         }
@@ -338,11 +560,11 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
         @Override
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
             super.replace(fb, offset, length, revise(fb, text), attr);
-            System.out.println("Replace called!");
+            if (debugFilter) { System.out.println("Replace called!"); }
         }
 
         private String revise(FilterBypass fb, String text) {
-            System.out.println("Revise called!");
+            if (debugFilter) { System.out.println("Revise called!"); }
             if (upper) {
                 text = text.toUpperCase();
             }
@@ -368,13 +590,16 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
         }
     }
 
-    public static class NumberFilter extends DocumentFilter {
+    static class NumberFilter extends DocumentFilter {
+        boolean debugFilter = false;
+
         // Removing this limit initializer, if there's a bug change it back
         int limit;
         boolean number;
 
+
         public NumberFilter(int limit, boolean number) {
-            System.out.println("Limit: " + limit + "(Number: " + number + ')');
+            if (debugFilter) { System.out.println("Limit: " + limit + "(Number: " + number + ')'); }
             this.limit = limit;
             this.number = number;
         }
@@ -388,15 +613,14 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
         public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attr) throws BadLocationException {
             if (!text.equals("Type year")) {
                 super.replace(fb, offset, length, revise(fb, text), attr);
-                System.out.println("Replace called!");
+                if (debugFilter) { System.out.println("Replace called!"); }
             } else {
                 super.replace(fb, offset, length, text, attr);
             }
         }
 
         private String revise(FilterBypass fb, String text) {
-
-            System.out.println("Revise called!");
+            if (debugFilter) { System.out.println("Revise called!"); }
 
             StringBuilder builder = new StringBuilder(text);
             int index = 0;
@@ -419,4 +643,3 @@ public class GUI<KeyNumberGenerator> implements ActionListener {
         }
     }
 }
-

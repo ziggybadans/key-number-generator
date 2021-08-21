@@ -1,6 +1,6 @@
 package com.ziggybadans.keynumbergenerator;
 
-public class CharConcatentation {
+public class CharConcatenation {
     public String concat(char... chars) {
         if (chars.length == 0) {
             return "";
