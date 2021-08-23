@@ -31,16 +31,18 @@ import java.util.concurrent.TimeUnit;
 
 public class GUI implements ActionListener {
 
-    KeyNumberGenerator main = new KeyNumberGenerator();
-    ProgramProperties properties = new ProgramProperties();
+    final KeyNumberGenerator main = new KeyNumberGenerator();
+    final ProgramProperties properties = new ProgramProperties();
 
-    JFrame frame;
+    final JFrame frame;
+    final JLayeredPane panel;
+
     JButton backgroundButton;
 
     JComboBox<String> marketMenu;
     SetPropertiesButton marketSP;
 
-    static JTextField yearInput;
+    JTextField yearInput;
     SetPropertiesButton yearSP;
 
     JTextField writerIInput;
@@ -59,9 +61,9 @@ public class GUI implements ActionListener {
 
     JButton generateButton;
     String generateOutput;
-    static JTextField generateResult;
+    JTextField generateResult;
 
-    static boolean yearFieldActive;
+    boolean yearFieldActive;
 
     PlainDocument generateDocument;
     PlainDocument yearDocument;
@@ -85,7 +87,7 @@ public class GUI implements ActionListener {
         frame.setSize(850, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLayeredPane panel = new JLayeredPane();
+        panel = new JLayeredPane();
         frame.add(panel);
 
         properties.loadProperties();
@@ -395,21 +397,12 @@ public class GUI implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == marketMenu) {
             if (debug) { System.out.println("Market: " + marketMenu.getSelectedItem()); }
-            main.setMarket((String) marketMenu.getSelectedItem());
         }
         else if (event.getSource() == durationMenu) {
-            try {
-                if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
-                main.setDuration((int) durationMenu.getSelectedItem());
-            } catch (NullPointerException e) {
-                durationMenu.setSelectedItem(KeyNumberGenerator.durations[0]);
-                if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
-                main.setDuration((int) durationMenu.getSelectedItem());
-            }
+            if (debug) { System.out.println("Duration: " + durationMenu.getSelectedItem()); }
         }
         else if (event.getSource() == typeMenu) {
             if (debug) { System.out.println("Type: " + typeMenu.getSelectedItem()); }
-            main.setType((String) typeMenu.getSelectedItem());
         }
         else if (event.getSource() == generateButton) {
             if (clientIInput.getText().equals("Type client name")) {
@@ -450,7 +443,7 @@ public class GUI implements ActionListener {
             numberOutput.setText(properties.getProperty("number"));
 
             if (!main.yearReady) {
-                BalloonTip nullError = new BalloonTip(GUI.yearInput, "This input was left blank.");
+                BalloonTip nullError = new BalloonTip(yearInput, "This input was left blank.");
                 TimingUtils.showTimedBalloon(nullError, 2000, e -> FadingUtils.fadeOutBalloon(nullError,
                         e1 -> nullError.closeBalloon(), 500, 15));
             }
@@ -534,11 +527,10 @@ public class GUI implements ActionListener {
         }
     }
 
-    static class CharacterFilter extends DocumentFilter {
+    class CharacterFilter extends DocumentFilter {
         boolean debugFilter = false;
 
         boolean upper = false;
-        // Removing this limit initializer, if there's a bug change it back
         int limit;
 
         public CharacterFilter(int limit) {
@@ -576,7 +568,7 @@ public class GUI implements ActionListener {
                     index++;
                 } else {
                     builder.deleteCharAt(index);
-                    BalloonTip acceptError = new BalloonTip(GUI.generateResult,
+                    BalloonTip acceptError = new BalloonTip(generateResult,
                             "Maximum length is 30 characters. Only numbers, letters, and dashes allowed.");
                     TimingUtils.showTimedBalloon(acceptError, 2000, e -> FadingUtils.fadeOutBalloon(acceptError,
                             e1 -> acceptError.closeBalloon(), 500, 15));
@@ -590,7 +582,7 @@ public class GUI implements ActionListener {
         }
     }
 
-    static class NumberFilter extends DocumentFilter {
+    class NumberFilter extends DocumentFilter {
         boolean debugFilter = false;
 
         // Removing this limit initializer, if there's a bug change it back
@@ -629,7 +621,7 @@ public class GUI implements ActionListener {
                     index++;
                 } else {
                         builder.deleteCharAt(index);
-                        BalloonTip acceptError = new BalloonTip(GUI.yearInput,
+                        BalloonTip acceptError = new BalloonTip(yearInput,
                                 "Maximum length is 4 characters. Only numbers allowed.");
                         TimingUtils.showTimedBalloon(acceptError, 2000, e -> FadingUtils.fadeOutBalloon(acceptError,
                                 e1 -> acceptError.closeBalloon(), 500, 15));

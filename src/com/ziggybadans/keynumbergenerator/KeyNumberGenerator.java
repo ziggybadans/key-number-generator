@@ -19,6 +19,7 @@ public class KeyNumberGenerator {
     public String market;
 
     public char writerInitial;
+    public String clientInitial;
 
     public static Integer[] durations = {10, 15, 30, 45, 60, 90};
     public boolean durationReady = false;
@@ -28,34 +29,31 @@ public class KeyNumberGenerator {
     public boolean typeReady = false;
     public String type;
 
-    public String clientInitial;
-
     public static int number = 0;
-    public String keyNumber;
-
     boolean debug = true;
 
     KeyNumberGenerator() {
     }
 
     public void setMarket(String input) {
-        int tempMarket;
         if (input.equals("NULL")) {
             market = null;
             marketReady = false;
+        } else {
+            int inputMarket;
+            try {
+                inputMarket = java.util.Arrays.asList(markets).indexOf(input);
+                market = markets[inputMarket];
+                marketReady = true;
+                if (debug) { System.out.println("Debug: " + market + " - Successful!"); }
+            }
+            catch (Exception e) {
+                if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
+            }
         }
-        try {
-            tempMarket = java.util.Arrays.asList(markets).indexOf(input);
-            market = markets[tempMarket];
-            marketReady = true;
-            if (debug) { System.out.println("Debug: " + market + " - Successful!"); }
-        }
-        catch (Exception e) {
-            if (debug) { System.out.println("Debug: " + input + " - Invalid."); }
-        }
+
     }
 
-    // Get current year for this later.
     public void setYear(String input) {
         CharConcatenation charConcat = new CharConcatenation();
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
@@ -68,7 +66,6 @@ public class KeyNumberGenerator {
             } else if (input.length() == 4 && Integer.parseInt(input) >= currentYear) {
                 char firstYearChar = input.charAt(2);
                 char secondYearChar = input.charAt(3);
-
                 this.year = Integer.parseInt(charConcat.concat(firstYearChar, secondYearChar));
                 this.yearReady = true;
                 if (debug) { System.out.println("Debug2: " + this.year + " - Successful!"); }
@@ -176,7 +173,7 @@ public class KeyNumberGenerator {
 
     public String generate() {
         System.out.println("Key Number:");
-        keyNumber = get(market) + get(year) + get(writerInitial) + '-' + get(clientInitial) + '-' + get(duration) + get(type) + '-' + number;
+        String keyNumber = get(market) + get(year) + get(writerInitial) + '-' + get(clientInitial) + '-' + get(duration) + get(type) + '-' + number;
         System.out.println(keyNumber);
         number++;
 
