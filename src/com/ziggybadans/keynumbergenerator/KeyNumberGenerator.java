@@ -97,7 +97,6 @@ public class KeyNumberGenerator {
             durationReady = false;
         } else {
             try {
-                // Check this
                 tempDuration = Arrays.asList(durations).indexOf(input);
                 duration = durations[tempDuration];
                 durationReady = true;

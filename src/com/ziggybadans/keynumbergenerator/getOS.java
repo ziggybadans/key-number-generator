@@ -15,5 +15,4 @@ public final class getOS {
     public static boolean isMac() {
         return getOsName().startsWith("Mac");
     }
-
 }
