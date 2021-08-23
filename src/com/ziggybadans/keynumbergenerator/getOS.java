@@ -1,5 +1,8 @@
 package com.ziggybadans.keynumbergenerator;
 
+/**
+ * This class gets the current OS.
+ */
 public final class getOS {
     private static String OS = null;
 

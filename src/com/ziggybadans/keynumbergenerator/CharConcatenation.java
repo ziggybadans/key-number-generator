@@ -1,5 +1,9 @@
 package com.ziggybadans.keynumbergenerator;
 
+/**
+ * A class used for the concatenation methods {@code setYear} and {@code setClientI} in {@code KeyNumberGenerator}.
+ * @see KeyNumberGenerator
+ */
 public class CharConcatenation {
     public String concat(char... chars) {
         if (chars.length == 0) {

@@ -29,11 +29,24 @@ import java.io.File;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class creates the GUI for the program. Tooltips and Balloons are spread throughout for feedback to the user.
+ * @see javax.swing.ToolTipManager
+ * @see BalloonTip
+ */
 public class GUI implements ActionListener {
 
     private final KeyNumberGenerator main = new KeyNumberGenerator();
+    /**
+     * When the GUI is initialised, the properties are loaded.
+     * @see ProgramProperties
+     */
     private final ProgramProperties properties = new ProgramProperties();
 
+    /**
+     * All of the below are the {@code JComponents} for the GUI.
+     * @see JComponent
+     */
     final JFrame frame;
     final JLayeredPane panel;
     JButton backgroundButton;
@@ -62,13 +75,28 @@ public class GUI implements ActionListener {
     String generateOutput;
     JTextField generateResult;
 
+    /**
+     * This checks whether {@code yearField} is currently selected.
+     */
     boolean yearFieldActive;
 
+    /**
+     * These are for the filters for the text fields.
+     * @see PlainDocument
+     * @see DocumentFilter
+     */
     PlainDocument generateDocument;
     PlainDocument yearDocument;
     PlainDocument writerIDocument;
     PlainDocument clientIDocument;
 
+    /**
+     * These components are for the menu bar, the open properties, the button to set a custom properties directory, and to reload the program with the set properties.
+     * @see JMenu
+     * @see JMenuBar
+     * @see JMenuItem
+     * @see JFileChooser
+     */
     JMenuBar menuBar;
     JMenu preferences;
     JMenuItem editProperties;
@@ -80,6 +108,11 @@ public class GUI implements ActionListener {
     boolean debugProperties = false;
     boolean debugFields = false;
 
+    /**
+     * This constructor creates a new frame and panel for the program, loads the properties, then waits a second for the file to be created. After this, it places the components and finally, makes the GUI visible.
+     * @throws InterruptedException this is due to the timeout function to wait for the file to load or be created.
+     * @see ProgramProperties
+     */
     public GUI() throws InterruptedException {
         frame = new JFrame("Key Number Generator");
 
@@ -97,6 +130,10 @@ public class GUI implements ActionListener {
         frame.setVisible(true);
     }
 
+    /**
+     * This is a custom button type that, for each button created, sends its associated {@code JTextField's} or {@code JComboBox's} input to the correct property.
+     * @see JButton
+     */
     class SetPropertiesButton extends JButton {
         public SetPropertiesButton(String key, JTextField input) {
             super("Set prop.");
@@ -122,6 +159,10 @@ public class GUI implements ActionListener {
         }
     }
 
+    /**
+     * This is a custom button type that, for each button created, sets its associated {@code JComboBox} to a "NULL" value.
+     * @see JButton
+     */
     static class NullButton extends JButton {
         public NullButton(JComboBox<String> linked) {
             super("Make null");
@@ -142,6 +183,11 @@ public class GUI implements ActionListener {
         }
     }
 
+    /**
+     * This is a method that brings up a dialog box for a certain error type.
+     * @param type the type of error
+     * @see ProgramProperties
+     */
     public static void throwPropertiesError(String type) {
         switch (type) {
             case "access" ->
@@ -170,6 +216,16 @@ public class GUI implements ActionListener {
         }
     }
 
+    /**
+     * The place methods are an easier-to-read system for placing {@code JComponents} for the {@code GUI}. Once all the bounds are set properly and the {@code nullButton} is created if specified, the method adds each component to the panel and sets its layer.
+     * @param label the label for the component. This acts as the pivot for all the linked components, taking in the raw user's {@code bounds}.
+     * @param component the main component that will be interacted with. Can either be a {@code JComboBox} or {@code JTextField}.
+     * @param linked the linked {@code SetPropertiesButton} that is placed below the {@code JComboBox} or {@code JTextField}.
+     * @param nullButtonBoolean a boolean that determines whether this group of {@code JComponents} should have a button to make the {@code JComboBox} null.
+     * @param integer a boolean that determines whether the type of {@code nullButton} is for a {@code JComboBox<Integer> or JComboBox<String>}.
+     * @param panel the linked panel to place these components in.
+     * @param bounds a series of integers for the bounds of the label. Each other component is offset from these bounds by a certain amount.
+     */
     private void place(JLabel label, JComboBox component, SetPropertiesButton linked, boolean nullButtonBoolean, boolean integer, JLayeredPane panel, int... bounds) {
         label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
         component.setBounds(label.getX(), label.getY() + 25, label.getWidth(), label.getHeight() + 8);
@@ -220,6 +276,10 @@ public class GUI implements ActionListener {
         panel.setLayer(component, layer, 0);
     }
 
+    /**
+     * This method places the components on the panel, sets properties for them and fills {@code JComponents} with values. Some {@code FocusListeners} are also referenced here.
+     * @param panel the panel to use.
+     */
     private void placeComponents(JLayeredPane panel) {
         panel.setLayout(null);
 
@@ -392,6 +452,20 @@ public class GUI implements ActionListener {
         frame.setJMenuBar(menuBar);
     }
 
+    /**
+     * If an action is performed on any {@code JComponent} with an {@code ActionListener,} this code runs.
+     * If the {@code generateButton} is clicked, it sends off all the values of the fields to {@code KeyNumberGenerator} to generate the key number. If a value of a {@code JComponent} is null, it sends of a null value.
+     * After this, it advances the {@code number} by one, and grabs the key number to put in the appropriate text field.
+     * If a certain field had no value inputted by the user, it shows a {@code BalloonTip} to warn them (a null value is okay though, and may be desired in some cases).
+     * If the {@code editProperties} button is clicked, it attempts to open the properties file using the default text editor, to provide quick and easy access to the properties to change something manually (such as the number).
+     * If the {@code locationProperties} button is clicked, it opens a {@code JFileChooser} in directory-only mode to select a new directory, then runs {@code setPathname} in {@code ProgramProperties}.
+     * If the {@code reload} button is clicked, it fetches the properties for each {@code JComponent} and replaces any value selected or typed in them with the value currently set in properties.
+     * @param event the event to watch for.
+     * @see ActionListener
+     * @see KeyNumberGenerator
+     * @see ProgramProperties
+     * @see JFileChooser
+     */
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == marketMenu) {
@@ -526,6 +600,11 @@ public class GUI implements ActionListener {
         }
     }
 
+    /**
+     * This class filters {@code generateOutput} to only accept 30 characters, and only characters that are either a number, letter, dash, or escaped null. This method affects pasted text too, blocking anything that goes past the limit off.
+     * If a condition is met in this filter, it stops the text from being inputted, and displays a balloon tip giving info to the user.
+     * @see DocumentFilter
+     */
     class CharacterFilter extends DocumentFilter {
         boolean debugFilter = false;
 
@@ -581,6 +660,11 @@ public class GUI implements ActionListener {
         }
     }
 
+    /**
+     * This class filters {@code yearInput} to only accept 4 characters, and only characters that are a number. This method affects pasted text too, blocking anything that goes past the limit off.
+     * If a condition is met in this filter, it stops the text from being inputted, and displays a balloon tip giving info to the user.
+     * @see DocumentFilter
+     */
     class NumberFilter extends DocumentFilter {
         boolean debugFilter = false;
 
