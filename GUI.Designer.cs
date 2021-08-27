@@ -31,54 +31,55 @@ namespace KeyNumberGenerator
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GUI));
-            this.CreatedByLabel = new System.Windows.Forms.LinkLabel();
+            this.createdByLabel = new System.Windows.Forms.LinkLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editPropertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changePropertiesLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.yearLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.marketLabel = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yearLabel = new System.Windows.Forms.Label();
+            this.yearInput = new System.Windows.Forms.TextBox();
+            this.typeLabel = new System.Windows.Forms.Label();
+            this.keyNumberLabel = new System.Windows.Forms.Label();
+            this.keyNumberOutput = new System.Windows.Forms.TextBox();
+            this.generateButton = new System.Windows.Forms.Button();
+            this.numberLabel = new System.Windows.Forms.Label();
+            this.numberOutput = new System.Windows.Forms.TextBox();
+            this.copyButton = new System.Windows.Forms.Button();
+            this.marketLabel = new System.Windows.Forms.Label();
+            this.marketInput = new System.Windows.Forms.ComboBox();
+            this.durationLabel = new System.Windows.Forms.Label();
+            this.durationInput = new System.Windows.Forms.ComboBox();
+            this.typeInput = new System.Windows.Forms.ComboBox();
+            this.marketPropertiesButton = new System.Windows.Forms.Button();
+            this.marketNullButton = new System.Windows.Forms.Button();
+            this.durationNullButton = new System.Windows.Forms.Button();
+            this.typeNullButton = new System.Windows.Forms.Button();
+            this.writerInput = new System.Windows.Forms.TextBox();
+            this.writerLabel = new System.Windows.Forms.Label();
+            this.clientInput = new System.Windows.Forms.TextBox();
+            this.clientLabel = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button6 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
+            this.durationPropertiesButton = new System.Windows.Forms.Button();
+            this.typePropertiesButton = new System.Windows.Forms.Button();
+            this.yearPropertiesButton = new System.Windows.Forms.Button();
+            this.writerPropertiesButton = new System.Windows.Forms.Button();
+            this.clientPropertiesButton = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // CreatedByLabel
+            // createdByLabel
             // 
-            this.CreatedByLabel.AutoSize = true;
-            this.CreatedByLabel.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.CreatedByLabel.Location = new System.Drawing.Point(662, 249);
-            this.CreatedByLabel.Name = "CreatedByLabel";
-            this.CreatedByLabel.Size = new System.Drawing.Size(126, 13);
-            this.CreatedByLabel.TabIndex = 0;
-            this.CreatedByLabel.TabStop = true;
-            this.CreatedByLabel.Text = "Created by Ziggy Badans";
-            this.CreatedByLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.createdByLabel.AutoSize = true;
+            this.createdByLabel.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.createdByLabel.Location = new System.Drawing.Point(662, 249);
+            this.createdByLabel.Name = "createdByLabel";
+            this.createdByLabel.Size = new System.Drawing.Size(126, 13);
+            this.createdByLabel.TabIndex = 0;
+            this.createdByLabel.TabStop = true;
+            this.createdByLabel.Text = "Created by Ziggy Badans";
+            this.createdByLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // menuStrip1
             // 
@@ -114,6 +115,14 @@ namespace KeyNumberGenerator
             this.changePropertiesLocationToolStripMenuItem.Text = "Change properties location...";
             this.changePropertiesLocationToolStripMenuItem.ToolTipText = "Set a custom directory for the properties file";
             // 
+            // reloadToolStripMenuItem
+            // 
+            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.reloadToolStripMenuItem.Text = "Reload";
+            this.reloadToolStripMenuItem.ToolTipText = "Replaces all text fields currently edited with default values";
+            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
+            // 
             // yearLabel
             // 
             this.yearLabel.AutoSize = true;
@@ -124,101 +133,103 @@ namespace KeyNumberGenerator
             this.yearLabel.TabIndex = 4;
             this.yearLabel.Text = "Year";
             // 
-            // textBox1
+            // yearInput
             // 
-            this.textBox1.Location = new System.Drawing.Point(97, 46);
-            this.textBox1.MaxLength = 4;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 5;
+            this.yearInput.Location = new System.Drawing.Point(97, 46);
+            this.yearInput.MaxLength = 4;
+            this.yearInput.Name = "yearInput";
+            this.yearInput.Size = new System.Drawing.Size(100, 20);
+            this.yearInput.TabIndex = 5;
+            this.yearInput.Enter += new System.EventHandler(this.yearInput_Enter);
+            this.yearInput.Leave += new System.EventHandler(this.yearInput_Leave);
             // 
-            // label2
+            // typeLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(9, 192);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Type";
-            this.toolTip1.SetToolTip(this.label2, "Make type null");
+            this.typeLabel.AutoSize = true;
+            this.typeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.typeLabel.Location = new System.Drawing.Point(9, 192);
+            this.typeLabel.Name = "typeLabel";
+            this.typeLabel.Size = new System.Drawing.Size(35, 13);
+            this.typeLabel.TabIndex = 8;
+            this.typeLabel.Text = "Type";
+            this.toolTip1.SetToolTip(this.typeLabel, "Make type null");
             // 
-            // label3
+            // keyNumberLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(305, 112);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(75, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Key Number";
+            this.keyNumberLabel.AutoSize = true;
+            this.keyNumberLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.keyNumberLabel.Location = new System.Drawing.Point(305, 112);
+            this.keyNumberLabel.Name = "keyNumberLabel";
+            this.keyNumberLabel.Size = new System.Drawing.Size(75, 13);
+            this.keyNumberLabel.TabIndex = 10;
+            this.keyNumberLabel.Text = "Key Number";
             // 
-            // textBox2
+            // keyNumberOutput
             // 
-            this.textBox2.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.textBox2.Location = new System.Drawing.Point(308, 129);
-            this.textBox2.MaxLength = 30;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(157, 20);
-            this.textBox2.TabIndex = 11;
+            this.keyNumberOutput.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.keyNumberOutput.Location = new System.Drawing.Point(308, 129);
+            this.keyNumberOutput.MaxLength = 30;
+            this.keyNumberOutput.Name = "keyNumberOutput";
+            this.keyNumberOutput.Size = new System.Drawing.Size(157, 20);
+            this.keyNumberOutput.TabIndex = 11;
             // 
-            // button1
+            // generateButton
             // 
-            this.button1.Location = new System.Drawing.Point(354, 155);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Generate";
-            this.button1.UseVisualStyleBackColor = true;
+            this.generateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.generateButton.Location = new System.Drawing.Point(354, 155);
+            this.generateButton.Name = "generateButton";
+            this.generateButton.Size = new System.Drawing.Size(75, 23);
+            this.generateButton.TabIndex = 12;
+            this.generateButton.Text = "Generate";
+            this.generateButton.UseVisualStyleBackColor = true;
+            this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
             // 
-            // label4
+            // numberLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(543, 112);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(114, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Sequential Number";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.numberLabel.AutoSize = true;
+            this.numberLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numberLabel.Location = new System.Drawing.Point(543, 112);
+            this.numberLabel.Name = "numberLabel";
+            this.numberLabel.Size = new System.Drawing.Size(114, 13);
+            this.numberLabel.TabIndex = 13;
+            this.numberLabel.Text = "Sequential Number";
             // 
-            // textBox3
+            // numberOutput
             // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Location = new System.Drawing.Point(546, 128);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(47, 20);
-            this.textBox3.TabIndex = 14;
-            this.textBox3.Text = "1";
-            this.toolTip1.SetToolTip(this.textBox3, "This value increases by 1 every time a key is generated");
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.numberOutput.Enabled = false;
+            this.numberOutput.Location = new System.Drawing.Point(546, 128);
+            this.numberOutput.Name = "numberOutput";
+            this.numberOutput.Size = new System.Drawing.Size(47, 20);
+            this.numberOutput.TabIndex = 14;
+            this.numberOutput.Text = "1";
+            this.toolTip1.SetToolTip(this.numberOutput, "This value increases by 1 every time a key is generated");
             // 
-            // button2
+            // copyButton
             // 
-            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-            this.button2.Location = new System.Drawing.Point(471, 125);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(27, 27);
-            this.button2.TabIndex = 15;
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.copyButton.Image = ((System.Drawing.Image)(resources.GetObject("copyButton.Image")));
+            this.copyButton.Location = new System.Drawing.Point(471, 125);
+            this.copyButton.Name = "copyButton";
+            this.copyButton.Size = new System.Drawing.Size(27, 27);
+            this.copyButton.TabIndex = 15;
+            this.copyButton.UseVisualStyleBackColor = true;
+            this.copyButton.Click += new System.EventHandler(this.copyButton_Click);
             // 
             // marketLabel
             // 
             this.marketLabel.AutoSize = true;
+            this.marketLabel.BackColor = System.Drawing.SystemColors.Control;
             this.marketLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.marketLabel.Location = new System.Drawing.Point(9, 29);
             this.marketLabel.Name = "marketLabel";
             this.marketLabel.Size = new System.Drawing.Size(46, 13);
             this.marketLabel.TabIndex = 2;
             this.marketLabel.Text = "Market";
-            this.marketLabel.Click += new System.EventHandler(this.marketLabel_Click);
             // 
-            // comboBox1
+            // marketInput
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.marketInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.marketInput.FormattingEnabled = true;
+            this.marketInput.Items.AddRange(new object[] {
             "AUG",
             "BAL",
             "BEG",
@@ -248,228 +259,247 @@ namespace KeyNumberGenerator
             "TOW",
             "TRSN",
             "AGEN"});
-            this.comboBox1.Location = new System.Drawing.Point(12, 45);
-            this.comboBox1.MaxDropDownItems = 3;
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(60, 21);
-            this.comboBox1.TabIndex = 3;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.marketInput.Location = new System.Drawing.Point(12, 45);
+            this.marketInput.MaxDropDownItems = 3;
+            this.marketInput.Name = "marketInput";
+            this.marketInput.Size = new System.Drawing.Size(60, 21);
+            this.marketInput.TabIndex = 3;
+            this.marketInput.Enter += new System.EventHandler(this.marketInput_Enter);
+            this.marketInput.Leave += new System.EventHandler(this.marketInput_Leave);
             // 
-            // label1
+            // durationLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 111);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Duration";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.durationLabel.AutoSize = true;
+            this.durationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.durationLabel.Location = new System.Drawing.Point(9, 111);
+            this.durationLabel.Name = "durationLabel";
+            this.durationLabel.Size = new System.Drawing.Size(55, 13);
+            this.durationLabel.TabIndex = 6;
+            this.durationLabel.Text = "Duration";
             // 
-            // comboBox2
+            // durationInput
             // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.durationInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.durationInput.FormattingEnabled = true;
+            this.durationInput.Items.AddRange(new object[] {
             "10",
             "15",
             "30",
             "45",
             "60",
             "90"});
-            this.comboBox2.Location = new System.Drawing.Point(12, 128);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(60, 21);
-            this.comboBox2.TabIndex = 7;
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.durationInput.Location = new System.Drawing.Point(12, 128);
+            this.durationInput.Name = "durationInput";
+            this.durationInput.Size = new System.Drawing.Size(60, 21);
+            this.durationInput.TabIndex = 7;
+            this.durationInput.Enter += new System.EventHandler(this.durationInput_Enter);
+            this.durationInput.Leave += new System.EventHandler(this.durationInput_Leave);
             // 
-            // comboBox3
+            // typeInput
             // 
-            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Items.AddRange(new object[] {
+            this.typeInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.typeInput.FormattingEnabled = true;
+            this.typeInput.Items.AddRange(new object[] {
             "R",
             "L",
             "SL",
             "X",
             "SX"});
-            this.comboBox3.Location = new System.Drawing.Point(12, 208);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(60, 21);
-            this.comboBox3.TabIndex = 9;
-            this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            this.typeInput.Location = new System.Drawing.Point(12, 208);
+            this.typeInput.Name = "typeInput";
+            this.typeInput.Size = new System.Drawing.Size(60, 21);
+            this.typeInput.TabIndex = 9;
+            this.typeInput.Enter += new System.EventHandler(this.typeInput_Enter);
+            this.typeInput.Leave += new System.EventHandler(this.typeInput_Leave);
             // 
-            // button3
+            // marketPropertiesButton
             // 
-            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
-            this.button3.Location = new System.Drawing.Point(12, 72);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(27, 27);
-            this.button3.TabIndex = 16;
-            this.toolTip1.SetToolTip(this.button3, "Save current value as property");
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.marketPropertiesButton.Image = ((System.Drawing.Image)(resources.GetObject("marketPropertiesButton.Image")));
+            this.marketPropertiesButton.Location = new System.Drawing.Point(12, 72);
+            this.marketPropertiesButton.Name = "marketPropertiesButton";
+            this.marketPropertiesButton.Size = new System.Drawing.Size(27, 27);
+            this.marketPropertiesButton.TabIndex = 16;
+            this.toolTip1.SetToolTip(this.marketPropertiesButton, "Save current value as property");
+            this.marketPropertiesButton.UseVisualStyleBackColor = true;
+            this.marketPropertiesButton.Click += new System.EventHandler(this.marketPropertiesButton_Click);
             // 
-            // button4
+            // marketNullButton
             // 
-            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
-            this.button4.Location = new System.Drawing.Point(45, 72);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(27, 27);
-            this.button4.TabIndex = 17;
-            this.toolTip1.SetToolTip(this.button4, "Make market null");
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.marketNullButton.Image = ((System.Drawing.Image)(resources.GetObject("marketNullButton.Image")));
+            this.marketNullButton.Location = new System.Drawing.Point(45, 72);
+            this.marketNullButton.Name = "marketNullButton";
+            this.marketNullButton.Size = new System.Drawing.Size(27, 27);
+            this.marketNullButton.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.marketNullButton, "Make market null");
+            this.marketNullButton.UseVisualStyleBackColor = true;
+            this.marketNullButton.Click += new System.EventHandler(this.marketNullButton_Click);
             // 
-            // button5
+            // durationNullButton
             // 
-            this.button5.Image = ((System.Drawing.Image)(resources.GetObject("button5.Image")));
-            this.button5.Location = new System.Drawing.Point(45, 155);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(27, 27);
-            this.button5.TabIndex = 19;
-            this.toolTip1.SetToolTip(this.button5, "Make duration null");
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.durationNullButton.Image = ((System.Drawing.Image)(resources.GetObject("durationNullButton.Image")));
+            this.durationNullButton.Location = new System.Drawing.Point(45, 152);
+            this.durationNullButton.Name = "durationNullButton";
+            this.durationNullButton.Size = new System.Drawing.Size(27, 27);
+            this.durationNullButton.TabIndex = 19;
+            this.toolTip1.SetToolTip(this.durationNullButton, "Make duration null");
+            this.durationNullButton.UseVisualStyleBackColor = true;
+            this.durationNullButton.Click += new System.EventHandler(this.durationNullButton_Click);
             // 
-            // button7
+            // typeNullButton
             // 
-            this.button7.Image = ((System.Drawing.Image)(resources.GetObject("button7.Image")));
-            this.button7.Location = new System.Drawing.Point(45, 235);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(27, 27);
-            this.button7.TabIndex = 21;
-            this.toolTip1.SetToolTip(this.button7, "Make type null");
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.typeNullButton.Image = ((System.Drawing.Image)(resources.GetObject("typeNullButton.Image")));
+            this.typeNullButton.Location = new System.Drawing.Point(45, 235);
+            this.typeNullButton.Name = "typeNullButton";
+            this.typeNullButton.Size = new System.Drawing.Size(27, 27);
+            this.typeNullButton.TabIndex = 21;
+            this.toolTip1.SetToolTip(this.typeNullButton, "Make type null");
+            this.typeNullButton.UseVisualStyleBackColor = true;
+            this.typeNullButton.Click += new System.EventHandler(this.typeNullButton_Click);
             // 
-            // textBox4
+            // writerInput
             // 
-            this.textBox4.Location = new System.Drawing.Point(97, 129);
-            this.textBox4.MaxLength = 4;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 23;
+            this.writerInput.Location = new System.Drawing.Point(97, 129);
+            this.writerInput.Name = "writerInput";
+            this.writerInput.Size = new System.Drawing.Size(100, 20);
+            this.writerInput.TabIndex = 23;
+            this.writerInput.Enter += new System.EventHandler(this.writerInput_Enter);
+            this.writerInput.Leave += new System.EventHandler(this.writerInput_Leave);
             // 
-            // label5
+            // writerLabel
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(94, 113);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(41, 13);
-            this.label5.TabIndex = 22;
-            this.label5.Text = "Writer";
+            this.writerLabel.AutoSize = true;
+            this.writerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.writerLabel.Location = new System.Drawing.Point(94, 113);
+            this.writerLabel.Name = "writerLabel";
+            this.writerLabel.Size = new System.Drawing.Size(41, 13);
+            this.writerLabel.TabIndex = 22;
+            this.writerLabel.Text = "Writer";
             // 
-            // textBox5
+            // clientInput
             // 
-            this.textBox5.Location = new System.Drawing.Point(97, 209);
-            this.textBox5.MaxLength = 4;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 25;
+            this.clientInput.Location = new System.Drawing.Point(97, 209);
+            this.clientInput.Name = "clientInput";
+            this.clientInput.Size = new System.Drawing.Size(100, 20);
+            this.clientInput.TabIndex = 25;
+            this.clientInput.Enter += new System.EventHandler(this.clientInput_Enter);
+            this.clientInput.Leave += new System.EventHandler(this.clientInput_Leave);
             // 
-            // label6
+            // clientLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(94, 193);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(39, 13);
-            this.label6.TabIndex = 24;
-            this.label6.Text = "Client";
+            this.clientLabel.AutoSize = true;
+            this.clientLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clientLabel.Location = new System.Drawing.Point(94, 193);
+            this.clientLabel.Name = "clientLabel";
+            this.clientLabel.Size = new System.Drawing.Size(39, 13);
+            this.clientLabel.TabIndex = 24;
+            this.clientLabel.Text = "Client";
             // 
-            // reloadToolStripMenuItem
+            // durationPropertiesButton
             // 
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.reloadToolStripMenuItem.Text = "Reload";
-            this.reloadToolStripMenuItem.ToolTipText = "Replaces all text fields currently edited with default values";
+            this.durationPropertiesButton.Image = ((System.Drawing.Image)(resources.GetObject("durationPropertiesButton.Image")));
+            this.durationPropertiesButton.Location = new System.Drawing.Point(12, 152);
+            this.durationPropertiesButton.Name = "durationPropertiesButton";
+            this.durationPropertiesButton.Size = new System.Drawing.Size(27, 27);
+            this.durationPropertiesButton.TabIndex = 26;
+            this.toolTip1.SetToolTip(this.durationPropertiesButton, "Save current value as property");
+            this.durationPropertiesButton.UseVisualStyleBackColor = true;
+            this.durationPropertiesButton.Click += new System.EventHandler(this.durationPropertiesButton_Click);
             // 
-            // button6
+            // typePropertiesButton
             // 
-            this.button6.Image = ((System.Drawing.Image)(resources.GetObject("button6.Image")));
-            this.button6.Location = new System.Drawing.Point(12, 152);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(27, 27);
-            this.button6.TabIndex = 26;
-            this.toolTip1.SetToolTip(this.button6, "Save current value as property");
-            this.button6.UseVisualStyleBackColor = true;
+            this.typePropertiesButton.Image = ((System.Drawing.Image)(resources.GetObject("typePropertiesButton.Image")));
+            this.typePropertiesButton.Location = new System.Drawing.Point(12, 235);
+            this.typePropertiesButton.Name = "typePropertiesButton";
+            this.typePropertiesButton.Size = new System.Drawing.Size(27, 27);
+            this.typePropertiesButton.TabIndex = 27;
+            this.toolTip1.SetToolTip(this.typePropertiesButton, "Save current value as property");
+            this.typePropertiesButton.UseVisualStyleBackColor = true;
+            this.typePropertiesButton.Click += new System.EventHandler(this.typePropertiesButton_Click);
             // 
-            // button8
+            // yearPropertiesButton
             // 
-            this.button8.Image = ((System.Drawing.Image)(resources.GetObject("button8.Image")));
-            this.button8.Location = new System.Drawing.Point(12, 235);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(27, 27);
-            this.button8.TabIndex = 27;
-            this.toolTip1.SetToolTip(this.button8, "Save current value as property");
-            this.button8.UseVisualStyleBackColor = true;
+            this.yearPropertiesButton.Image = ((System.Drawing.Image)(resources.GetObject("yearPropertiesButton.Image")));
+            this.yearPropertiesButton.Location = new System.Drawing.Point(97, 72);
+            this.yearPropertiesButton.Name = "yearPropertiesButton";
+            this.yearPropertiesButton.Size = new System.Drawing.Size(27, 27);
+            this.yearPropertiesButton.TabIndex = 28;
+            this.toolTip1.SetToolTip(this.yearPropertiesButton, "Save current value as property");
+            this.yearPropertiesButton.UseVisualStyleBackColor = true;
+            this.yearPropertiesButton.Click += new System.EventHandler(this.yearPropertiesButton_Click);
             // 
-            // button9
+            // writerPropertiesButton
             // 
-            this.button9.Image = ((System.Drawing.Image)(resources.GetObject("button9.Image")));
-            this.button9.Location = new System.Drawing.Point(97, 72);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(27, 27);
-            this.button9.TabIndex = 28;
-            this.toolTip1.SetToolTip(this.button9, "Save current value as property");
-            this.button9.UseVisualStyleBackColor = true;
+            this.writerPropertiesButton.Image = ((System.Drawing.Image)(resources.GetObject("writerPropertiesButton.Image")));
+            this.writerPropertiesButton.Location = new System.Drawing.Point(97, 155);
+            this.writerPropertiesButton.Name = "writerPropertiesButton";
+            this.writerPropertiesButton.Size = new System.Drawing.Size(27, 27);
+            this.writerPropertiesButton.TabIndex = 29;
+            this.toolTip1.SetToolTip(this.writerPropertiesButton, "Save current value as property");
+            this.writerPropertiesButton.UseVisualStyleBackColor = true;
+            this.writerPropertiesButton.Click += new System.EventHandler(this.writerPropertiesButton_Click);
             // 
-            // button10
+            // clientPropertiesButton
             // 
-            this.button10.Image = ((System.Drawing.Image)(resources.GetObject("button10.Image")));
-            this.button10.Location = new System.Drawing.Point(97, 155);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(27, 27);
-            this.button10.TabIndex = 29;
-            this.toolTip1.SetToolTip(this.button10, "Save current value as property");
-            this.button10.UseVisualStyleBackColor = true;
+            this.clientPropertiesButton.Image = ((System.Drawing.Image)(resources.GetObject("clientPropertiesButton.Image")));
+            this.clientPropertiesButton.Location = new System.Drawing.Point(97, 235);
+            this.clientPropertiesButton.Name = "clientPropertiesButton";
+            this.clientPropertiesButton.Size = new System.Drawing.Size(27, 27);
+            this.clientPropertiesButton.TabIndex = 30;
+            this.toolTip1.SetToolTip(this.clientPropertiesButton, "Save current value as property");
+            this.clientPropertiesButton.UseVisualStyleBackColor = true;
+            this.clientPropertiesButton.Click += new System.EventHandler(this.clientPropertiesButton_Click);
             // 
-            // button11
+            // button1
             // 
-            this.button11.Image = ((System.Drawing.Image)(resources.GetObject("button11.Image")));
-            this.button11.Location = new System.Drawing.Point(97, 235);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(27, 27);
-            this.button11.TabIndex = 30;
-            this.toolTip1.SetToolTip(this.button11, "Save current value as property");
-            this.button11.UseVisualStyleBackColor = true;
+            this.button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
+            this.button1.FlatAppearance.BorderSize = 0;
+            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.SystemColors.Control;
+            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.SystemColors.Control;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(800, 275);
+            this.button1.TabIndex = 31;
+            this.button1.TabStop = false;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 275);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.comboBox3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.clientPropertiesButton);
+            this.Controls.Add(this.writerPropertiesButton);
+            this.Controls.Add(this.yearPropertiesButton);
+            this.Controls.Add(this.typePropertiesButton);
+            this.Controls.Add(this.durationPropertiesButton);
+            this.Controls.Add(this.clientInput);
+            this.Controls.Add(this.clientLabel);
+            this.Controls.Add(this.writerInput);
+            this.Controls.Add(this.writerLabel);
+            this.Controls.Add(this.typeNullButton);
+            this.Controls.Add(this.durationNullButton);
+            this.Controls.Add(this.marketNullButton);
+            this.Controls.Add(this.marketPropertiesButton);
+            this.Controls.Add(this.copyButton);
+            this.Controls.Add(this.numberOutput);
+            this.Controls.Add(this.numberLabel);
+            this.Controls.Add(this.generateButton);
+            this.Controls.Add(this.keyNumberOutput);
+            this.Controls.Add(this.keyNumberLabel);
+            this.Controls.Add(this.typeInput);
+            this.Controls.Add(this.typeLabel);
+            this.Controls.Add(this.durationInput);
+            this.Controls.Add(this.durationLabel);
+            this.Controls.Add(this.yearInput);
             this.Controls.Add(this.yearLabel);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.marketInput);
             this.Controls.Add(this.marketLabel);
-            this.Controls.Add(this.CreatedByLabel);
+            this.Controls.Add(this.createdByLabel);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.button1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "GUI";
             this.Text = "Key Number Generator";
@@ -482,40 +512,41 @@ namespace KeyNumberGenerator
 
         #endregion
 
-        private System.Windows.Forms.LinkLabel CreatedByLabel;
+        private System.Windows.Forms.LinkLabel createdByLabel;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editPropertiesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changePropertiesLocationToolStripMenuItem;
         private System.Windows.Forms.Label yearLabel;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox yearInput;
+        private System.Windows.Forms.Label typeLabel;
+        private System.Windows.Forms.Label keyNumberLabel;
+        private System.Windows.Forms.TextBox keyNumberOutput;
+        private System.Windows.Forms.Button generateButton;
+        private System.Windows.Forms.Label numberLabel;
+        private System.Windows.Forms.TextBox numberOutput;
+        private System.Windows.Forms.Button copyButton;
         private System.Windows.Forms.Label marketLabel;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.ComboBox marketInput;
+        private System.Windows.Forms.Label durationLabel;
+        private System.Windows.Forms.ComboBox durationInput;
+        private System.Windows.Forms.ComboBox typeInput;
+        private System.Windows.Forms.Button marketPropertiesButton;
+        private System.Windows.Forms.Button marketNullButton;
+        private System.Windows.Forms.Button durationNullButton;
+        private System.Windows.Forms.Button typeNullButton;
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox writerInput;
+        private System.Windows.Forms.Label writerLabel;
+        private System.Windows.Forms.TextBox clientInput;
+        private System.Windows.Forms.Label clientLabel;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button durationPropertiesButton;
+        private System.Windows.Forms.Button typePropertiesButton;
+        private System.Windows.Forms.Button yearPropertiesButton;
+        private System.Windows.Forms.Button writerPropertiesButton;
+        private System.Windows.Forms.Button clientPropertiesButton;
+        private System.Windows.Forms.Button button1;
     }
 }
 

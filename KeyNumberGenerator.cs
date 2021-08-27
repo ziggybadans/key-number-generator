@@ -1,0 +1,305 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KeyNumberGenerator
+{
+    class KeyNumberGenerator
+    {
+        int year = -1;
+        public bool yearReady;
+
+        public static string[] markets = { "AUG", "BAL", "BEG", "BEN", "BER", "BOW", "BUN", "BUR", "CAI", "DAR", "DEV", "GEE", "GLA", "GOL", "HOB", "IPS", "LAU", "LIN", "MAC",
+            "MAR", "MIL", "MUR", "MUS", "NOW", "PIR", "QUE", "ROC", "TOW", "WOL", "TRSN", "AGEN" };
+        public bool marketReady = false;
+        string market;
+
+        char writerInitial;
+        string clientInitial;
+
+        public static int[] durations = { 10, 15, 30, 45, 60, 90 };
+        public bool durationReady = false;
+        int duration = -1;
+
+        public static string[] types = { "R", "L", "SL", "X", "SX" };
+        public bool typeReady = false;
+        string type;
+
+        static int number = 0;
+        public string keyNumber;
+
+        public KeyNumberGenerator() {
+            number = Properties.Settings.Default.number;
+        }
+
+        public void SetMarket(string input)
+        {
+            if (input == "NULL")
+            {
+                this.market = null;
+                this.marketReady = false;
+                Console.WriteLine("SetMarket" + market);
+            } else
+            {
+                try
+                {
+                    int checkInput = Array.IndexOf(markets, input);
+                    this.market = markets[checkInput];
+                    this.marketReady = true;
+                    Console.WriteLine("SetMarket: " + market + " - Successful!");
+                } catch (IndexOutOfRangeException)
+                {
+                    Console.WriteLine("SetMarket: " + input + " - Invalid.");
+                }
+            }
+        }
+
+        public void SetYear(String input)
+        {
+            string currentYear = DateTime.Now.Year.ToString();
+            Console.WriteLine("Current year: " + currentYear);
+            try
+            {
+                if (input.Length == 2 && int.Parse(input) >= int.Parse(CharConcatenation.Concat(currentYear[2], currentYear[3])))
+                {
+                    this.year = int.Parse(input);
+                    this.yearReady = true;
+                    Console.WriteLine("SetYear1: " + this.year + " - Successful!");
+                } else if (input.Length == 4 && int.Parse(input) >= int.Parse(currentYear))
+                {
+                    char yearFirstChar = input[2];
+                    char yearSecondChar = input[3];
+                    this.year = int.Parse(CharConcatenation.Concat(yearFirstChar, yearSecondChar));
+                    Console.WriteLine("SetYear2: " + this.year + " - Successful!");
+                } else
+                {
+                    this.yearReady = false;
+                    Console.WriteLine("SetYear: " + input + " - Invalid.");
+                }
+            } catch (NullReferenceException)
+            {
+                Console.WriteLine("SetYear: null");
+                year = -1;
+                this.yearReady = false;
+            }
+        }
+
+        public void SetWriterI(string input)
+        {
+            try
+            {
+                string upperInput = input.ToUpper();
+                writerInitial = upperInput[0];
+                Console.WriteLine("SetWriterI: " + writerInitial + " - Successful!");
+            } catch (NullReferenceException)
+            {
+                writerInitial = '\0';
+                Console.WriteLine("SetWriterI: null");
+            }
+        }
+
+        public void SetDuration(int input)
+        {
+            if (input == 0)
+            {
+                duration = 0;
+                durationReady = false;
+                Console.WriteLine("SetDuration: null");
+            } else
+            {
+                try
+                {
+                    int checkInput = Array.IndexOf(durations, input);
+                    duration = durations[checkInput];
+                    durationReady = true;
+                    Console.WriteLine("SetDuration: " + duration + " - Successful!");
+                } catch (IndexOutOfRangeException)
+                {
+                    durationReady = false;
+                    Console.WriteLine("SetDuration: " + input + " - Invalid.");
+                }
+            }
+        }
+
+        public void SetType(string input)
+        {
+           if (input == null)
+            {
+                type = null;
+                typeReady = false;
+                Console.WriteLine("SetType: null");
+            } else
+            {
+                try
+                {
+                    int checkInput = Array.IndexOf(types, input);
+                    type = types[checkInput];
+                    typeReady = true;
+                    Console.WriteLine("SetType: " + type + " - Successful!");
+                } catch (IndexOutOfRangeException)
+                {
+                    typeReady = false;
+                    Console.WriteLine("SetType: " + input + " - Invalid.");
+                }
+            } 
+        }
+
+        public void SetClientI(string input)
+        {
+            try
+            {
+                string upperInput = input.ToUpper();
+                if (input.Length == 2)
+                {
+                    char clientFirstInitial = upperInput[0];
+                    char clientSecondInitial = upperInput[1];
+                    clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
+                }
+                Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
+            } catch (NullReferenceException)
+            {
+                clientInitial = null;
+                Console.WriteLine("SetClientI: null");
+            }
+        }
+
+        public string Get(string input)
+        {
+            if (input != null)
+            {
+                return input;
+            } else
+            {
+                return "NULL";
+            }
+        }
+        public string Get(int input)
+        {
+            if (input != -1)
+            {
+                return Convert.ToString(input);
+            }
+            else
+            {
+                return "NULL";
+            }
+        }
+        public string Get(char input)
+        {
+            if (input != '\0')
+            {
+                return Convert.ToString(input);
+            } else
+            {
+                return "NULL";
+            }
+        }
+
+        public string Generate()
+        {
+            Console.WriteLine("Key Number:");
+            keyNumber = Get(market) + Get(year) + Get(writerInitial) + '-' + Get(clientInitial) + '-' + Get(duration) + Get(type) + '-' + number;
+            Console.WriteLine(keyNumber);
+            number++;
+            Properties.Settings.Default.number = number;
+            Properties.Settings.Default.Save();
+
+            System.Windows.Forms.Clipboard.SetText(keyNumber);
+
+            return keyNumber;
+        }
+
+        public void Save(string property)
+        {
+            if (property == "market")
+            {
+                Properties.Settings.Default.market = market;
+                Properties.Settings.Default.Save();
+            }
+            else if (property == "year") {
+                Properties.Settings.Default.year = year.ToString();
+                Properties.Settings.Default.Save();
+            }
+            else if (property == "writerInitial")
+            {
+                Properties.Settings.Default.writerInitial = writerInitial.ToString();
+                Properties.Settings.Default.Save();
+            }
+            else if (property == "duration")
+            {
+                Properties.Settings.Default.duration = duration;
+                Properties.Settings.Default.Save();
+            }
+            else if (property == "type")
+            {
+                Properties.Settings.Default.type = type;
+                Properties.Settings.Default.Save();
+            }
+            else if (property == "clientInitial")
+            {
+                Properties.Settings.Default.clientInitial = clientInitial;
+                Properties.Settings.Default.Save();
+            }
+            else if (property == "number")
+            {
+                Properties.Settings.Default.number = number;
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        public string Load(string property)
+        {
+            if (property == "market")
+            {
+                return Properties.Settings.Default.market;
+            }
+            else if (property == "year")
+            {
+                return Properties.Settings.Default.year;
+            }
+            else if (property == "writerInitial")
+            {
+                return Properties.Settings.Default.writerInitial;
+            }
+            else if (property == "duration")
+            {
+                return Properties.Settings.Default.duration.ToString();
+            }
+            else if (property == "type")
+            {
+                return Properties.Settings.Default.type;
+            }
+            else if (property == "clientInitial")
+            {
+                return Properties.Settings.Default.clientInitial;
+            }
+            else if (property == "number")
+            {
+                return Properties.Settings.Default.number.ToString();
+            } else
+            {
+                return "NULL";
+            }
+        }
+
+    }
+
+    static class CharConcatenation
+    {
+        public static String Concat(params char[] chars)
+        {
+            if (chars.Length == 0)
+            {
+                return "";
+            }
+            StringBuilder s = new StringBuilder(chars.Length);
+            foreach (char c in chars)
+            {
+                s.Append(c);
+            }
+            return s.ToString();
+        }
+    }
+}
