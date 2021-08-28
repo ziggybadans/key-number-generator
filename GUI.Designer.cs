@@ -66,6 +66,9 @@ namespace KeyNumberGenerator
             this.writerPropertiesButton = new System.Windows.Forms.Button();
             this.clientPropertiesButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
+            this.maskedTextBox1 = new System.Windows.Forms.MaskedTextBox();
+            this.maskedTextBox2 = new System.Windows.Forms.MaskedTextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,6 +143,7 @@ namespace KeyNumberGenerator
             this.yearInput.Name = "yearInput";
             this.yearInput.Size = new System.Drawing.Size(100, 20);
             this.yearInput.TabIndex = 5;
+            this.yearInput.TextChanged += new System.EventHandler(this.yearInput_TextChanged);
             this.yearInput.Enter += new System.EventHandler(this.yearInput_Enter);
             this.yearInput.Leave += new System.EventHandler(this.yearInput_Leave);
             // 
@@ -172,6 +176,8 @@ namespace KeyNumberGenerator
             this.keyNumberOutput.Name = "keyNumberOutput";
             this.keyNumberOutput.Size = new System.Drawing.Size(157, 20);
             this.keyNumberOutput.TabIndex = 11;
+            this.keyNumberOutput.TextChanged += new System.EventHandler(this.keyNumberOutput_TextChanged);
+            this.keyNumberOutput.Leave += new System.EventHandler(this.keyNumberOutput_Leave);
             // 
             // generateButton
             // 
@@ -207,7 +213,7 @@ namespace KeyNumberGenerator
             // copyButton
             // 
             this.copyButton.Image = ((System.Drawing.Image)(resources.GetObject("copyButton.Image")));
-            this.copyButton.Location = new System.Drawing.Point(471, 125);
+            this.copyButton.Location = new System.Drawing.Point(471, 126);
             this.copyButton.Name = "copyButton";
             this.copyButton.Size = new System.Drawing.Size(27, 27);
             this.copyButton.TabIndex = 15;
@@ -237,6 +243,7 @@ namespace KeyNumberGenerator
             "BER",
             "BOW",
             "BUN",
+            "BUR",
             "CAI",
             "DAR",
             "DEV",
@@ -257,10 +264,11 @@ namespace KeyNumberGenerator
             "QUE",
             "ROC",
             "TOW",
+            "WOL",
             "TRSN",
             "AGEN"});
             this.marketInput.Location = new System.Drawing.Point(12, 45);
-            this.marketInput.MaxDropDownItems = 3;
+            this.marketInput.MaxDropDownItems = 60;
             this.marketInput.Name = "marketInput";
             this.marketInput.Size = new System.Drawing.Size(60, 21);
             this.marketInput.TabIndex = 3;
@@ -465,11 +473,29 @@ namespace KeyNumberGenerator
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
+            // maskedTextBox1
+            // 
+            this.maskedTextBox1.Location = new System.Drawing.Point(237, 46);
+            this.maskedTextBox1.Mask = "0099";
+            this.maskedTextBox1.Name = "maskedTextBox1";
+            this.maskedTextBox1.Size = new System.Drawing.Size(100, 20);
+            this.maskedTextBox1.TabIndex = 32;
+            // 
+            // maskedTextBox2
+            // 
+            this.maskedTextBox2.Location = new System.Drawing.Point(436, 193);
+            this.maskedTextBox2.Mask = ">LLL?0099L???-LL??-0099L???-00";
+            this.maskedTextBox2.Name = "maskedTextBox2";
+            this.maskedTextBox2.Size = new System.Drawing.Size(221, 20);
+            this.maskedTextBox2.TabIndex = 33;
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 275);
+            this.Controls.Add(this.maskedTextBox2);
+            this.Controls.Add(this.maskedTextBox1);
             this.Controls.Add(this.clientPropertiesButton);
             this.Controls.Add(this.writerPropertiesButton);
             this.Controls.Add(this.yearPropertiesButton);
@@ -547,6 +573,9 @@ namespace KeyNumberGenerator
         private System.Windows.Forms.Button writerPropertiesButton;
         private System.Windows.Forms.Button clientPropertiesButton;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolTip toolTip2;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox1;
+        private System.Windows.Forms.MaskedTextBox maskedTextBox2;
     }
 }
 

@@ -37,12 +37,29 @@ namespace KeyNumberGenerator
             keyNumberGenerator.SetMarket(marketInput.Text);
             keyNumberGenerator.SetYear(yearInput.Text);
             keyNumberGenerator.SetWriterI(writerInput.Text);
-            keyNumberGenerator.SetDuration(int.Parse(durationInput.Text));
+            try
+            {
+                keyNumberGenerator.SetDuration(int.Parse(durationInput.Text));
+            } catch (Exception) { }
+            
             keyNumberGenerator.SetType(typeInput.Text);
             keyNumberGenerator.SetClientI(clientInput.Text);
 
             keyNumberOutput.Text = keyNumberGenerator.Generate();
             numberOutput.Text = keyNumberGenerator.Load("number");
+
+            if (writerInput.Text == "Type name")
+            {
+                writerLabel.BackColor = Color.AntiqueWhite;
+            }
+            if (clientInput.Text == "Type client name")
+            {
+                clientLabel.BackColor = Color.AntiqueWhite;
+            }
+            if (yearInput.Text == "Type year")
+            {
+                yearLabel.BackColor = Color.AntiqueWhite;
+            }
         }
 
         private void yearInput_Enter(object sender, EventArgs e)
@@ -155,7 +172,7 @@ namespace KeyNumberGenerator
         {
             marketInput.DropDownStyle = ComboBoxStyle.DropDown;
             marketInput.Text = "NULL";
-            keyNumberGenerator.SetMarket(marketInput.Text);
+            keyNumberGenerator.SetMarket(null);
             marketLabel.BackColor = Color.AntiqueWhite;
         }
 
@@ -171,7 +188,7 @@ namespace KeyNumberGenerator
         {
             typeInput.DropDownStyle = ComboBoxStyle.DropDown;
             typeInput.Text = "NULL";
-            keyNumberGenerator.SetType(typeInput.Text);
+            keyNumberGenerator.SetType(null);
             typeLabel.BackColor = Color.AntiqueWhite;
         }
 
@@ -235,6 +252,43 @@ namespace KeyNumberGenerator
             {
                 typeLabel.BackColor = Color.AntiqueWhite;
             }
+        }
+
+        private void yearInput_TextChanged(object sender, EventArgs e)
+        {
+            yearLabel.BackColor = Color.WhiteSmoke;
+            if (yearInput.TextLength != 0)
+            {
+                for (int i = 0; i < yearInput.TextLength; i++)
+                {
+                    if (!char.IsDigit(yearInput.Text[i]))
+                    {
+                        yearInput.Text = yearInput.Text.Remove(i, 1);
+                        yearLabel.BackColor = Color.AntiqueWhite;
+                    }
+                }
+            }
+        }
+
+        private void keyNumberOutput_TextChanged(object sender, EventArgs e)
+        {
+            keyNumberLabel.BackColor = Color.WhiteSmoke;
+            if (keyNumberOutput.TextLength != 0)
+            {
+                for (int i = 0; i < keyNumberOutput.TextLength; i++)
+                {
+                    if (keyNumberOutput.Text[i] != '-' && !char.IsLetterOrDigit(keyNumberOutput.Text[i])) 
+                    {
+                        keyNumberOutput.Text = keyNumberOutput.Text.Remove(i, 1);
+                        keyNumberLabel.BackColor = Color.AntiqueWhite;
+                    }
+                }
+            }
+        }
+
+        private void keyNumberOutput_Leave(object sender, EventArgs e)
+        {
+            keyNumberLabel.BackColor = Color.WhiteSmoke;
         }
     }
 }

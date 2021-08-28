@@ -88,23 +88,32 @@ namespace KeyNumberGenerator
 
         public void SetWriterI(string input)
         {
-            try
-            {
-                string upperInput = input.ToUpper();
-                writerInitial = upperInput[0];
-                Console.WriteLine("SetWriterI: " + writerInitial + " - Successful!");
-            } catch (NullReferenceException)
+            if (input == "Type name")
             {
                 writerInitial = '\0';
                 Console.WriteLine("SetWriterI: null");
+            }
+            else
+            {
+                try
+                {
+                    string upperInput = input.ToUpper();
+                    writerInitial = upperInput[0];
+                    Console.WriteLine("SetWriterI: " + writerInitial + " - Successful!");
+                }
+                catch (NullReferenceException)
+                {
+                    writerInitial = '\0';
+                    Console.WriteLine("SetWriterI: null");
+                }
             }
         }
 
         public void SetDuration(int input)
         {
-            if (input == 0)
+            if (input == -1)
             {
-                duration = 0;
+                duration = -1;
                 durationReady = false;
                 Console.WriteLine("SetDuration: null");
             } else
@@ -155,6 +164,13 @@ namespace KeyNumberGenerator
                 {
                     char clientFirstInitial = upperInput[0];
                     char clientSecondInitial = upperInput[1];
+                    clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
+                } else
+                {
+                    int secondInitialIndex = input.ToUpper().IndexOf(" ") + 1;
+                    char clientFirstInitial = input.ToUpper()[0];
+                    char clientSecondInitial = input.ToUpper()[secondInitialIndex];
+
                     clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
                 }
                 Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
