@@ -290,5 +290,20 @@ namespace KeyNumberGenerator
         {
             keyNumberLabel.BackColor = Color.WhiteSmoke;
         }
+
+        private void advancedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditProperties popup = new EditProperties();
+            DialogResult dialogResult = popup.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                Console.WriteLine("OK! Closing...");
+            }
+            else if (dialogResult == DialogResult.Cancel)
+            {
+                Console.WriteLine("Closing...");
+            }
+            popup.Dispose();
+        }
     }
 }
