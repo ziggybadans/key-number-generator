@@ -305,5 +305,25 @@ namespace KeyNumberGenerator
             }
             popup.Dispose();
         }
+
+        private void writerInput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void writerLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numberLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numberOutput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

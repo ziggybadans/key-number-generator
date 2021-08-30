@@ -157,27 +157,37 @@ namespace KeyNumberGenerator
 
         public void SetClientI(string input)
         {
-            try
-            {
-                string upperInput = input.ToUpper();
-                if (input.Length == 2)
-                {
-                    char clientFirstInitial = upperInput[0];
-                    char clientSecondInitial = upperInput[1];
-                    clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
-                } else
-                {
-                    int secondInitialIndex = input.ToUpper().IndexOf(" ") + 1;
-                    char clientFirstInitial = input.ToUpper()[0];
-                    char clientSecondInitial = input.ToUpper()[secondInitialIndex];
-
-                    clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
-                }
-                Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
-            } catch (NullReferenceException)
+            if (input == "")
             {
                 clientInitial = null;
                 Console.WriteLine("SetClientI: null");
+            }
+            else
+            {
+                try
+                {
+                    string upperInput = input.ToUpper();
+                    if (input.Length == 2)
+                    {
+                        char clientFirstInitial = upperInput[0];
+                        char clientSecondInitial = upperInput[1];
+                        clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
+                    }
+                    else
+                    {
+                        int secondInitialIndex = input.ToUpper().IndexOf(" ") + 1;
+                        char clientFirstInitial = input.ToUpper()[0];
+                        char clientSecondInitial = input.ToUpper()[secondInitialIndex];
+
+                        clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
+                    }
+                    Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
+                }
+                catch (NullReferenceException)
+                {
+                    clientInitial = null;
+                    Console.WriteLine("SetClientI: null");
+                }
             }
         }
 
