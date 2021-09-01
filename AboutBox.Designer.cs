@@ -120,6 +120,7 @@ namespace KeyNumberGenerator
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "GitHub Repository";
             this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // okButton
             // 

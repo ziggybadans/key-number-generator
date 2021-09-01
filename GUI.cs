@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Octokit;
+using System;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Octokit;
 using System.Net;
+using System.Windows.Forms;
 
 namespace KeyNumberGenerator
 {
@@ -20,7 +15,7 @@ namespace KeyNumberGenerator
         public GUI()
         {
             InitializeComponent();
-            
+
             marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
             durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
             typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
@@ -66,7 +61,7 @@ namespace KeyNumberGenerator
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/ziggybadans/key-number-generator");
+            //System.Diagnostics.Process.Start("https://github.com/ziggybadans/key-number-generator");
         }
 
         private void generateButton_Click(object sender, EventArgs e)
@@ -77,8 +72,9 @@ namespace KeyNumberGenerator
             try
             {
                 keyNumberGenerator.SetDuration(int.Parse(durationInput.Text));
-            } catch (Exception) { }
-            
+            }
+            catch (Exception) { }
+
             keyNumberGenerator.SetType(typeInput.Text);
             keyNumberGenerator.SetClientI(clientInput.Text);
 
@@ -118,7 +114,8 @@ namespace KeyNumberGenerator
             if (!keyNumberGenerator.yearReady || yearInput.Text == "Type year")
             {
                 yearLabel.BackColor = Color.AntiqueWhite;
-            } else
+            }
+            else
             {
                 yearLabel.BackColor = Color.WhiteSmoke;
             }
@@ -387,7 +384,7 @@ namespace KeyNumberGenerator
             {
                 for (int i = 0; i < keyNumberOutput.TextLength; i++)
                 {
-                    if (keyNumberOutput.Text[i] != '-' && !char.IsLetterOrDigit(keyNumberOutput.Text[i])) 
+                    if (keyNumberOutput.Text[i] != '-' && !char.IsLetterOrDigit(keyNumberOutput.Text[i]))
                     {
                         keyNumberOutput.Text = keyNumberOutput.Text.Remove(i, 1);
                         keyNumberLabel.BackColor = Color.AntiqueWhite;
@@ -473,42 +470,50 @@ namespace KeyNumberGenerator
 
         public async void DownloadUpdate()
         {
-            var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
-            var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
-            var latest = releases[0];
-            version = latest.TagName;
-            Console.WriteLine("Latest version is: " + version);
-
-            if (version != Properties.Settings.Default.Version)
+            try
             {
-                progressBar1.Visible = true;
-                if (!System.IO.Directory.Exists(System.IO.Directory.GetCurrentDirectory() + "\\download\\"))
+                var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
+                var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
+                var latest = releases[0];
+                version = latest.TagName;
+                Console.WriteLine("Latest version is: " + version);
+
+                if (version != Properties.Settings.Default.Version)
                 {
-                    System.IO.Directory.CreateDirectory(System.IO.Directory.GetCurrentDirectory() + "\\download\\");
-                }
-                using (WebClient wc = new WebClient())
-                {
-                    Console.WriteLine("URI: " + latest.Assets[1].BrowserDownloadUrl);
-                    wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.wc_DownloadProgressChanged);
-                    Console.WriteLine("Path: " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name);
-                    wc.DownloadFileAsync(
-                        new System.Uri(latest.Assets[1].BrowserDownloadUrl),
-                        System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name
-                        );
-                    wc.DownloadFileCompleted += new AsyncCompletedEventHandler(this.wc_DownloadDataCompleted);
+                    progressBar1.Visible = true;
+                    if (!System.IO.Directory.Exists(System.IO.Directory.GetCurrentDirectory() + "\\download\\"))
+                    {
+                        System.IO.Directory.CreateDirectory(System.IO.Directory.GetCurrentDirectory() + "\\download\\");
+                    }
+                    using (WebClient wc = new WebClient())
+                    {
+                        Console.WriteLine("URI: " + latest.Assets[1].BrowserDownloadUrl);
+                        wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.wc_DownloadProgressChanged);
+                        Console.WriteLine("Path: " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name);
+                        wc.DownloadFileAsync(
+                            new System.Uri(latest.Assets[1].BrowserDownloadUrl),
+                            System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name
+                            );
+                        wc.DownloadFileCompleted += new AsyncCompletedEventHandler(this.wc_DownloadDataCompleted);
+                    }
                 }
             }
+            catch (Exception)
+            {
+
+            }
+
         }
 
         private void updateButton_Click(object sender, EventArgs e)
         {
-            string message = "Version " + version + 
-                " was downloaded to " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" + 
+            string message = "Version " + version +
+                " was downloaded to " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" +
                 ". Close the program and replace the old .exe file with the new one.";
             string caption = "Downloaded update";
             MessageBoxButtons buttons = MessageBoxButtons.OK;
             MessageBox.Show(message, caption, buttons);
-            
+
         }
     }
 }

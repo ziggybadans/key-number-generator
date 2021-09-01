@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace KeyNumberGenerator
 {
@@ -30,7 +27,8 @@ namespace KeyNumberGenerator
         static int number = 0;
         public string keyNumber;
 
-        public KeyNumberGenerator() {
+        public KeyNumberGenerator()
+        {
             number = Properties.Settings.Default.number;
         }
 
@@ -41,7 +39,8 @@ namespace KeyNumberGenerator
                 this.market = null;
                 this.marketReady = false;
                 Console.WriteLine("SetMarket" + market);
-            } else
+            }
+            else
             {
                 try
                 {
@@ -49,7 +48,8 @@ namespace KeyNumberGenerator
                     this.market = markets[checkInput];
                     this.marketReady = true;
                     Console.WriteLine("SetMarket: " + market + " - Successful!");
-                } catch (IndexOutOfRangeException)
+                }
+                catch (IndexOutOfRangeException)
                 {
                     Console.WriteLine("SetMarket: " + input + " - Invalid.");
                 }
@@ -67,19 +67,22 @@ namespace KeyNumberGenerator
                     this.year = int.Parse(input);
                     this.yearReady = true;
                     Console.WriteLine("SetYear1: " + this.year + " - Successful!");
-                } else if (input.Length == 4 && int.Parse(input) >= int.Parse(currentYear))
+                }
+                else if (input.Length == 4 && int.Parse(input) >= int.Parse(currentYear))
                 {
                     char yearFirstChar = input[2];
                     char yearSecondChar = input[3];
                     this.year = int.Parse(CharConcatenation.Concat(yearFirstChar, yearSecondChar));
                     Console.WriteLine("SetYear2: " + this.year + " - Successful!");
                     this.yearReady = true;
-                } else
+                }
+                else
                 {
                     this.yearReady = false;
                     Console.WriteLine("SetYear: " + input + " - Invalid.");
                 }
-            } catch (NullReferenceException)
+            }
+            catch (NullReferenceException)
             {
                 Console.WriteLine("SetYear: null");
                 year = -1;
@@ -118,7 +121,8 @@ namespace KeyNumberGenerator
                 duration = -1;
                 durationReady = false;
                 Console.WriteLine("SetDuration: null");
-            } else
+            }
+            else
             {
                 try
                 {
@@ -126,7 +130,8 @@ namespace KeyNumberGenerator
                     duration = durations[checkInput];
                     durationReady = true;
                     Console.WriteLine("SetDuration: " + duration + " - Successful!");
-                } catch (IndexOutOfRangeException)
+                }
+                catch (IndexOutOfRangeException)
                 {
                     durationReady = false;
                     Console.WriteLine("SetDuration: " + input + " - Invalid.");
@@ -136,12 +141,13 @@ namespace KeyNumberGenerator
 
         public void SetType(string input)
         {
-           if (input == null)
+            if (input == null)
             {
                 type = null;
                 typeReady = false;
                 Console.WriteLine("SetType: null");
-            } else
+            }
+            else
             {
                 try
                 {
@@ -149,12 +155,13 @@ namespace KeyNumberGenerator
                     type = types[checkInput];
                     typeReady = true;
                     Console.WriteLine("SetType: " + type + " - Successful!");
-                } catch (IndexOutOfRangeException)
+                }
+                catch (IndexOutOfRangeException)
                 {
                     typeReady = false;
                     Console.WriteLine("SetType: " + input + " - Invalid.");
                 }
-            } 
+            }
         }
 
         public void SetClientI(string input)
@@ -198,7 +205,8 @@ namespace KeyNumberGenerator
             if (input != null)
             {
                 return input;
-            } else
+            }
+            else
             {
                 return "NULL";
             }
@@ -219,7 +227,8 @@ namespace KeyNumberGenerator
             if (input != '\0')
             {
                 return Convert.ToString(input);
-            } else
+            }
+            else
             {
                 return "NULL";
             }
@@ -246,7 +255,8 @@ namespace KeyNumberGenerator
                 Properties.Settings.Default.market = market;
                 Properties.Settings.Default.Save();
             }
-            else if (property == "year") {
+            else if (property == "year")
+            {
                 Properties.Settings.Default.year = year.ToString();
                 Properties.Settings.Default.Save();
             }
@@ -306,7 +316,8 @@ namespace KeyNumberGenerator
             else if (property == "number")
             {
                 return Properties.Settings.Default.number.ToString();
-            } else
+            }
+            else
             {
                 return "NULL";
             }

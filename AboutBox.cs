@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Octokit;
+using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Octokit;
 using System.Net;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace KeyNumberGenerator
 {
@@ -30,54 +27,69 @@ namespace KeyNumberGenerator
         {
             labelVersion.Text = "Version " + Properties.Settings.Default.Version;
 
-            var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
-            var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
-            var latest = releases[0];
-            string version = latest.TagName;
-            Console.WriteLine("Latest version is: " + version);
+            try
+            {
+                var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
+                var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
+                var latest = releases[0];
+                string version = latest.TagName;
+                Console.WriteLine("Latest version is: " + version);
 
-            if (version != Properties.Settings.Default.Version)
-            {
-                label1.Text = "New Update Available!";
-                label2.Visible = true;
-                label2.Text = "Version " + version;
-                button2.Visible = true;
+                if (version != Properties.Settings.Default.Version)
+                {
+                    label1.Text = "New Update Available!";
+                    label2.Visible = true;
+                    label2.Text = "Version " + version;
+                    button2.Visible = true;
+                }
+                else
+                {
+                    label1.Text = "Up-to-date!";
+                }
             }
-            else
+            catch (Exception)
             {
-                label1.Text = "Up-to-date!";
+
             }
         }
 
         public async void DownloadUpdate()
         {
-            var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
-            var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
-            var latest = releases[0];
-            version = latest.TagName;
-            Console.WriteLine("Latest version is: " + version);
+            try
+            {
+                var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
+                var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
+                var latest = releases[0];
+                version = latest.TagName;
+                Console.WriteLine("Latest version is: " + version);
 
-            if (version != Properties.Settings.Default.Version)
-            {
-                progressBar1.Visible = true;
-                if (!System.IO.Directory.Exists(System.IO.Directory.GetCurrentDirectory() + "\\download\\"))
+                if (version != Properties.Settings.Default.Version)
                 {
-                    System.IO.Directory.CreateDirectory(System.IO.Directory.GetCurrentDirectory() + "\\download\\");
+                    progressBar1.Visible = true;
+                    if (!System.IO.Directory.Exists(System.IO.Directory.GetCurrentDirectory() + "\\download\\"))
+                    {
+                        System.IO.Directory.CreateDirectory(System.IO.Directory.GetCurrentDirectory() + "\\download\\");
+                    }
+                    using (WebClient wc = new WebClient())
+                    {
+                        Console.WriteLine("URI: " + latest.Assets[1].BrowserDownloadUrl);
+                        wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.wc_DownloadProgressChanged);
+                        Console.WriteLine("Path: " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name);
+                        wc.DownloadFileAsync(
+                            new System.Uri(latest.Assets[1].BrowserDownloadUrl),
+                            System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name
+                            );
+                        wc.DownloadFileCompleted += new AsyncCompletedEventHandler(this.wc_DownloadDataCompleted);
+                    }
                 }
-                using (WebClient wc = new WebClient())
+                else
                 {
-                    Console.WriteLine("URI: " + latest.Assets[1].BrowserDownloadUrl);
-                    wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.wc_DownloadProgressChanged);
-                    Console.WriteLine("Path: " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name);
-                    wc.DownloadFileAsync(
-                        new System.Uri(latest.Assets[1].BrowserDownloadUrl),
-                        System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name
-                        );
-                    wc.DownloadFileCompleted += new AsyncCompletedEventHandler(this.wc_DownloadDataCompleted);
+                    label1.BackColor = Color.AliceBlue;
                 }
-            } else
+            }
+            catch (Exception)
             {
-                label1.BackColor = Color.AliceBlue;
+
             }
         }
         #region Assembly Attribute Accessors
@@ -188,6 +200,11 @@ namespace KeyNumberGenerator
         private void button2_Click(object sender, EventArgs e)
         {
             DownloadUpdate();
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/ziggybadans/key-number-generator");
         }
     }
 }

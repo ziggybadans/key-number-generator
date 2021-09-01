@@ -1,5 +1,4 @@
-﻿
-namespace KeyNumberGenerator
+﻿namespace KeyNumberGenerator
 {
     partial class GUI
     {
@@ -487,7 +486,6 @@ namespace KeyNumberGenerator
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(100, 19);
             this.progressBar1.TabIndex = 55;
-            this.progressBar1.Value = 50;
             this.progressBar1.Visible = false;
             // 
             // updateButton
