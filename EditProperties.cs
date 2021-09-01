@@ -16,5 +16,18 @@ namespace KeyNumberGenerator
         {
             InitializeComponent();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.number = 1;
+            Properties.Settings.Default.market = "AUG";
+            Properties.Settings.Default.year = "Type year";
+            Properties.Settings.Default.duration = 10;
+            Properties.Settings.Default.type = "R";
+            Properties.Settings.Default.clientInitial = "Type client name";
+            Properties.Settings.Default.writerInitial = "Type name";
+            Properties.Settings.Default.Save();
+            propertyGrid1.Refresh();
+        }
     }
 }

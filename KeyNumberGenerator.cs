@@ -73,6 +73,7 @@ namespace KeyNumberGenerator
                     char yearSecondChar = input[3];
                     this.year = int.Parse(CharConcatenation.Concat(yearFirstChar, yearSecondChar));
                     Console.WriteLine("SetYear2: " + this.year + " - Successful!");
+                    this.yearReady = true;
                 } else
                 {
                     this.yearReady = false;
@@ -84,6 +85,7 @@ namespace KeyNumberGenerator
                 year = -1;
                 this.yearReady = false;
             }
+            Console.WriteLine(yearReady);
         }
 
         public void SetWriterI(string input)
