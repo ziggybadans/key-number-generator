@@ -93,7 +93,12 @@ namespace KeyNumberGenerator
 
         public void SetWriterI(string input)
         {
-            if (input == "Type name")
+            if (input == "")
+            {
+                writerInitial = '\0';
+                Console.WriteLine("SetWriterI: null");
+            }
+            else if (input == "Type name")
             {
                 writerInitial = '\0';
                 Console.WriteLine("SetWriterI: null");
@@ -171,36 +176,44 @@ namespace KeyNumberGenerator
                 clientInitial = null;
                 Console.WriteLine("SetClientI: null");
             }
-            try
-            {
-                string upperInput = input.ToUpper();
-                if (!input.Contains(" "))
-                {
-                    if (input.Length >= 2)
-                    {
-                        char clientFirstInitial = upperInput[0];
-                        char clientSecondInitial = upperInput[1];
-                        clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
-                    }
-                    else
-                    {
-                        clientInitial = upperInput[0].ToString();
-                    }
-                }
-                else
-                {
-                    int secondInitialIndex = input.ToUpper().IndexOf(" ") + 1;
-                    char clientFirstInitial = input.ToUpper()[0];
-                    char clientSecondInitial = input.ToUpper()[secondInitialIndex];
-
-                    clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
-                }
-                Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
-            }
-            catch (NullReferenceException)
+            else if (input == "Type client name")
             {
                 clientInitial = null;
                 Console.WriteLine("SetClientI: null");
+            }
+            else
+            {
+                try
+                {
+                    string upperInput = input.ToUpper();
+                    if (!input.Contains(" "))
+                    {
+                        if (input.Length >= 2)
+                        {
+                            char clientFirstInitial = upperInput[0];
+                            char clientSecondInitial = upperInput[1];
+                            clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
+                        }
+                        else
+                        {
+                            clientInitial = upperInput[0].ToString();
+                        }
+                    }
+                    else
+                    {
+                        int secondInitialIndex = input.ToUpper().IndexOf(" ") + 1;
+                        char clientFirstInitial = input.ToUpper()[0];
+                        char clientSecondInitial = input.ToUpper()[secondInitialIndex];
+
+                        clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
+                    }
+                    Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
+                }
+                catch (NullReferenceException)
+                {
+                    clientInitial = null;
+                    Console.WriteLine("SetClientI: null");
+                }
             }
          }
 

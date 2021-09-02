@@ -109,7 +109,7 @@ namespace KeyNumberGenerator.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("v1.0")]
         public string Version {
             get {
                 return ((string)(this["Version"]));
