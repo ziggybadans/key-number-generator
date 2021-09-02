@@ -16,9 +16,30 @@ namespace KeyNumberGenerator
         {
             InitializeComponent();
 
-            marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
-            durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
-            typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
+            if (Array.Exists(KeyNumberGenerator.markets, element => element == keyNumberGenerator.Load("market")))
+            {
+                marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
+            } else
+            {
+                marketInput.SelectedIndex = 0;
+            }
+            if (Array.Exists(KeyNumberGenerator.durations, element => element == int.Parse(keyNumberGenerator.Load("duration"))))
+            {
+                durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
+            }
+            else
+            {
+                durationInput.SelectedIndex = 0;
+            }
+            if (Array.Exists(KeyNumberGenerator.types, element => element == keyNumberGenerator.Load("type")))
+            {
+                typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
+            }
+            else
+            {
+                typeInput.SelectedIndex = 0;
+            }
+            
             yearInput.Text = keyNumberGenerator.Load("year");
             writerInput.Text = keyNumberGenerator.Load("writerInitial");
             clientInput.Text = keyNumberGenerator.Load("clientInitial");
@@ -406,39 +427,105 @@ namespace KeyNumberGenerator
             {
                 if (marketInput.Text == "NULL")
                 {
-                    marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
+                    if (Array.Exists(KeyNumberGenerator.markets, element => element == keyNumberGenerator.Load("market")))
+                    {
+                        marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
+                    } else
+                    {
+                        marketInput.SelectedIndex = 0;
+                    }
                     marketInput.DropDownStyle = ComboBoxStyle.DropDownList;
                     marketLabel.BackColor = Color.WhiteSmoke;
                 }
                 else
                 {
-                    marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
+                    if (Array.Exists(KeyNumberGenerator.markets, element => element == keyNumberGenerator.Load("market")))
+                    {
+                        marketInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.markets, keyNumberGenerator.Load("market"));
+                    }
+                    else
+                    {
+                        marketInput.SelectedIndex = 0;
+                    }
                 }
                 if (durationInput.Text == "NULL")
                 {
-                    durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
+                    if (Array.Exists(KeyNumberGenerator.durations, element => element == int.Parse(keyNumberGenerator.Load("duration"))))
+                    {
+                        durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
+
+                    } else
+                    {
+                        durationInput.SelectedIndex = 0;
+                    }
                     durationInput.DropDownStyle = ComboBoxStyle.DropDownList;
                     durationLabel.BackColor = Color.WhiteSmoke;
                 }
                 else
                 {
-                    durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
+                    if (Array.Exists(KeyNumberGenerator.durations, element => element == int.Parse(keyNumberGenerator.Load("duration"))))
+                    {
+                        durationInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.durations, int.Parse(keyNumberGenerator.Load("duration")));
+
+                    }
+                    else
+                    {
+                        durationInput.SelectedIndex = 0;
+                    }
                 }
                 if (typeInput.Text == "NULL")
                 {
-                    typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
+                    if (Array.Exists(KeyNumberGenerator.types, element => element == keyNumberGenerator.Load("type")))
+                    {
+                        typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
+                    } else
+                    {
+                        typeInput.SelectedIndex = 0;
+                    }
                     typeInput.DropDownStyle = ComboBoxStyle.DropDownList;
                     typeLabel.BackColor = Color.WhiteSmoke;
                 }
                 else
                 {
-                    typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
+                    if (Array.Exists(KeyNumberGenerator.types, element => element == keyNumberGenerator.Load("type")))
+                    {
+                        typeInput.SelectedIndex = Array.IndexOf(KeyNumberGenerator.types, keyNumberGenerator.Load("type"));
+                    }
+                    else
+                    {
+                        typeInput.SelectedIndex = 0;
+                    }
                 }
 
                 yearInput.Text = keyNumberGenerator.Load("year");
                 writerInput.Text = keyNumberGenerator.Load("writerInitial");
                 clientInput.Text = keyNumberGenerator.Load("clientInitial");
                 numberOutput.Text = keyNumberGenerator.Load("number");
+
+                if (!keyNumberGenerator.marketReady)
+                {
+                    marketLabel.BackColor = Color.AntiqueWhite;
+                }
+                if (!keyNumberGenerator.durationReady)
+                {
+                    durationLabel.BackColor = Color.AntiqueWhite;
+                }
+                if (!keyNumberGenerator.typeReady)
+                {
+                    typeLabel.BackColor = Color.AntiqueWhite;
+                }
+                if (!keyNumberGenerator.yearReady || yearInput.Text == "Type year")
+                {
+                    yearLabel.BackColor = Color.AntiqueWhite;
+                }
+                if (writerInput.Text == "Type name")
+                {
+                    writerLabel.BackColor = Color.AntiqueWhite;
+                }
+                if (clientInput.Text == "Type client name")
+                {
+                    clientLabel.BackColor = Color.AntiqueWhite;
+                }
             }
             else if (dialogResult == DialogResult.Cancel) { }
             popup.Dispose();

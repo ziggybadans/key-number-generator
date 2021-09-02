@@ -81,7 +81,6 @@
             this.createdByLabel.Name = "createdByLabel";
             this.createdByLabel.Size = new System.Drawing.Size(126, 13);
             this.createdByLabel.TabIndex = 0;
-            this.createdByLabel.TabStop = true;
             this.createdByLabel.Text = "Created by Ziggy Badans";
             this.createdByLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
@@ -136,7 +135,7 @@
             this.keyNumberOutput.MaxLength = 30;
             this.keyNumberOutput.Name = "keyNumberOutput";
             this.keyNumberOutput.Size = new System.Drawing.Size(157, 20);
-            this.keyNumberOutput.TabIndex = 11;
+            this.keyNumberOutput.TabIndex = 6;
             this.keyNumberOutput.TextChanged += new System.EventHandler(this.keyNumberOutput_TextChanged);
             this.keyNumberOutput.Leave += new System.EventHandler(this.keyNumberOutput_Leave);
             // 
@@ -146,7 +145,7 @@
             this.generateButton.Location = new System.Drawing.Point(74, 67);
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(75, 23);
-            this.generateButton.TabIndex = 12;
+            this.generateButton.TabIndex = 7;
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
             this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
@@ -168,6 +167,7 @@
             this.numberOutput.Name = "numberOutput";
             this.numberOutput.Size = new System.Drawing.Size(47, 20);
             this.numberOutput.TabIndex = 14;
+            this.numberOutput.TabStop = false;
             this.numberOutput.Text = "1";
             this.toolTip1.SetToolTip(this.numberOutput, "This value increases by 1 every time a key is generated");
             // 
@@ -177,7 +177,7 @@
             this.copyButton.Location = new System.Drawing.Point(191, 38);
             this.copyButton.Name = "copyButton";
             this.copyButton.Size = new System.Drawing.Size(27, 27);
-            this.copyButton.TabIndex = 15;
+            this.copyButton.TabIndex = 8;
             this.copyButton.UseVisualStyleBackColor = true;
             this.copyButton.Click += new System.EventHandler(this.copyButton_Click);
             // 
@@ -188,6 +188,7 @@
             this.clientPropertiesButton.Name = "clientPropertiesButton";
             this.clientPropertiesButton.Size = new System.Drawing.Size(27, 27);
             this.clientPropertiesButton.TabIndex = 54;
+            this.clientPropertiesButton.TabStop = false;
             this.toolTip1.SetToolTip(this.clientPropertiesButton, "Save current value as property");
             this.clientPropertiesButton.UseVisualStyleBackColor = true;
             this.clientPropertiesButton.Click += new System.EventHandler(this.clientPropertiesButton_Click);
@@ -199,6 +200,7 @@
             this.writerPropertiesButton.Name = "writerPropertiesButton";
             this.writerPropertiesButton.Size = new System.Drawing.Size(27, 27);
             this.writerPropertiesButton.TabIndex = 53;
+            this.writerPropertiesButton.TabStop = false;
             this.toolTip1.SetToolTip(this.writerPropertiesButton, "Save current value as property");
             this.writerPropertiesButton.UseVisualStyleBackColor = true;
             this.writerPropertiesButton.Click += new System.EventHandler(this.writerPropertiesButton_Click);
@@ -210,6 +212,7 @@
             this.yearPropertiesButton.Name = "yearPropertiesButton";
             this.yearPropertiesButton.Size = new System.Drawing.Size(27, 27);
             this.yearPropertiesButton.TabIndex = 52;
+            this.yearPropertiesButton.TabStop = false;
             this.toolTip1.SetToolTip(this.yearPropertiesButton, "Save current value as property");
             this.yearPropertiesButton.UseVisualStyleBackColor = true;
             this.yearPropertiesButton.Click += new System.EventHandler(this.yearPropertiesButton_Click);
@@ -221,6 +224,7 @@
             this.typePropertiesButton.Name = "typePropertiesButton";
             this.typePropertiesButton.Size = new System.Drawing.Size(27, 27);
             this.typePropertiesButton.TabIndex = 51;
+            this.typePropertiesButton.TabStop = false;
             this.toolTip1.SetToolTip(this.typePropertiesButton, "Save current value as property");
             this.typePropertiesButton.UseVisualStyleBackColor = true;
             this.typePropertiesButton.Click += new System.EventHandler(this.typePropertiesButton_Click);
@@ -232,6 +236,7 @@
             this.durationPropertiesButton.Name = "durationPropertiesButton";
             this.durationPropertiesButton.Size = new System.Drawing.Size(27, 27);
             this.durationPropertiesButton.TabIndex = 50;
+            this.durationPropertiesButton.TabStop = false;
             this.toolTip1.SetToolTip(this.durationPropertiesButton, "Save current value as property");
             this.durationPropertiesButton.UseVisualStyleBackColor = true;
             // 
@@ -253,6 +258,7 @@
             this.marketPropertiesButton.Name = "marketPropertiesButton";
             this.marketPropertiesButton.Size = new System.Drawing.Size(27, 27);
             this.marketPropertiesButton.TabIndex = 42;
+            this.marketPropertiesButton.TabStop = false;
             this.toolTip1.SetToolTip(this.marketPropertiesButton, "Save current value as property");
             this.marketPropertiesButton.UseVisualStyleBackColor = true;
             this.marketPropertiesButton.Click += new System.EventHandler(this.marketPropertiesButton_Click);
@@ -264,6 +270,7 @@
             this.marketNullButton.Name = "marketNullButton";
             this.marketNullButton.Size = new System.Drawing.Size(27, 27);
             this.marketNullButton.TabIndex = 43;
+            this.marketNullButton.TabStop = false;
             this.toolTip1.SetToolTip(this.marketNullButton, "Make market null");
             this.marketNullButton.UseVisualStyleBackColor = true;
             this.marketNullButton.Click += new System.EventHandler(this.marketNullButton_Click);
@@ -275,6 +282,7 @@
             this.durationNullButton.Name = "durationNullButton";
             this.durationNullButton.Size = new System.Drawing.Size(27, 27);
             this.durationNullButton.TabIndex = 44;
+            this.durationNullButton.TabStop = false;
             this.toolTip1.SetToolTip(this.durationNullButton, "Make duration null");
             this.durationNullButton.UseVisualStyleBackColor = true;
             this.durationNullButton.Click += new System.EventHandler(this.durationNullButton_Click);
@@ -286,6 +294,7 @@
             this.typeNullButton.Name = "typeNullButton";
             this.typeNullButton.Size = new System.Drawing.Size(27, 27);
             this.typeNullButton.TabIndex = 45;
+            this.typeNullButton.TabStop = false;
             this.toolTip1.SetToolTip(this.typeNullButton, "Make type null");
             this.typeNullButton.UseVisualStyleBackColor = true;
             this.typeNullButton.Click += new System.EventHandler(this.typeNullButton_Click);
@@ -327,7 +336,7 @@
             this.yearInput.MaxLength = 4;
             this.yearInput.Name = "yearInput";
             this.yearInput.Size = new System.Drawing.Size(60, 20);
-            this.yearInput.TabIndex = 37;
+            this.yearInput.TabIndex = 1;
             this.yearInput.TextChanged += new System.EventHandler(this.yearInput_TextChanged);
             this.yearInput.Enter += new System.EventHandler(this.yearInput_Enter);
             this.yearInput.Leave += new System.EventHandler(this.yearInput_Leave);
@@ -383,7 +392,7 @@
             this.marketInput.MaxDropDownItems = 60;
             this.marketInput.Name = "marketInput";
             this.marketInput.Size = new System.Drawing.Size(60, 21);
-            this.marketInput.TabIndex = 35;
+            this.marketInput.TabIndex = 0;
             this.marketInput.Enter += new System.EventHandler(this.marketInput_Enter);
             this.marketInput.Leave += new System.EventHandler(this.marketInput_Leave);
             // 
@@ -421,7 +430,7 @@
             this.durationInput.Location = new System.Drawing.Point(15, 222);
             this.durationInput.Name = "durationInput";
             this.durationInput.Size = new System.Drawing.Size(60, 21);
-            this.durationInput.TabIndex = 39;
+            this.durationInput.TabIndex = 4;
             this.durationInput.Enter += new System.EventHandler(this.durationInput_Enter);
             this.durationInput.Leave += new System.EventHandler(this.durationInput_Leave);
             // 
@@ -430,7 +439,7 @@
             this.clientInput.Location = new System.Drawing.Point(15, 134);
             this.clientInput.Name = "clientInput";
             this.clientInput.Size = new System.Drawing.Size(145, 20);
-            this.clientInput.TabIndex = 49;
+            this.clientInput.TabIndex = 3;
             this.clientInput.Enter += new System.EventHandler(this.clientInput_Enter);
             this.clientInput.Leave += new System.EventHandler(this.clientInput_Leave);
             // 
@@ -447,7 +456,7 @@
             this.typeInput.Location = new System.Drawing.Point(100, 221);
             this.typeInput.Name = "typeInput";
             this.typeInput.Size = new System.Drawing.Size(60, 21);
-            this.typeInput.TabIndex = 41;
+            this.typeInput.TabIndex = 5;
             this.typeInput.Enter += new System.EventHandler(this.typeInput_Enter);
             this.typeInput.Leave += new System.EventHandler(this.typeInput_Leave);
             // 
@@ -466,7 +475,7 @@
             this.writerInput.Location = new System.Drawing.Point(185, 48);
             this.writerInput.Name = "writerInput";
             this.writerInput.Size = new System.Drawing.Size(65, 20);
-            this.writerInput.TabIndex = 47;
+            this.writerInput.TabIndex = 2;
             this.writerInput.Enter += new System.EventHandler(this.writerInput_Enter);
             this.writerInput.Leave += new System.EventHandler(this.writerInput_Leave);
             // 
@@ -496,6 +505,7 @@
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(75, 24);
             this.updateButton.TabIndex = 56;
+            this.updateButton.TabStop = false;
             this.updateButton.Text = "Update";
             this.updateButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.updateButton.UseVisualStyleBackColor = false;
