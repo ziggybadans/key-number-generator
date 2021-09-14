@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("KeyNumberGenerator")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Ziggy Badans")]
 [assembly: AssemblyProduct("KeyNumberGenerator")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright ©  2021 | Ziggy Badans")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

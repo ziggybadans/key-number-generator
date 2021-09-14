@@ -36,9 +36,8 @@ namespace KeyNumberGenerator
             this.okButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,9 +53,8 @@ namespace KeyNumberGenerator
             this.tableLayoutPanel.Controls.Add(this.okButton, 1, 4);
             this.tableLayoutPanel.Controls.Add(this.button1, 0, 4);
             this.tableLayoutPanel.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.button2, 0, 2);
             this.tableLayoutPanel.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel.Controls.Add(this.progressBar1, 0, 3);
+            this.tableLayoutPanel.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(9, 9);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -92,7 +90,7 @@ namespace KeyNumberGenerator
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(271, 17);
             this.labelVersion.TabIndex = 0;
-            this.labelVersion.Text = "Version 1.0";
+            this.labelVersion.Text = "Version v1.0";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelCopyright
@@ -153,18 +151,6 @@ namespace KeyNumberGenerator
             this.label1.TabIndex = 27;
             this.label1.Text = "Up-to-date!";
             // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(59, 64);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 28;
-            this.button2.Text = "Update";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Visible = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -173,16 +159,20 @@ namespace KeyNumberGenerator
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(128, 30);
             this.label2.TabIndex = 29;
-            this.label2.Text = "Version 1.01";
+            this.label2.Text = "Version v1.01";
             this.label2.Visible = false;
             // 
-            // progressBar1
+            // label3
             // 
-            this.progressBar1.Location = new System.Drawing.Point(3, 93);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(131, 23);
-            this.progressBar1.TabIndex = 30;
-            this.progressBar1.Visible = false;
+            this.label3.AutoSize = true;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(6, 60);
+            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(128, 30);
+            this.label3.TabIndex = 30;
+            this.label3.Text = "Update will be installed next time program opens.";
+            this.label3.Visible = false;
             // 
             // AboutBox
             // 
@@ -201,6 +191,7 @@ namespace KeyNumberGenerator
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -215,8 +206,7 @@ namespace KeyNumberGenerator
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label3;
     }
 }
