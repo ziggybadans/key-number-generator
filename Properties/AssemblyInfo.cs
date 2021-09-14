@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("KeyNumberGenerator")]
-[assembly: AssemblyCopyright("Copyright ©  2021")]
+[assembly: AssemblyCopyright("Copyright ©  2021 | Ziggy Badans")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

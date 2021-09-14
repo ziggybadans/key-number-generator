@@ -17,7 +17,7 @@ namespace KeyNumberGenerator
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version " + 'v' + "{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            this.labelCopyright.Text = AssemblyCopyright + " | Ziggy Badans";
+            this.labelCopyright.Text = AssemblyCopyright;
 
             Version();
         }
