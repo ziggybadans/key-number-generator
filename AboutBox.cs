@@ -23,8 +23,6 @@ namespace KeyNumberGenerator
 
         async void Version()
         {
-            labelVersion.Text = "Version " + AssemblyVersion;
-
             try
             {
                 var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
