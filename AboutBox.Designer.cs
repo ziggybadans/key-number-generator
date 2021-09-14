@@ -90,7 +90,7 @@ namespace KeyNumberGenerator
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(271, 17);
             this.labelVersion.TabIndex = 0;
-            this.labelVersion.Text = "Version 0";
+            this.labelVersion.Text = "Version v1.0";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelCopyright
@@ -159,11 +159,12 @@ namespace KeyNumberGenerator
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(128, 30);
             this.label2.TabIndex = 29;
-            this.label2.Text = "Version 1.01";
+            this.label2.Text = "Version v1.01";
             this.label2.Visible = false;
             // 
             // label3
             // 
+            this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(6, 60);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 3, 0);
@@ -190,6 +191,7 @@ namespace KeyNumberGenerator
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }

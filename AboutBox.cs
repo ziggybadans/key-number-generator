@@ -10,13 +10,12 @@ namespace KeyNumberGenerator
 {
     partial class AboutBox : Form
     {
-
         public AboutBox()
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
-            this.labelVersion.Text = String.Format("Version " + 'v' + "{0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            this.labelVersion.Text = String.Format("Version v{0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
 
             Version();
@@ -24,6 +23,8 @@ namespace KeyNumberGenerator
 
         async void Version()
         {
+            labelVersion.Text = "Version " + AssemblyVersion;
+
             try
             {
                 var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
@@ -32,9 +33,9 @@ namespace KeyNumberGenerator
                 string version = latest.TagName;
                 Console.WriteLine("Latest version is: " + version);
 
-                if (version != 'v' + Assembly.GetExecutingAssembly().GetName().Version.ToString())
+                if (version != AssemblyVersion)
                 {
-                    Console.WriteLine("Current version is: " + 'v' + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    Console.WriteLine("Current version is: " + AssemblyVersion);
                     label1.Text = "New Update Available!";
                     label2.Visible = true;
                     label2.Text = "Version " + version;
