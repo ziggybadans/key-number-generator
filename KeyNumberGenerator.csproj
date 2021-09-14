@@ -74,7 +74,8 @@
     <TargetZone>Internet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon wo bg 2.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Octokit, Version=0.50.0.0, Culture=neutral, processorArchitecture=MSIL">
