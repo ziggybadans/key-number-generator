@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="KeyNumberGenerator.exe" version="1.0.0.3" publicKeyToken="805f6de9251353e1" language="neutral" processorArchitecture="msil" type="win32" />
+  <description asmv2:iconFile="app-icon.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="KeyNumberGenerator" version="1.0.0.3" language="neutral" processorArchitecture="msil" />
+    <commandLine file="KeyNumberGenerator.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="KeyNumberGenerator.exe" size="251840">
+      <assemblyIdentity name="KeyNumberGenerator" version="1.0.0.3" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>iwGpX9BTNwh2SEEuna0eAR6KA3qvFPvwkb4sDoV5beY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Octokit.dll" size="1001472">
+      <assemblyIdentity name="Octokit" version="0.50.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>4hmT1gu98Fe8buwXeNEyYz4lFvxszd2XgAjbDGo1QE0=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="app-icon.ico" size="101164">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>D2WfHaM8oEZIZU5htghKMItBZ9dLIQ46x6Pd7p8Hnms=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="KeyNumberGenerator.exe.config" size="2390">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>R2FDS0uORJ4bBERNWkJEBqD2OJwvsKQSXPugOZI2cLI=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=HADRON-PC\ziggy" issuerKeyHash="d988b6c9110f8da73a7106ae5f9443e852512072" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>LfEZ4k3nZDbQV1/y7c/6TSfrEAfJSb5ijToamZ5dpl8=</DigestValue></Reference></SignedInfo><SignatureValue>e8nWdjmmlsi3K1nOAO9ZDrJ4YhtVd5vySWl/Wy3tyopLEnsPheRXIRjsiZKfvk8sKsLm+BNxXLFYXsC7fPcVIxYqFIVRYg5+Qfmbl7oZ23p7QmSnaZBcpi/FyydvrmAgcg3GIW0TczDo87qKxmBjBMLiHC93uj/TCHxOlI6EBiY=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>s9mcEizK59ZcCWOmPBPJuPj+5QShMWCiUXV8nd0zPWOSUe3uSUCyCqKYbvYhl+jkGfa24p2SC8M6mp2fMFs1RxJxWHOGS71vq8PLEXIJCl8Tl5KNCpypfA1vyRku5Xk3Wlx1zDWUZco55hUhwEUufOLnyPy3ybTG8Z9L6JvmUgU=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="5fa65d9e991a3a8d62be49c90710eb274dfacfedf25f57d03664e74de219f12d" Description="" Url=""><as:assemblyIdentity name="KeyNumberGenerator.exe" version="1.0.0.3" publicKeyToken="805f6de9251353e1" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=HADRON-PC\ziggy</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>SkiXRiaGdiFY0SkuGBLyZ191F7anZkdS7rnllSxxPeI=</DigestValue></Reference></SignedInfo><SignatureValue>SsbaSVVNSHo8CShm3URQBlqPL5nVAbrVZK6r1p45NUtDzx4M7e6khslorBb8uWsbKbhqbrtmsYaRthTRd0QEw+x7NAkon4rQoDVW2pQWy/JwGb2R4LniKTmLwxpFMPFGZTl9fBOHf4YYC7jpfwSGCqRtoGzWHFY8M60tofG8LF0=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>s9mcEizK59ZcCWOmPBPJuPj+5QShMWCiUXV8nd0zPWOSUe3uSUCyCqKYbvYhl+jkGfa24p2SC8M6mp2fMFs1RxJxWHOGS71vq8PLEXIJCl8Tl5KNCpypfA1vyRku5Xk3Wlx1zDWUZco55hUhwEUufOLnyPy3ybTG8Z9L6JvmUgU=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB1TCCAT6gAwIBAgIQZPUrhI5c07RFyc7MPpi7GzANBgkqhkiG9w0BAQsFADApMScwJQYDVQQDHh4ASABBAEQAUgBPAE4ALQBQAEMAXAB6AGkAZwBnAHkwHhcNMjEwOTAyMDA1NTI2WhcNMjIwOTAyMDY1NTI2WjApMScwJQYDVQQDHh4ASABBAEQAUgBPAE4ALQBQAEMAXAB6AGkAZwBnAHkwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALPZnBIsyufWXAljpjwTybj4/uUEoTFgolF1fJ3dMz1jklHt7klAsgqimG72IZfo5Bn2tuKdkgvDOpqdnzBbNUcScVhzhku9b6vDyxFyCQpfE5eSjQqcqXwNb8kZLuV5N1pcdcw1lGXKOeYVIcBFLnzi58j8t8m0xvGfS+ib5lIFAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAHfPa/XC6ApJy2aohDSe3bTAnCFtq2mlkwCWsnR9Ka8Ut+LdhiGa4upbM07DtjGDb1XQg/tIJxtjuz4nrmIRcaRqhJeADti5v1E8nf91Ehzl+jaG6j5BeWehOqYpKJWQFaDHbjUBYFNYgzj5h+pU+ZnNzroV4FjTpAd/NRrkVxkE=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

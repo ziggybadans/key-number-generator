@@ -31,7 +31,7 @@ namespace KeyNumberGenerator
                 string version = latest.TagName;
                 Console.WriteLine("Latest version is: " + version);
 
-                if (version != AssemblyVersion)
+                if (version != 'v' + AssemblyVersion)
                 {
                     Console.WriteLine("Current version is: " + AssemblyVersion);
                     label1.Text = "New Update Available!";
