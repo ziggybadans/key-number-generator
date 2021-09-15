@@ -76,8 +76,6 @@ namespace KeyNumberGenerator
             {
                 clientLabel.BackColor = Color.AntiqueWhite;
             }
-
-            DownloadUpdate();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -349,7 +347,7 @@ namespace KeyNumberGenerator
 
         private void copyButton_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.Clipboard.SetText(keyNumberGenerator.keyNumber);
+            System.Windows.Forms.Clipboard.SetText(keyNumberOutput.Text);
         }
 
         private void marketInput_Leave(object sender, EventArgs e)
@@ -540,67 +538,6 @@ namespace KeyNumberGenerator
 
             }
             popup.Dispose();
-        }
-
-        void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            Console.WriteLine("Downloading latest version...");
-            progressBar1.Value = e.ProgressPercentage;
-        }
-
-        void wc_DownloadDataCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            Console.WriteLine("Downloading succeeded!");
-            progressBar1.Visible = false;
-            updateButton.Visible = true;
-        }
-
-        public async void DownloadUpdate()
-        {
-            try
-            {
-                var client = new GitHubClient(new ProductHeaderValue("key-number-generator"));
-                var releases = await client.Repository.Release.GetAll("ziggybadans", "key-number-generator");
-                var latest = releases[0];
-                version = latest.TagName;
-                Console.WriteLine("Latest version is: " + version);
-
-                if (version != Properties.Settings.Default.Version)
-                {
-                    progressBar1.Visible = true;
-                    if (!System.IO.Directory.Exists(System.IO.Directory.GetCurrentDirectory() + "\\download\\"))
-                    {
-                        System.IO.Directory.CreateDirectory(System.IO.Directory.GetCurrentDirectory() + "\\download\\");
-                    }
-                    using (WebClient wc = new WebClient())
-                    {
-                        Console.WriteLine("URI: " + latest.Assets[1].BrowserDownloadUrl);
-                        wc.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.wc_DownloadProgressChanged);
-                        Console.WriteLine("Path: " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name);
-                        wc.DownloadFileAsync(
-                            new System.Uri(latest.Assets[1].BrowserDownloadUrl),
-                            System.IO.Directory.GetCurrentDirectory() + "\\download\\" + latest.Assets[1].Name
-                            );
-                        wc.DownloadFileCompleted += new AsyncCompletedEventHandler(this.wc_DownloadDataCompleted);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-
-        }
-
-        private void updateButton_Click(object sender, EventArgs e)
-        {
-            string message = "Version " + version +
-                " was downloaded to " + System.IO.Directory.GetCurrentDirectory() + "\\download\\" +
-                ". Close the program and replace the old .exe file with the new one.";
-            string caption = "Downloaded update";
-            MessageBoxButtons buttons = MessageBoxButtons.OK;
-            MessageBox.Show(message, caption, buttons);
-
         }
     }
 }

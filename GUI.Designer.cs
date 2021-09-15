@@ -66,8 +66,6 @@
             this.clientLabel = new System.Windows.Forms.Label();
             this.writerInput = new System.Windows.Forms.TextBox();
             this.writerLabel = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.updateButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -81,6 +79,7 @@
             this.createdByLabel.Name = "createdByLabel";
             this.createdByLabel.Size = new System.Drawing.Size(126, 13);
             this.createdByLabel.TabIndex = 0;
+            this.createdByLabel.TabStop = true;
             this.createdByLabel.Text = "Created by Ziggy Badans";
             this.createdByLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
@@ -489,37 +488,12 @@
             this.writerLabel.TabIndex = 46;
             this.writerLabel.Text = "Writer";
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(439, 2);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(100, 19);
-            this.progressBar1.TabIndex = 55;
-            this.progressBar1.Visible = false;
-            // 
-            // updateButton
-            // 
-            this.updateButton.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.updateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updateButton.Location = new System.Drawing.Point(545, 0);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(75, 24);
-            this.updateButton.TabIndex = 56;
-            this.updateButton.TabStop = false;
-            this.updateButton.Text = "Update";
-            this.updateButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.updateButton.UseVisualStyleBackColor = false;
-            this.updateButton.Visible = false;
-            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
-            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(620, 288);
-            this.Controls.Add(this.updateButton);
-            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.yearInput);
             this.Controls.Add(this.marketLabel);
             this.Controls.Add(this.clientPropertiesButton);
@@ -598,8 +572,6 @@
         private System.Windows.Forms.Label writerLabel;
         private System.Windows.Forms.Button durationNullButton;
         private System.Windows.Forms.Button typeNullButton;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button updateButton;
     }
 }
 
