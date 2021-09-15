@@ -145,7 +145,7 @@
             this.generateButton.Name = "generateButton";
             this.generateButton.Size = new System.Drawing.Size(75, 23);
             this.generateButton.TabIndex = 7;
-            this.generateButton.Text = "Generate";
+            this.generateButton.Text = "GenerateT";
             this.generateButton.UseVisualStyleBackColor = true;
             this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
             // 

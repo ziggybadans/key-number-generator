@@ -27,11 +27,11 @@
     <UpdateUrl>https://raw.githubusercontent.com/ziggybadans/key-number-generator/c-sharp/publish/</UpdateUrl>
     <ProductName>KeyNumberGenerator</ProductName>
     <PublisherName>Ziggy Badans</PublisherName>
-    <MinimumRequiredVersion>1.0.0.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.0.1</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.1</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
