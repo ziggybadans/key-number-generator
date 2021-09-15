@@ -90,7 +90,7 @@ namespace KeyNumberGenerator
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(271, 17);
             this.labelVersion.TabIndex = 0;
-            this.labelVersion.Text = "Version 1.0";
+            this.labelVersion.Text = "Version v1.0";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelCopyright
@@ -159,7 +159,7 @@ namespace KeyNumberGenerator
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(128, 30);
             this.label2.TabIndex = 29;
-            this.label2.Text = "Version 1.01";
+            this.label2.Text = "Version v1.01";
             this.label2.Visible = false;
             // 
             // label3
