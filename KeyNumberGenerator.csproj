@@ -24,6 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://raw.githubusercontent.com/ziggybadans/key-number-generator/c-sharp/publish/</InstallUrl>
+    <UpdateUrl>https://raw.githubusercontent.com/ziggybadans/key-number-generator/c-sharp/publish/</UpdateUrl>
     <ProductName>KeyNumberGenerator</ProductName>
     <PublisherName>Ziggy Badans</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
