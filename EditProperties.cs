@@ -19,6 +19,7 @@ namespace KeyNumberGenerator
             Properties.Settings.Default.type = "R";
             Properties.Settings.Default.clientInitial = "Type client name";
             Properties.Settings.Default.writerInitial = "Type name";
+            Properties.Settings.Default.firstLaunch = false;
             Properties.Settings.Default.Save();
             propertyGrid1.Refresh();
         }

@@ -43,7 +43,6 @@ namespace KeyNumberGenerator
             yearInput.Text = keyNumberGenerator.Load("year");
             writerInput.Text = keyNumberGenerator.Load("writerInitial");
             clientInput.Text = keyNumberGenerator.Load("clientInitial");
-            numberOutput.Text = keyNumberGenerator.Load("number");
 
             keyNumberGenerator.SetMarket(marketInput.Text);
             keyNumberGenerator.SetDuration(int.Parse(durationInput.Text));
@@ -85,6 +84,9 @@ namespace KeyNumberGenerator
 
         private void generateButton_Click(object sender, EventArgs e)
         {
+            Properties.Settings.Default.firstLaunch = false;
+            updateLabel.Visible = false;
+
             keyNumberGenerator.SetMarket(marketInput.Text);
             keyNumberGenerator.SetYear(yearInput.Text);
             keyNumberGenerator.SetWriterI(writerInput.Text);
@@ -98,7 +100,6 @@ namespace KeyNumberGenerator
             keyNumberGenerator.SetClientI(clientInput.Text);
 
             keyNumberOutput.Text = keyNumberGenerator.Generate();
-            numberOutput.Text = keyNumberGenerator.Load("number");
 
             if (writerInput.Text == "Type name")
             {
@@ -228,7 +229,6 @@ namespace KeyNumberGenerator
             yearInput.Text = keyNumberGenerator.Load("year");
             writerInput.Text = keyNumberGenerator.Load("writerInitial");
             clientInput.Text = keyNumberGenerator.Load("clientInitial");
-            numberOutput.Text = keyNumberGenerator.Load("number");
         }
 
         private void marketPropertiesButton_Click(object sender, EventArgs e)
@@ -498,7 +498,6 @@ namespace KeyNumberGenerator
                 yearInput.Text = keyNumberGenerator.Load("year");
                 writerInput.Text = keyNumberGenerator.Load("writerInitial");
                 clientInput.Text = keyNumberGenerator.Load("clientInitial");
-                numberOutput.Text = keyNumberGenerator.Load("number");
 
                 if (!keyNumberGenerator.marketReady)
                 {
@@ -538,6 +537,12 @@ namespace KeyNumberGenerator
 
             }
             popup.Dispose();
+        }
+
+        private void updateLabel_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.firstLaunch = false;
+            updateLabel.Visible = false;
         }
     }
 }

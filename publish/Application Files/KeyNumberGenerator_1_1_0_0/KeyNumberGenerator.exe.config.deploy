@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="KeyNumberGenerator.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+        <sectionGroup name="applicationSettings" type="System.Configuration.ApplicationSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" >
+            <section name="KeyNumberGenerator.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.2" />
+    </startup>
+    <userSettings>
+        <KeyNumberGenerator.Properties.Settings>
+            <setting name="number" serializeAs="String">
+                <value>1</value>
+            </setting>
+            <setting name="market" serializeAs="String">
+                <value>AUG</value>
+            </setting>
+            <setting name="year" serializeAs="String">
+                <value>Type year</value>
+            </setting>
+            <setting name="duration" serializeAs="String">
+                <value>10</value>
+            </setting>
+            <setting name="type" serializeAs="String">
+                <value>R</value>
+            </setting>
+            <setting name="clientInitial" serializeAs="String">
+                <value>Type client name</value>
+            </setting>
+            <setting name="writerInitial" serializeAs="String">
+                <value>Type name</value>
+            </setting>
+            <setting name="firstLaunch" serializeAs="String">
+                <value>True</value>
+            </setting>
+        </KeyNumberGenerator.Properties.Settings>
+    </userSettings>
+    <applicationSettings>
+        <KeyNumberGenerator.Properties.Settings>
+            <setting name="Version" serializeAs="String">
+                <value>v1.1</value>
+            </setting>
+        </KeyNumberGenerator.Properties.Settings>
+    </applicationSettings>
+</configuration>

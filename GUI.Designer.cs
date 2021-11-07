@@ -38,8 +38,6 @@
             this.keyNumberLabel = new System.Windows.Forms.Label();
             this.keyNumberOutput = new System.Windows.Forms.TextBox();
             this.generateButton = new System.Windows.Forms.Button();
-            this.numberLabel = new System.Windows.Forms.Label();
-            this.numberOutput = new System.Windows.Forms.TextBox();
             this.copyButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.clientPropertiesButton = new System.Windows.Forms.Button();
@@ -66,6 +64,7 @@
             this.clientLabel = new System.Windows.Forms.Label();
             this.writerInput = new System.Windows.Forms.TextBox();
             this.writerLabel = new System.Windows.Forms.Label();
+            this.updateLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -148,27 +147,6 @@
             this.generateButton.Text = "Generate";
             this.generateButton.UseVisualStyleBackColor = true;
             this.generateButton.Click += new System.EventHandler(this.generateButton_Click);
-            // 
-            // numberLabel
-            // 
-            this.numberLabel.AutoSize = true;
-            this.numberLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numberLabel.Location = new System.Drawing.Point(61, 108);
-            this.numberLabel.Name = "numberLabel";
-            this.numberLabel.Size = new System.Drawing.Size(114, 13);
-            this.numberLabel.TabIndex = 13;
-            this.numberLabel.Text = "Sequential Number";
-            // 
-            // numberOutput
-            // 
-            this.numberOutput.Enabled = false;
-            this.numberOutput.Location = new System.Drawing.Point(64, 124);
-            this.numberOutput.Name = "numberOutput";
-            this.numberOutput.Size = new System.Drawing.Size(47, 20);
-            this.numberOutput.TabIndex = 14;
-            this.numberOutput.TabStop = false;
-            this.numberOutput.Text = "1";
-            this.toolTip1.SetToolTip(this.numberOutput, "This value increases by 1 every time a key is generated");
             // 
             // copyButton
             // 
@@ -321,12 +299,10 @@
             this.panel1.Controls.Add(this.keyNumberLabel);
             this.panel1.Controls.Add(this.keyNumberOutput);
             this.panel1.Controls.Add(this.generateButton);
-            this.panel1.Controls.Add(this.numberLabel);
-            this.panel1.Controls.Add(this.numberOutput);
             this.panel1.Controls.Add(this.copyButton);
-            this.panel1.Location = new System.Drawing.Point(309, 63);
+            this.panel1.Location = new System.Drawing.Point(309, 92);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(244, 170);
+            this.panel1.Size = new System.Drawing.Size(244, 112);
             this.panel1.TabIndex = 32;
             // 
             // yearInput
@@ -447,11 +423,11 @@
             this.typeInput.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.typeInput.FormattingEnabled = true;
             this.typeInput.Items.AddRange(new object[] {
-            "R",
-            "L",
-            "SL",
-            "X",
-            "SX"});
+            "Rec",
+            "Live",
+            "Sim Live",
+            "Cross",
+            "Sim Cross"});
             this.typeInput.Location = new System.Drawing.Point(100, 221);
             this.typeInput.Name = "typeInput";
             this.typeInput.Size = new System.Drawing.Size(60, 21);
@@ -484,9 +460,21 @@
             this.writerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.writerLabel.Location = new System.Drawing.Point(182, 32);
             this.writerLabel.Name = "writerLabel";
-            this.writerLabel.Size = new System.Drawing.Size(41, 13);
+            this.writerLabel.Size = new System.Drawing.Size(64, 13);
             this.writerLabel.TabIndex = 46;
-            this.writerLabel.Text = "Writer";
+            this.writerLabel.Text = "My Initials";
+            // 
+            // updateLabel
+            // 
+            this.updateLabel.AutoSize = true;
+            this.updateLabel.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.updateLabel.Location = new System.Drawing.Point(218, 5);
+            this.updateLabel.Name = "updateLabel";
+            this.updateLabel.Size = new System.Drawing.Size(390, 13);
+            this.updateLabel.TabIndex = 55;
+            this.updateLabel.Text = "App updated! (Improved writer, client and type fields, removed sequential number)" +
+    "";
+            this.updateLabel.Click += new System.EventHandler(this.updateLabel_Click);
             // 
             // GUI
             // 
@@ -494,6 +482,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(620, 288);
+            this.Controls.Add(this.updateLabel);
             this.Controls.Add(this.yearInput);
             this.Controls.Add(this.marketLabel);
             this.Controls.Add(this.clientPropertiesButton);
@@ -541,8 +530,6 @@
         private System.Windows.Forms.Label keyNumberLabel;
         private System.Windows.Forms.TextBox keyNumberOutput;
         private System.Windows.Forms.Button generateButton;
-        private System.Windows.Forms.Label numberLabel;
-        private System.Windows.Forms.TextBox numberOutput;
         private System.Windows.Forms.Button copyButton;
         private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
@@ -572,6 +559,7 @@
         private System.Windows.Forms.Label writerLabel;
         private System.Windows.Forms.Button durationNullButton;
         private System.Windows.Forms.Button typeNullButton;
+        private System.Windows.Forms.Label updateLabel;
     }
 }
 

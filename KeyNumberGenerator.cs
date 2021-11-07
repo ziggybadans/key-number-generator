@@ -13,7 +13,7 @@ namespace KeyNumberGenerator
         public bool marketReady = false;
         string market;
 
-        char writerInitial;
+        string writerInitial;
         string clientInitial;
 
         public static int[] durations = { 10, 15, 30, 45, 60, 90 };
@@ -95,12 +95,12 @@ namespace KeyNumberGenerator
         {
             if (input == "")
             {
-                writerInitial = '\0';
+                writerInitial = null;
                 Console.WriteLine("SetWriterI: null");
             }
             else if (input == "Type name")
             {
-                writerInitial = '\0';
+                writerInitial = null;
                 Console.WriteLine("SetWriterI: null");
             }
             else
@@ -108,12 +108,33 @@ namespace KeyNumberGenerator
                 try
                 {
                     string upperInput = input.ToUpper();
-                    writerInitial = upperInput[0];
+                    int firstSpace = upperInput.IndexOf(' ');
+                    int secondSpace = upperInput.IndexOf(' ', firstSpace + 1);
+                    char firstInitial = upperInput[0];
+                    char secondInitial;
+                    char thirdInitial;
+                    if (firstSpace != -1)
+                    {
+                        secondInitial = upperInput.Substring(firstSpace + 1)[0];
+                        if (secondSpace != -1)
+                        {
+                            thirdInitial = upperInput.Substring(secondSpace + 1)[0];
+                            writerInitial = CharConcatenation.Concat(firstInitial, secondInitial, thirdInitial);
+                        }
+                        else
+                        {
+                            writerInitial = CharConcatenation.Concat(firstInitial, secondInitial);
+                        }
+                    }
+                    else
+                    {
+                        writerInitial = firstInitial.ToString();
+                    }
                     Console.WriteLine("SetWriterI: " + writerInitial + " - Successful!");
                 }
                 catch (NullReferenceException)
                 {
-                    writerInitial = '\0';
+                    writerInitial = null;
                     Console.WriteLine("SetWriterI: null");
                 }
             }
@@ -156,10 +177,26 @@ namespace KeyNumberGenerator
             {
                 try
                 {
-                    int checkInput = Array.IndexOf(types, input);
-                    type = types[checkInput];
-                    typeReady = true;
-                    Console.WriteLine("SetType: " + type + " - Successful!");
+                    if (input.Equals("Cross"))
+                    {
+                        type = types[3];
+                        Console.WriteLine("SetType: " + type + " - Successful!");
+                    }
+                    else if (input.Equals("Sim Cross"))
+                    {
+                        type = types[4];
+                        Console.WriteLine("SetType: " + type + " - Successful!");
+                    }
+                    else
+                    {
+                        string correctedInput = input.Replace("Sim", " ").Trim();
+                        Console.WriteLine("SetTypePre: " + correctedInput + "| SetTypePost: " + correctedInput[0]);
+                        int checkInput = Array.IndexOf(types, correctedInput[0].ToString());
+                        type = types[checkInput];
+                        typeReady = true;
+                        Console.WriteLine("SetType: " + type + " - Successful!");
+                    }
+
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -186,6 +223,40 @@ namespace KeyNumberGenerator
                 try
                 {
                     string upperInput = input.ToUpper();
+                    int firstSpace = upperInput.IndexOf(' ');
+                    int secondSpace = upperInput.IndexOf(' ', firstSpace + 1);
+                    int thirdSpace = upperInput.IndexOf(' ', secondSpace + 1);
+                    char firstInitial = upperInput[0];
+                    char secondInitial;
+                    char thirdInitial;
+                    char fourthInitial;
+
+                    if (firstSpace != -1)
+                    {
+                        secondInitial = upperInput.Substring(firstSpace + 1)[0];
+                        if (secondSpace != -1)
+                        {
+                            thirdInitial = upperInput.Substring(secondSpace + 1)[0];
+                            if (thirdSpace != -1)
+                            {
+                                fourthInitial = upperInput.Substring(thirdSpace + 1)[0];
+                                clientInitial = CharConcatenation.Concat(firstInitial, secondInitial, thirdInitial, fourthInitial);
+                            }
+                            else
+                            {
+                                clientInitial = CharConcatenation.Concat(firstInitial, secondInitial, thirdInitial);
+                            }
+                        }
+                        else
+                        {
+                            clientInitial = CharConcatenation.Concat(firstInitial, secondInitial);
+                        }
+                    }
+                    else
+                    {
+                        clientInitial = firstInitial.ToString();
+                    }
+                    /*
                     if (!input.Contains(" "))
                     {
                         if (input.Length >= 2)
@@ -207,6 +278,7 @@ namespace KeyNumberGenerator
 
                         clientInitial = CharConcatenation.Concat(clientFirstInitial, clientSecondInitial);
                     }
+                    */
                     Console.WriteLine("SetClientI: " + clientInitial + " - Successful!");
                 }
                 catch (NullReferenceException)
